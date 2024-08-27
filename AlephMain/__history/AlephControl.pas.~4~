@@ -1,0 +1,66 @@
+unit AlephControl;
+
+interface
+
+uses
+  System.Classes, FMX.Controls, RemControlInterface, MainAleph;
+
+type
+  TAlephControl = class(TControl, IREmControl)
+  private
+    FRemMargins: TREmMargins;
+    function GetRemMargins: TREmMargins;
+    procedure SetRemMargins(const Value: TREmMargins);
+  protected
+    procedure Loaded; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure UpdateRemMargins;
+    property RemMargins: TREmMargins read GetRemMargins write SetRemMargins;
+  end;
+
+implementation
+
+{ TAlephControl }
+
+constructor TAlephControl.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FRemMargins := TREmMargins.Create(12);  // Base size example
+end;
+
+destructor TAlephControl.Destroy;
+begin
+  FRemMargins.Free;
+  inherited Destroy;
+end;
+
+procedure TAlephControl.Loaded;
+begin
+  inherited;
+  UpdateRemMargins;
+end;
+
+function TAlephControl.GetRemMargins: TREmMargins;
+begin
+  Result := FRemMargins;
+end;
+
+procedure TAlephControl.SetRemMargins(const Value: TREmMargins);
+begin
+  FRemMargins.Assign(Value);
+  UpdateRemMargins;
+
+  // Verifica se está em modo de design
+  if csDesigning in ComponentState then
+    Repaint; // Força o redesenho em tempo de design
+end;
+
+procedure TAlephControl.UpdateRemMargins;
+begin
+  FRemMargins.ApplyToControl(Self);
+end;
+
+end.
+

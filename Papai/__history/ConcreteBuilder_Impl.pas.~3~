@@ -1,0 +1,17 @@
+unit ConcreteBuilder_Impl;
+
+interface
+
+uses
+  System.SysUtils,
+  System.Classes,
+  Builder_Impl;
+
+type
+  TConcreteBuilder = class(TInterfacedObject, IBuilder)
+
+  end;
+
+implementation
+
+end.

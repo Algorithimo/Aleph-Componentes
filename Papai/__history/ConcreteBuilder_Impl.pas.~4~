@@ -1,0 +1,32 @@
+unit ConcreteBuilder_Impl;
+
+interface
+
+uses
+  System.SysUtils,
+  System.Classes,
+  Builder_Impl;
+
+type
+  TConcreteBuilder = class(TInterfacedObject, IBuilder)
+  public
+    constructor Create;
+    destructor Destroy; override;
+  end;
+
+implementation
+
+{ TConcreteBuilder }
+
+constructor TConcreteBuilder.Create;
+begin
+
+end;
+
+destructor TConcreteBuilder.Destroy;
+begin
+
+  inherited;
+end;
+
+end.

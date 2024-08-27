@@ -1,0 +1,29 @@
+unit LayoutPlus;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, FMX.Types, FMX.Controls, FMX.Layouts;
+
+type
+  TLayout1 = class(TLayout)
+  private
+    { Private declarations }
+  protected
+    { Protected declarations }
+  public
+    { Public declarations }
+  published
+    { Published declarations }
+  end;
+
+procedure Register;
+
+implementation
+
+procedure Register;
+begin
+  RegisterComponents('Aleph', [TLayout1]);
+end;
+
+end.

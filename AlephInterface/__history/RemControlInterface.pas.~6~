@@ -1,0 +1,19 @@
+unit RemControlInterface;
+
+interface
+
+uses
+  MainAleph;
+
+type
+  IREmControl = interface ['{AA52EAD6-586D-4AFF-8078-E68F1221E7EF}']
+    function GetRemMargins: TREmMargins;
+    procedure SetRemMargins(const Value: TREmMargins);
+    procedure UpdateRemMargins;
+    property RemMargins: TREmMargins read GetRemMargins write SetRemMargins;
+  end;
+
+implementation
+
+end.
+

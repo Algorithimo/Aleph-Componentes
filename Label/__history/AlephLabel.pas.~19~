@@ -1,0 +1,43 @@
+unit AlephLabel;
+
+interface
+
+uses
+  System.SysUtils,
+  System.Classes,
+  FMX.Types,
+  FMX.Controls,
+  FMX.Controls.Presentation,
+  FMX.StdCtrls;
+
+type
+  TAlephLabel = class(TLabel)
+  public
+    procedure AdjustSizeComponent(AFormClientHeight, AFormClientWidth: Integer; AFontSizePercent: Double);
+  end;
+
+procedure Register;
+
+implementation
+
+procedure Register;
+begin
+  RegisterComponents('Aleph', [TAlephLabel]);
+end;
+
+{ TAlephLabel }
+
+procedure TAlephLabel.AdjustSizeComponent(AFormClientHeight, AFormClientWidth: Integer; AFontSizePercent: Double);
+var
+  i: Integer;
+  NewFontSize: Integer;
+begin
+  Self.BeginUpdate;
+  NewFontSize := Round(AFormClientHeight * AFontSizePercent);
+  if NewFontSize < AFontSizeBase then
+    NewFontSize := AFontSizeBase;
+  Self.TextSettings.Font.Size := NewFontSize;
+  Self.EndUpdate;
+end;
+
+end.
