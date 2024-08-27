@@ -67,6 +67,12 @@
     <Transaction>2024/08/27 00:05:59.000.349,E:\Aleph\Componente\Layout\AlephLayout1.pas=</Transaction>
   </Transactions>
 	<ProjectSortOrder AutoSort="0" SortType="0">
+    <File Path="AlephComponent"/>
+    <File Path="AlephComponent\AlephLayout.pas"/>
+    <File Path="AlephComponent\AlephLayout_Editor.pas"/>
+    <File Path="AlephComponent\AlephPropertyEditor.pas"/>
+    <File Path="AlephComponent\AlephRectangle.pas"/>
+    <File Path="AlephComponent\AlephTipos.pas"/>
     <File Path="AlephMain"/>
     <File Path="AlephMain\AlephControl.pas"/>
     <File Path="AlephMain\MainAleph.pas"/>
@@ -80,11 +86,6 @@
     <File Path="GofComponent\Layout\MainLayout.pas"/>
     <File Path="Label"/>
     <File Path="Label\AlephLabel.pas"/>
-    <File Path="AlephComponent\AlephLayout.pas"/>
-    <File Path="AlephComponent\AlephLayout_Editor.pas"/>
-    <File Path="AlephComponent\AlephPropertyEditor.pas"/>
-    <File Path="AlephComponent\AlephRectangle.pas"/>
-    <File Path="AlephComponent\AlephTipos.pas"/>
     <File Path="designide.dcp"/>
     <File Path="fmx.dcp"/>
     <File Path="rtl.dcp"/>
