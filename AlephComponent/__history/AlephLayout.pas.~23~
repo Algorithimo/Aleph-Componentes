@@ -49,7 +49,7 @@ var
 procedure Register;
 begin
   // Registrar os componentes na paleta de componentes da IDE
-  RegisterComponents('Aleph', [TAlephLayout]);
+  RegisterComponents('Aleph1', [TAlephLayout]);
 end;
 
 procedure RegisterAlephLayout(ALayout: TAlephLayout);

@@ -20,13 +20,15 @@ type
   TAlephLayout = class(TLayout)
   private
     FAlephTipo: TAlephTipo;
-    FFlexboxLayout: TFlexboxLayout;
+    FFlexboxContainer: TFlexContainer;
     procedure AdjustSize(Sender: TObject);
+    procedure ApplyFlexboxLayout(Sender: TObject);
     procedure FormResizeHandler(Sender: TObject);
     class procedure GlobalFormResizeHandler(Sender: TObject); static;
     function GetTipo: TAlephTipo;
+    function GetFlexboxContainer: TFlexContainer;
     procedure SetTipo(const Value: TAlephTipo);
-    procedure ApplyFlexboxLayout;
+    procedure SetFlexboxContainer(const Value: TFlexContainer);
   protected
     procedure Resize; override;
   public
@@ -34,23 +36,21 @@ type
     destructor Destroy; override;
   published
     property AlephPercentage: TAlephTipo read GetTipo write SetTipo;
-    property FlexboxLayout: TFlexboxLayout read FFlexboxLayout write FFlexboxLayout;
-
+    property FlexboxContainer: TFlexContainer read GetFlexboxContainer write SetFlexboxContainer;
   end;
 
 procedure Register;
 
 implementation
 
+var
+  AlephLayouts: TList<TAlephLayout>;
+
 procedure Register;
 begin
   // Registrar os componentes na paleta de componentes da IDE
   RegisterComponents('Aleph', [TAlephLayout]);
-//  RegisterPropertiesInCategory('Layout', TAlephLayout, ['PWidth', 'PHeight']);
 end;
-
-var
-  AlephLayouts: TList<TAlephLayout>;
 
 procedure RegisterAlephLayout(ALayout: TAlephLayout);
 begin
@@ -63,6 +63,11 @@ procedure UnregisterAlephLayout(ALayout: TAlephLayout);
 begin
   if Assigned(AlephLayouts) then
     AlephLayouts.Remove(ALayout);
+end;
+
+function TAlephLayout.GetFlexboxContainer: TFlexContainer;
+begin
+  Result := FFlexboxContainer;
 end;
 
 function TAlephLayout.GetTipo: TAlephTipo;
@@ -78,8 +83,8 @@ begin
   begin
     for i := 0 to AlephLayouts.Count - 1 do
     begin
-      AlephLayouts[i].AdjustSize(sender);
-      AlephLayouts[i].ApplyFlexboxLayout;
+      AlephLayouts[i].AdjustSize(Sender);
+      AlephLayouts[i].ApplyFlexboxLayout(sender);
     end;
   end;
 end;
@@ -87,32 +92,43 @@ end;
 procedure TAlephLayout.Resize;
 begin
   inherited;
-  FAlephTipo.Resize;
+  if Assigned(FAlephTipo) then
+    FAlephTipo.Resize;
+end;
+
+procedure TAlephLayout.SetFlexboxContainer(const Value: TFlexContainer);
+begin
+  if Assigned(FFlexboxContainer) then
+    FFlexboxContainer.Assign(Value);
+  AdjustSize(nil);
 end;
 
 procedure TAlephLayout.SetTipo(const Value: TAlephTipo);
 begin
-  FAlephTipo.Assign(Value);
+  if Assigned(FAlephTipo) then
+    FAlephTipo.Assign(Value);
   AdjustSize(nil);
 end;
 
-{ TAlephLayout }
-
 procedure TAlephLayout.AdjustSize(Sender: TObject);
 begin
+  if Assigned(FAlephTipo) then
     FAlephTipo.AdjustSize;
 end;
 
-procedure TAlephLayout.ApplyFlexboxLayout;
+procedure TAlephLayout.ApplyFlexboxLayout(Sender: TObject);
 begin
-  if Assigned(FFlexboxLayout) then
-    FFlexboxLayout.ApplyFlexboxLayout(Self);
+  if Assigned(FFlexboxContainer) then
+  begin
+    FFlexboxContainer.CalculateLayout;
+  end;
 end;
 
 constructor TAlephLayout.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-   FAlephTipo := TAlephTipo.Create(self);
+  FAlephTipo := TAlephTipo.Create(Self);
+  FFlexboxContainer := TFlexContainer.Create;
   if AOwner is TForm then
   begin
     TForm(AOwner).OnResize := FormResizeHandler;
@@ -123,17 +139,21 @@ end;
 
 destructor TAlephLayout.Destroy;
 begin
-  FreeAndNil(AlephLayouts);
+  if Assigned(AlephLayouts) then
+  begin
+    UnregisterAlephLayout(Self);
+    if AlephLayouts.Count = 0 then
+      FreeAndNil(AlephLayouts); // Liberar a lista se estiver vazia
+  end;
   FreeAndNil(FAlephTipo);
-  UnregisterAlephLayout(Self);
+  FreeAndNil(FFlexboxContainer); // Libera a referência ao FlexContainer
   inherited Destroy;
 end;
 
 procedure TAlephLayout.FormResizeHandler(Sender: TObject);
 begin
   GlobalFormResizeHandler(Sender);
-
 end;
 
-
 end.
+

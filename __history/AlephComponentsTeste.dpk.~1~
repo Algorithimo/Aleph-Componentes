@@ -1,0 +1,58 @@
+package AlephComponents;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS ON}
+{$RANGECHECKS ON}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  designide,
+  vcl,
+  vclactnband,
+  vclx,
+  xmlrtl,
+  fmx;
+
+contains
+  AlephLabel in 'Label\AlephLabel.pas',
+  MainAleph in 'AlephMain\MainAleph.pas',
+  AlephControl in 'AlephMain\AlephControl.pas',
+  RemControlInterface in 'AlephMain\RemControlInterface.pas',
+  ConcreteBuilder_Impl in 'GofComponent\Layout\ConcreteBuilder_Impl.pas',
+  InterfaceBuilder_Impl in 'GofComponent\Layout\InterfaceBuilder_Impl.pas',
+  Diretor_Impl in 'GofComponent\Layout\Diretor_Impl.pas',
+  MainLayout in 'GofComponent\Layout\MainLayout.pas',
+  LayoutGof in 'GofComponent\Layout\LayoutGof.pas',
+  AlephLayout in 'AlephComponent\AlephLayout.pas',
+  AlephRectangle in 'AlephComponent\AlephRectangle.pas',
+  AlephLayout_Editor in 'AlephComponent\AlephLayout_Editor.pas',
+  AlephPropertyEditor in 'AlephComponent\AlephPropertyEditor.pas',
+  AlephTipos in 'AlephComponent\AlephTipos.pas',
+  AlephFlexbox in 'AlephComponent\AlephFlexbox.pas',
+  AlephFlexboxEnums in 'AlephComponent\AlephFlexboxEnums.pas',
+  AlephFlexboxInterfaces in 'AlephComponent\AlephFlexboxInterfaces.pas';
+
+end.

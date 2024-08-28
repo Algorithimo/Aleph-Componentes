@@ -1,64 +1,43 @@
-unit AlephFlexboxEnums;
+unit AlephFlexbox;
 
 interface
 
 uses
-  System.Classes, System.SysUtils, System.Generics.Collections, FMX.Types, FMX.Controls;
+  System.Classes, System.SysUtils, System.Generics.Collections, FMX.Types, FMX.Controls, AlephFlexboxEnums;
 
 type
-  TFlexDirection = (Row, RowReverse, Column, ColumnReverse);
-  TJustifyContent = (FlexStart, FlexEnd, Center, SpaceBetween, SpaceAround, SpaceEvenly);
-  TAlignItems = (Stretch, AFlexStart, AFlexEnd, ACenter);
 
-  TFlexItem = class(TPersistent)
+  TFlexContainerBase = class(TPersistent)
   private
     FControl: TControl;
-    FFlexGrow: Single;
-    FFlexShrink: Single;
-    FFlexBasis: Single;
-  public
-    constructor Create(AControl: TControl);
-    property Control: TControl read FControl;
-    property FlexGrow: Single read FFlexGrow write FFlexGrow;
-    property FlexShrink: Single read FFlexShrink write FFlexShrink;
-    property FlexBasis: Single read FFlexBasis write FFlexBasis;
-  end;
-
-  TFlexContainer = class(TPersistent)
-  private
     FItems: TObjectList<TFlexItem>;
     FFlexDirection: TFlexDirection;
     FJustifyContent: TJustifyContent;
     FAlignItems: TAlignItems;
-    FControl: TControl; // Armazena o controle (TLayout ou outro TControl)
-    procedure CalculateLayout;
+    function GetFlexDirection: TFlexDirection;
+    procedure SetFlexDirection(Value: TFlexDirection);
+    function GetJustifyContent: TJustifyContent;
+    procedure SetJustifyContent(Value: TJustifyContent);
+    function GetAlignItems: TAlignItems;
+    procedure SetAlignItems(Value: TAlignItems);
+    procedure SetContainer(AControl: TControl);
   public
     constructor Create;
     destructor Destroy; override;
+    procedure CalculateLayout;
     procedure AddItem(AControl: TControl);
     procedure RemoveItem(AControl: TControl);
-    procedure SetControl(AControl: TControl); // Novo método
-    property FlexDirection: TFlexDirection read FFlexDirection write FFlexDirection;
-    property JustifyContent: TJustifyContent read FJustifyContent write FJustifyContent;
-    property AlignItems: TAlignItems read FAlignItems write FAlignItems;
+    function GetItems: TList<TFlexItem>;
+    property FlexDirection: TFlexDirection read GetFlexDirection write SetFlexDirection;
+    property JustifyContent: TJustifyContent read GetJustifyContent write SetJustifyContent;
+    property AlignItems: TAlignItems read GetAlignItems write SetAlignItems;
   end;
 
 implementation
 
-{ TFlexItem }
+{ TFlexContainerBase }
 
-constructor TFlexItem.Create(AControl: TControl);
-begin
-  inherited Create;
-  FControl := AControl;
-  FFlexGrow := 0;
-  FFlexShrink := 1;
-  FFlexBasis := 0;
-end;
-
-{ TFlexContainer }
-
-constructor TFlexContainer.Create;
+constructor TFlexContainerBase.Create;
 begin
   inherited Create;
   FItems := TObjectList<TFlexItem>.Create(True);
@@ -67,13 +46,13 @@ begin
   FAlignItems := TAlignItems.Stretch;
 end;
 
-destructor TFlexContainer.Destroy;
+destructor TFlexContainerBase.Destroy;
 begin
   FItems.Free;
   inherited;
 end;
 
-procedure TFlexContainer.AddItem(AControl: TControl);
+procedure TFlexContainerBase.AddItem(AControl: TControl);
 var
   Item: TFlexItem;
 begin
@@ -81,7 +60,7 @@ begin
   FItems.Add(Item);
 end;
 
-procedure TFlexContainer.RemoveItem(AControl: TControl);
+procedure TFlexContainerBase.RemoveItem(AControl: TControl);
 var
   Item: TFlexItem;
 begin
@@ -93,12 +72,50 @@ begin
     end;
 end;
 
-procedure TFlexContainer.SetControl(AControl: TControl);
+function TFlexContainerBase.GetItems: TList<TFlexItem>;
+begin
+  Result := FItems;
+end;
+
+function TFlexContainerBase.GetFlexDirection: TFlexDirection;
+begin
+  Result := FFlexDirection;
+end;
+
+procedure TFlexContainerBase.SetFlexDirection(Value: TFlexDirection);
+begin
+  FFlexDirection := Value;
+  CalculateLayout;
+end;
+
+function TFlexContainerBase.GetJustifyContent: TJustifyContent;
+begin
+  Result := FJustifyContent;
+end;
+
+procedure TFlexContainerBase.SetJustifyContent(Value: TJustifyContent);
+begin
+  FJustifyContent := Value;
+  CalculateLayout;
+end;
+
+function TFlexContainerBase.GetAlignItems: TAlignItems;
+begin
+  Result := FAlignItems;
+end;
+
+procedure TFlexContainerBase.SetAlignItems(Value: TAlignItems);
+begin
+  FAlignItems := Value;
+  CalculateLayout;
+end;
+
+procedure TFlexContainerBase.SetContainer(AControl: TControl);
 begin
   FControl := AControl;
 end;
 
-procedure TFlexContainer.CalculateLayout;
+procedure TFlexContainerBase.CalculateLayout;
 var
   TotalSpace, FlexGrowSum, FlexShrinkSum, AvailableSpace, ItemSize, Position, Spacing: Single;
   Item: TFlexItem;
@@ -294,6 +311,8 @@ begin
       end;
   end;
 end;
+
+
 
 end.
 

@@ -1,7 +1,7 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{732DCDC0-079D-4C9F-A3E1-F019C7BCB3B2}</ProjectGuid>
-        <MainSource>AlephComponents.dpk</MainSource>
+        <MainSource>AlephComponentsTeste.dpk</MainSource>
         <ProjectVersion>19.5</ProjectVersion>
         <FrameworkType>FMX</FrameworkType>
         <Base>True</Base>
@@ -88,7 +88,7 @@
         <DCC_CBuilderOutput>All</DCC_CBuilderOutput>
         <DCC_UnitSearchPath>E:\Aleph\Componente\Label;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <AppFileExt>bpl</AppFileExt>
-        <SanitizedProjectName>AlephComponents</SanitizedProjectName>
+        <SanitizedProjectName>AlephComponentsTeste</SanitizedProjectName>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android)'!=''">
         <DCC_CBuilderOutput>None</DCC_CBuilderOutput>
@@ -193,7 +193,7 @@
         <BorlandProject>
             <Delphi.Personality>
                 <Source>
-                    <Source Name="MainSource">AlephComponents.dpk</Source>
+                    <Source Name="MainSource">AlephComponentsTeste.dpk</Source>
                 </Source>
             </Delphi.Personality>
             <Deployment Version="4">
@@ -212,9 +212,9 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\AlephComponents.bpl" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\AlephComponentsTeste.bpl" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
-                        <RemoteName>AlephComponents.bpl</RemoteName>
+                        <RemoteName>AlephComponentsTeste.bpl</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

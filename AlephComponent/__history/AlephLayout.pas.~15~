@@ -22,13 +22,11 @@ type
     FAlephTipo: TAlephTipo;
     FFlexboxContainer: TFlexContainer;
     procedure AdjustSize(Sender: TObject);
-    procedure ApplyFlexboxLayout(Sender: TObject);
     procedure FormResizeHandler(Sender: TObject);
     class procedure GlobalFormResizeHandler(Sender: TObject); static;
     function GetTipo: TAlephTipo;
-    function GetFlexboxContainer: TFlexContainer;
     procedure SetTipo(const Value: TAlephTipo);
-    procedure SetFlexboxContainer(const Value: TFlexContainer);
+    procedure ApplyFlexboxLayout;
   protected
     procedure Resize; override;
   public
@@ -36,7 +34,7 @@ type
     destructor Destroy; override;
   published
     property AlephPercentage: TAlephTipo read GetTipo write SetTipo;
-    property FlexboxContainer: TFlexContainer read GetFlexboxContainer write SetFlexboxContainer;
+    property FlexboxContainer: TFlexContainer read FFlexboxContainer write FFlexboxContainer;
   end;
 
 procedure Register;
@@ -65,11 +63,6 @@ begin
     AlephLayouts.Remove(ALayout);
 end;
 
-function TAlephLayout.GetFlexboxContainer: TFlexContainer;
-begin
-  Result := FFlexboxContainer;
-end;
-
 function TAlephLayout.GetTipo: TAlephTipo;
 begin
   Result := FAlephTipo;
@@ -84,7 +77,7 @@ begin
     for i := 0 to AlephLayouts.Count - 1 do
     begin
       AlephLayouts[i].AdjustSize(Sender);
-      AlephLayouts[i].ApplyFlexboxLayout(sender);
+      AlephLayouts[i].ApplyFlexboxLayout;
     end;
   end;
 end;
@@ -94,13 +87,6 @@ begin
   inherited;
   if Assigned(FAlephTipo) then
     FAlephTipo.Resize;
-end;
-
-procedure TAlephLayout.SetFlexboxContainer(const Value: TFlexContainer);
-begin
-  if Assigned(FFlexboxContainer) then
-    FFlexboxContainer.Assign(Value);
-  AdjustSize(nil);
 end;
 
 procedure TAlephLayout.SetTipo(const Value: TAlephTipo);
@@ -116,7 +102,7 @@ begin
     FAlephTipo.AdjustSize;
 end;
 
-procedure TAlephLayout.ApplyFlexboxLayout(Sender: TObject);
+procedure TAlephLayout.ApplyFlexboxLayout;
 begin
   if Assigned(FFlexboxContainer) then
   begin
@@ -128,7 +114,7 @@ constructor TAlephLayout.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FAlephTipo := TAlephTipo.Create(Self);
-  FFlexboxContainer := TFlexContainer.Create(self);
+  FFlexboxContainer := TFlexContainer.Create;
   if AOwner is TForm then
   begin
     TForm(AOwner).OnResize := FormResizeHandler;

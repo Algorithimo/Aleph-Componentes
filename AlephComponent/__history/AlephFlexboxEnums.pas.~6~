@@ -1,11 +1,13 @@
-unit AlephFlexbox;
+unit AlephFlexboxEnums;
 
 interface
 
 uses
-  System.Classes, System.SysUtils, System.Generics.Collections, FMX.Types, FMX.Controls, AlephFlexboxInterfaces;
-
+  System.Classes, System.SysUtils, System.Generics.Collections, FMX.Types, FMX.Controls;
 type
+  TFlexDirection = (Row, RowReverse, Column, ColumnReverse);
+  TJustifyContent = (FlexStart, FlexEnd, Center, SpaceBetween, SpaceAround);
+  TAlignItems = (Stretch, AFlexStart, AFlexEnd, ACenter);
   TFlexItem = class
   private
     FControl: TControl;
@@ -19,35 +21,23 @@ type
     property FlexShrink: Single read FFlexShrink write FFlexShrink;
     property FlexBasis: Single read FFlexBasis write FFlexBasis;
   end;
-
-  TFlexContainer = class(TControl, IFlexContainer)
+  TFlexContainer = class(TControl)
   private
     FItems: TObjectList<TFlexItem>;
     FFlexDirection: TFlexDirection;
     FJustifyContent: TJustifyContent;
     FAlignItems: TAlignItems;
-    function GetFlexDirection: TFlexDirection;
-    procedure SetFlexDirection(Value: TFlexDirection);
-    function GetJustifyContent: TJustifyContent;
-    procedure SetJustifyContent(Value: TJustifyContent);
-    function GetAlignItems: TAlignItems;
-    procedure SetAlignItems(Value: TAlignItems);
+    procedure CalculateLayout;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    procedure CalculateLayout;
-    procedure AddItem(AItem: TFlexItem);
-    procedure RemoveItem(AItem: TFlexItem);
-    function GetItems: TList<TFlexItem>;
-    property FlexDirection: TFlexDirection read GetFlexDirection write SetFlexDirection;
-    property JustifyContent: TJustifyContent read GetJustifyContent write SetJustifyContent;
-    property AlignItems: TAlignItems read GetAlignItems write SetAlignItems;
+    procedure AddItem(AControl: TControl);
+    property FlexDirection: TFlexDirection read FFlexDirection write FFlexDirection;
+    property JustifyContent: TJustifyContent read FJustifyContent write FJustifyContent;
+    property AlignItems: TAlignItems read FAlignItems write FAlignItems;
   end;
-
 implementation
-
 { TFlexItem }
-
 constructor TFlexItem.Create(AControl: TControl);
 begin
   inherited Create;
@@ -56,9 +46,7 @@ begin
   FFlexShrink := 1;
   FFlexBasis := 0;
 end;
-
 { TFlexContainer }
-
 constructor TFlexContainer.Create(AOwner: TComponent);
 begin
   inherited;
@@ -67,29 +55,19 @@ begin
   FJustifyContent := TJustifyContent.FlexStart;
   FAlignItems := TAlignItems.Stretch;
 end;
-
 destructor TFlexContainer.Destroy;
 begin
   FItems.Free;
   inherited;
 end;
-
-procedure TFlexContainer.AddItem(AItem: TFlexItem);
+procedure TFlexContainer.AddItem(AControl: TControl);
+var
+  Item: TFlexItem;
 begin
-  FItems.Add(AItem);
-  AItem.Control.Parent := Self;
+  Item := TFlexItem.Create(AControl);
+  FItems.Add(Item);
+  AControl.Parent := Self;
 end;
-
-procedure TFlexContainer.RemoveItem(AItem: TFlexItem);
-begin
-  FItems.Remove(AItem);
-end;
-
-function TFlexContainer.GetItems: TList<TFlexItem>;
-begin
-  Result := FItems;
-end;
-
 procedure TFlexContainer.CalculateLayout;
 var
   TotalSpace, FlexGrowSum, FlexShrinkSum, AvailableSpace: Single;
@@ -101,7 +79,6 @@ begin
     TotalSpace := Width
   else
     TotalSpace := Height;
-
   // Calcular somas de flex-grow e flex-shrink
   FlexGrowSum := 0;
   FlexShrinkSum := 0;
@@ -110,12 +87,10 @@ begin
     FlexGrowSum := FlexGrowSum + Item.FlexGrow;
     FlexShrinkSum := FlexShrinkSum + Item.FlexShrink;
   end;
-
   // Calcular espaço disponível
   AvailableSpace := TotalSpace;
   for Item in FItems do
     AvailableSpace := AvailableSpace - Item.FlexBasis;
-
   // Distribuir espaço
   for Item in FItems do
   begin
@@ -123,14 +98,12 @@ begin
       ItemSize := Item.FlexBasis + (AvailableSpace * (Item.FlexGrow / FlexGrowSum))
     else
       ItemSize := Item.FlexBasis + (AvailableSpace * (Item.FlexShrink / FlexShrinkSum));
-
     // Aplicar tamanho ao controle
     if FFlexDirection in [TFlexDirection.Row, TFlexDirection.RowReverse] then
       Item.Control.Width := ItemSize
     else
       Item.Control.Height := ItemSize;
   end;
-
   // Posicionar itens (simplificado para FlexStart)
   var Position: Single := 0;
   for Item in FItems do
@@ -147,39 +120,4 @@ begin
     end;
   end;
 end;
-
-function TFlexContainer.GetFlexDirection: TFlexDirection;
-begin
-  Result := FFlexDirection;
-end;
-
-procedure TFlexContainer.SetFlexDirection(Value: TFlexDirection);
-begin
-  FFlexDirection := Value;
-  CalculateLayout;
-end;
-
-function TFlexContainer.GetJustifyContent: TJustifyContent;
-begin
-  Result := FJustifyContent;
-end;
-
-procedure TFlexContainer.SetJustifyContent(Value: TJustifyContent);
-begin
-  FJustifyContent := Value;
-  CalculateLayout;
-end;
-
-function TFlexContainer.GetAlignItems: TAlignItems;
-begin
-  Result := FAlignItems;
-end;
-
-procedure TFlexContainer.SetAlignItems(Value: TAlignItems);
-begin
-  FAlignItems := Value;
-  CalculateLayout;
-end;
-
 end.
-
