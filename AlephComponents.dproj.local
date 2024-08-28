@@ -2,12 +2,12 @@
 <BorlandProject>
 	<Transactions>
     <Transaction>2024/08/17 17:13:51.000.328,=rtl.dcp</Transaction>
-    <Transaction>2024/08/17 17:13:54.000.636,=vclactnband.dcp</Transaction>
     <Transaction>2024/08/17 17:13:54.000.577,=designide.dcp</Transaction>
     <Transaction>2024/08/17 17:13:54.000.691,=xmlrtl.dcp</Transaction>
+    <Transaction>2024/08/17 17:13:54.000.636,=vclactnband.dcp</Transaction>
     <Transaction>2024/08/17 17:13:54.000.622,=vcl.dcp</Transaction>
-    <Transaction>2024/08/17 17:13:54.000.674,=vclx.dcp</Transaction>
     <Transaction>2024/08/17 17:13:54.000.561,=E:\Aleph\Componente\Label\AlephLabel.pas</Transaction>
+    <Transaction>2024/08/17 17:13:54.000.674,=vclx.dcp</Transaction>
     <Transaction>2024/08/17 17:16:37.000.641,=fmx.dcp</Transaction>
     <Transaction>2024/08/17 18:02:13.000.238,=E:\Aleph\Componente\Unit1.pas</Transaction>
     <Transaction>2024/08/17 18:02:28.000.039,E:\Aleph\Componente\Unit1.pas=E:\Aleph\Componente\Rectangle\AlephRectangle.pas</Transaction>
@@ -65,14 +65,23 @@
     <Transaction>2024/08/26 23:44:29.000.496,E:\Aleph\Componente\Layout\AlephLayout1.pas=</Transaction>
     <Transaction>2024/08/26 23:58:40.000.681,=E:\Aleph\Componente\Layout\AlephLayout1.pas</Transaction>
     <Transaction>2024/08/27 00:05:59.000.349,E:\Aleph\Componente\Layout\AlephLayout1.pas=</Transaction>
+    <Transaction>2024/08/27 19:46:12.000.890,=E:\Aleph\Aleph-Componentes\Unit1.pas</Transaction>
+    <Transaction>2024/08/27 19:46:39.000.898,E:\Aleph\Aleph-Componentes\Unit1.pas=E:\Aleph\Aleph-Componentes\AlephComponent\AlephFlexbox.pas</Transaction>
+    <Transaction>2024/08/27 20:50:38.000.811,=E:\Aleph\Aleph-Componentes\Unit1.pas</Transaction>
+    <Transaction>2024/08/27 20:50:54.000.453,E:\Aleph\Aleph-Componentes\Unit1.pas=E:\Aleph\Aleph-Componentes\AlephComponent\AlephFlexboxEnums.pas</Transaction>
+    <Transaction>2024/08/27 20:57:11.000.222,=E:\Aleph\Aleph-Componentes\Unit1.pas</Transaction>
+    <Transaction>2024/08/27 20:58:39.000.447,E:\Aleph\Aleph-Componentes\AlephComponent\AlephFlexboxInterfaces.pas=E:\Aleph\Aleph-Componentes\Unit1.pas</Transaction>
   </Transactions>
 	<ProjectSortOrder AutoSort="0" SortType="0">
     <File Path="AlephComponent"/>
+    <File Path="AlephComponent\AlephFlexbox.pas"/>
     <File Path="AlephComponent\AlephLayout.pas"/>
     <File Path="AlephComponent\AlephLayout_Editor.pas"/>
     <File Path="AlephComponent\AlephPropertyEditor.pas"/>
     <File Path="AlephComponent\AlephRectangle.pas"/>
     <File Path="AlephComponent\AlephTipos.pas"/>
+    <File Path="AlephComponent\AlephFlexboxEnums.pas"/>
+    <File Path="AlephComponent\AlephFlexboxInterfaces.pas"/>
     <File Path="AlephMain"/>
     <File Path="AlephMain\AlephControl.pas"/>
     <File Path="AlephMain\MainAleph.pas"/>

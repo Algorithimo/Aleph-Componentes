@@ -51,8 +51,6 @@ contains
   AlephLayout_Editor in 'AlephComponent\AlephLayout_Editor.pas',
   AlephPropertyEditor in 'AlephComponent\AlephPropertyEditor.pas',
   AlephTipos in 'AlephComponent\AlephTipos.pas',
-  AlephFlexbox in 'AlephComponent\AlephFlexbox.pas',
-  AlephFlexboxEnums in 'AlephComponent\AlephFlexboxEnums.pas',
-  AlephFlexboxInterfaces in 'AlephComponent\AlephFlexboxInterfaces.pas';
+  AlephFlexbox in 'AlephComponent\AlephFlexbox.pas';
 
 end.

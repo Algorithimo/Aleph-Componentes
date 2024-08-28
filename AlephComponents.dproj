@@ -172,6 +172,9 @@
         <DCCReference Include="AlephComponent\AlephLayout_Editor.pas"/>
         <DCCReference Include="AlephComponent\AlephPropertyEditor.pas"/>
         <DCCReference Include="AlephComponent\AlephTipos.pas"/>
+        <DCCReference Include="AlephComponent\AlephFlexbox.pas"/>
+        <DCCReference Include="AlephComponent\AlephFlexboxEnums.pas"/>
+        <DCCReference Include="AlephComponent\AlephFlexboxInterfaces.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

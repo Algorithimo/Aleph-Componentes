@@ -1,0 +1,33 @@
+unit AlephFlexboxInterfaces;
+
+interface
+
+uses
+  System.Classes, System.SysUtils, System.Generics.Collections, FMX.Types, FMX.Controls;
+type
+  TFlexDirection = (Row, RowReverse, Column, ColumnReverse);
+  TJustifyContent = (FlexStart, FlexEnd, Center, SpaceBetween, SpaceAround);
+  TAlignItems = (Stretch, AFlexStart, AFlexEnd, ACenter);
+  // Interface para manipular itens
+  IItemProvider<T: class> = interface
+    ['{D45C5B2C-1C9D-4F56-9E6D-3A2F8E2B373E}']
+    procedure AddItem(AItem: T);
+    procedure RemoveItem(AItem: T);
+    function GetItems: TList<T>;
+  end;
+  // Interface para manipular containers flexíveis
+  IFlexContainer = interface
+    ['{E57B8D9A-19A4-4B62-98BF-0D66D9D4494E}']
+    procedure CalculateLayout;
+    function GetFlexDirection: TFlexDirection;
+    procedure SetFlexDirection(Value: TFlexDirection);
+    function GetJustifyContent: TJustifyContent;
+    procedure SetJustifyContent(Value: TJustifyContent);
+    function GetAlignItems: TAlignItems;
+    procedure SetAlignItems(Value: TAlignItems);
+    property FlexDirection: TFlexDirection read GetFlexDirection write SetFlexDirection;
+    property JustifyContent: TJustifyContent read GetJustifyContent write SetJustifyContent;
+    property AlignItems: TAlignItems read GetAlignItems write SetAlignItems;
+  end;
+implementation
+end.

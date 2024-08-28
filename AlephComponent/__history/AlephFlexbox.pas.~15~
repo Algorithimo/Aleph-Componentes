@@ -1,0 +1,208 @@
+unit AlephFlexbox;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, FMX.Types, FMX.Controls, FMX.Layouts,
+  AlephFlexboxInterfaces;
+
+type
+  TFlexboxLayout = class(TInterfacedObject, IFlexDirection, IJustifyContent, IAlignItems)
+  private
+    FDirection: TFlexboxDirection;
+    FJustifyContent: TFlexboxJustifyContent;
+    FAlignItems: TFlexboxAlignItems;
+
+    // Métodos das interfaces
+    function GetDirection: TFlexboxDirection;
+    procedure SetDirection(Value: TFlexboxDirection);
+    function GetJustifyContent: TFlexboxJustifyContent;
+    procedure SetJustifyContent(Value: TFlexboxJustifyContent);
+    function GetAlignItems: TFlexboxAlignItems;
+    procedure SetAlignItems(Value: TFlexboxAlignItems);
+
+    procedure AlignItem(Control: TControl; ParentSize: Single; IsHorizontal: Boolean);
+  public
+    procedure ApplyFlexboxLayout(AControl: TLayout);
+    procedure UpdateLayout(AControl: TLayout);
+  published
+    // Propriedades expostas
+    property Direction: TFlexboxDirection read GetDirection write SetDirection;
+    property JustifyContent: TFlexboxJustifyContent read GetJustifyContent write SetJustifyContent;
+    property AlignItems: TFlexboxAlignItems read GetAlignItems write SetAlignItems;
+  end;
+
+implementation
+
+{ TFlexboxLayout }
+
+function TFlexboxLayout.GetDirection: TFlexboxDirection;
+begin
+  Result := FDirection;
+end;
+
+procedure TFlexboxLayout.SetDirection(Value: TFlexboxDirection);
+begin
+  if FDirection <> Value then
+  begin
+    FDirection := Value;
+    UpdateLayout(nil);
+  end;
+end;
+
+function TFlexboxLayout.GetJustifyContent: TFlexboxJustifyContent;
+begin
+  Result := FJustifyContent;
+end;
+
+procedure TFlexboxLayout.SetJustifyContent(Value: TFlexboxJustifyContent);
+begin
+  if FJustifyContent <> Value then
+  begin
+    FJustifyContent := Value;
+    UpdateLayout(nil);
+  end;
+end;
+
+function TFlexboxLayout.GetAlignItems: TFlexboxAlignItems;
+begin
+  Result := FAlignItems;
+end;
+
+procedure TFlexboxLayout.SetAlignItems(Value: TFlexboxAlignItems);
+begin
+  if FAlignItems <> Value then
+  begin
+    FAlignItems := Value;
+    UpdateLayout(nil);
+  end;
+end;
+
+procedure TFlexboxLayout.AlignItem(Control: TControl; ParentSize: Single; IsHorizontal: Boolean);
+begin
+  case FAlignItems of
+    faiStretch:
+      if IsHorizontal then
+        Control.Height := ParentSize
+      else
+        Control.Width := ParentSize;
+
+    faiFlexStart:
+      if IsHorizontal then
+        Control.Position.Y := 0
+      else
+        Control.Position.X := 0;
+
+    faiCenter:
+      if IsHorizontal then
+        Control.Position.Y := (ParentSize - Control.Height) / 2
+      else
+        Control.Position.X := (ParentSize - Control.Width) / 2;
+
+    faiFlexEnd:
+      if IsHorizontal then
+        Control.Position.Y := ParentSize - Control.Height
+      else
+        Control.Position.X := ParentSize - Control.Width;
+  end;
+end;
+
+procedure TFlexboxLayout.ApplyFlexboxLayout(AControl: TLayout);
+var
+  I: Integer;
+  Child: TFMXObject;
+  Control: TControl;
+  TotalSpace: Single;
+  SpaceBetween: Single;
+  CurrentOffset: Single;
+  ControlSize: Single;
+begin
+  if Assigned(AControl) then
+  begin
+    if FDirection = fdRow then
+      TotalSpace := AControl.Width
+    else
+      TotalSpace := AControl.Height;
+
+    SpaceBetween := 0;
+    CurrentOffset := 0;
+
+    case FJustifyContent of
+      fjcFlexStart:
+        CurrentOffset := 0;
+
+      fjcCenter:
+        begin
+          if FDirection = fdRow then
+            CurrentOffset := (TotalSpace - AControl.Width) / 2
+          else
+            CurrentOffset := (TotalSpace - AControl.Height) / 2;
+        end;
+
+      fjcFlexEnd:
+        begin
+          if FDirection = fdRow then
+            CurrentOffset := TotalSpace - AControl.Width
+          else
+            CurrentOffset := TotalSpace - AControl.Height;
+        end;
+
+      fjcSpaceBetween:
+        begin
+          if AControl.ChildrenCount > 1 then
+          begin
+            if FDirection = fdRow then
+              SpaceBetween := (TotalSpace - (AControl.ChildrenCount * AControl.Width)) / (AControl.ChildrenCount - 1)
+            else
+              SpaceBetween := (TotalSpace - (AControl.ChildrenCount * AControl.Height)) / (AControl.ChildrenCount - 1);
+          end;
+        end;
+
+      fjcSpaceAround:
+        begin
+          if AControl.ChildrenCount > 0 then
+          begin
+            if FDirection = fdRow then
+              SpaceBetween := (TotalSpace - (AControl.ChildrenCount * AControl.Width)) / (AControl.ChildrenCount + 1)
+            else
+              SpaceBetween := (TotalSpace - (AControl.ChildrenCount * AControl.Height)) / (AControl.ChildrenCount + 1);
+          end;
+        end;
+    end;
+
+    for I := 0 to AControl.ChildrenCount - 1 do
+    begin
+      Child := AControl.Children[I];
+      if Child is TControl then
+      begin
+        Control := TControl(Child);
+
+        if FDirection = fdRow then
+        begin
+          ControlSize := (TotalSpace - (SpaceBetween * (AControl.ChildrenCount - 1))) / AControl.ChildrenCount;
+          Control.Width := ControlSize;
+          Control.Position.X := CurrentOffset;
+          AlignItem(Control, AControl.Height, True);
+          CurrentOffset := CurrentOffset + Control.Width + SpaceBetween;
+        end
+        else if FDirection = fdColumn then
+        begin
+          ControlSize := (TotalSpace - (SpaceBetween * (AControl.ChildrenCount - 1))) / AControl.ChildrenCount;
+          Control.Height := ControlSize;
+          Control.Position.Y := CurrentOffset;
+          AlignItem(Control, AControl.Width, False);
+          CurrentOffset := CurrentOffset + Control.Height + SpaceBetween;
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TFlexboxLayout.UpdateLayout(AControl: TLayout);
+begin
+  if Assigned(AControl) then
+    ApplyFlexboxLayout(AControl);
+end;
+
+end.
+

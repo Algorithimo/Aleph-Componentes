@@ -1,0 +1,116 @@
+unit AlephFlexboxEnums;
+
+interface
+
+type
+  TFlexDirection = (fdRow, fdRowReverse, fdColumn, fdColumnReverse);
+  TDirection = (dLTR, dRTL);
+  TPhysicalEdge = (peTop, peBottom, peLeft, peRight);
+  TDimension = (dWidth, dHeight);
+
+function IsRow(FlexDirection: TFlexDirection): Boolean;
+function IsColumn(FlexDirection: TFlexDirection): Boolean;
+function ResolveDirection(FlexDirection: TFlexDirection; Direction: TDirection): TFlexDirection;
+function ResolveCrossDirection(FlexDirection: TFlexDirection; Direction: TDirection): TFlexDirection;
+function FlexStartEdge(FlexDirection: TFlexDirection): TPhysicalEdge;
+function FlexEndEdge(FlexDirection: TFlexDirection): TPhysicalEdge;
+function InlineStartEdge(FlexDirection: TFlexDirection; Direction: TDirection): TPhysicalEdge;
+function InlineEndEdge(FlexDirection: TFlexDirection; Direction: TDirection): TPhysicalEdge;
+function Dimension(FlexDirection: TFlexDirection): TDimension;
+
+implementation
+
+function IsRow(FlexDirection: TFlexDirection): Boolean;
+begin
+  Result := (FlexDirection = fdRow) or (FlexDirection = fdRowReverse);
+end;
+
+function IsColumn(FlexDirection: TFlexDirection): Boolean;
+begin
+  Result := (FlexDirection = fdColumn) or (FlexDirection = fdColumnReverse);
+end;
+
+function ResolveDirection(FlexDirection: TFlexDirection; Direction: TDirection): TFlexDirection;
+begin
+  if Direction = dRTL then
+  begin
+    case FlexDirection of
+      fdRow: Result := fdRowReverse;
+      fdRowReverse: Result := fdRow;
+      else Result := FlexDirection;
+    end;
+  end
+  else
+    Result := FlexDirection;
+end;
+
+function ResolveCrossDirection(FlexDirection: TFlexDirection; Direction: TDirection): TFlexDirection;
+begin
+  if IsColumn(FlexDirection) then
+    Result := ResolveDirection(fdRow, Direction)
+  else
+    Result := fdColumn;
+end;
+
+function FlexStartEdge(FlexDirection: TFlexDirection): TPhysicalEdge;
+begin
+  case FlexDirection of
+    fdColumn: Result := peTop;
+    fdColumnReverse: Result := peBottom;
+    fdRow: Result := peLeft;
+    fdRowReverse: Result := peRight;
+  else
+    raise Exception.Create('Invalid FlexDirection');
+  end;
+end;
+
+function FlexEndEdge(FlexDirection: TFlexDirection): TPhysicalEdge;
+begin
+  case FlexDirection of
+    fdColumn: Result := peBottom;
+    fdColumnReverse: Result := peTop;
+    fdRow: Result := peRight;
+    fdRowReverse: Result := peLeft;
+  else
+    raise Exception.Create('Invalid FlexDirection');
+  end;
+end;
+
+function InlineStartEdge(FlexDirection: TFlexDirection; Direction: TDirection): TPhysicalEdge;
+begin
+  if IsRow(FlexDirection) then
+  begin
+    if Direction = dRTL then
+      Result := peRight
+    else
+      Result := peLeft;
+  end
+  else
+    Result := peTop;
+end;
+
+function InlineEndEdge(FlexDirection: TFlexDirection; Direction: TDirection): TPhysicalEdge;
+begin
+  if IsRow(FlexDirection) then
+  begin
+    if Direction = dRTL then
+      Result := peLeft
+    else
+      Result := peRight;
+  end
+  else
+    Result := peBottom;
+end;
+
+function Dimension(FlexDirection: TFlexDirection): TDimension;
+begin
+  case FlexDirection of
+    fdColumn, fdColumnReverse: Result := dHeight;
+    fdRow, fdRowReverse: Result := dWidth;
+  else
+    raise Exception.Create('Invalid FlexDirection');
+  end;
+end;
+
+end.
+

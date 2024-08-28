@@ -1,0 +1,48 @@
+unit AlephFlexboxInterfaces;
+
+interface
+
+uses
+  System.Classes, FMX.Types, FMX.Controls;
+
+type
+  TFlexDirection = (Row, RowReverse, Column, ColumnReverse);
+  TJustifyContent = (FlexStart, FlexEnd, Center, SpaceBetween, SpaceAround);
+  TAlignItems = (Stretch, AFlexStart, AFlexEnd, ACenter);
+
+  IFlexItem = interface
+    ['{D5E1A87D-9E8B-4C1F-BF61-2DF6C3B8E7EC}']
+    function GetControl: TControl;
+    procedure SetFlexGrow(Value: Single);
+    function GetFlexGrow: Single;
+    procedure SetFlexShrink(Value: Single);
+    function GetFlexShrink: Single;
+    procedure SetFlexBasis(Value: Single);
+    function GetFlexBasis: Single;
+
+    property Control: TControl read GetControl;
+    property FlexGrow: Single read GetFlexGrow write SetFlexGrow;
+    property FlexShrink: Single read GetFlexShrink write SetFlexShrink;
+    property FlexBasis: Single read GetFlexBasis write SetFlexBasis;
+  end;
+
+  IFlexContainer = interface
+    ['{8D16F5CE-4A30-43B6-9BF0-1B4F2ABCA1CE}']
+    procedure AddItem(AControl: TControl);
+    procedure CalculateLayout;
+
+    function GetFlexDirection: TFlexDirection;
+    procedure SetFlexDirection(Value: TFlexDirection);
+    function GetJustifyContent: TJustifyContent;
+    procedure SetJustifyContent(Value: TJustifyContent);
+    function GetAlignItems: TAlignItems;
+    procedure SetAlignItems(Value: TAlignItems);
+
+    property FlexDirection: TFlexDirection read GetFlexDirection write SetFlexDirection;
+    property JustifyContent: TJustifyContent read GetJustifyContent write SetJustifyContent;
+    property AlignItems: TAlignItems read GetAlignItems write SetAlignItems;
+  end;
+
+implementation
+
+end.

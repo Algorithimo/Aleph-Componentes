@@ -50,9 +50,6 @@ contains
   AlephRectangle in 'AlephComponent\AlephRectangle.pas',
   AlephLayout_Editor in 'AlephComponent\AlephLayout_Editor.pas',
   AlephPropertyEditor in 'AlephComponent\AlephPropertyEditor.pas',
-  AlephTipos in 'AlephComponent\AlephTipos.pas',
-  AlephFlexbox in 'AlephComponent\AlephFlexbox.pas',
-  AlephFlexboxEnums in 'AlephComponent\AlephFlexboxEnums.pas',
-  AlephFlexboxInterfaces in 'AlephComponent\AlephFlexboxInterfaces.pas';
+  AlephTipos in 'AlephComponent\AlephTipos.pas';
 
 end.

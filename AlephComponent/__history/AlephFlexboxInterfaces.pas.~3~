@@ -1,0 +1,30 @@
+unit AlephFlexboxInterfaces;
+
+interface
+
+uses
+  System.Classes, FMX.Types, FMX.Controls, FMX.Layouts;
+type
+  TFlexboxDirection = (fdRow, fdColumn);
+  TFlexboxJustifyContent = (fjcFlexStart, fjcCenter, fjcFlexEnd, fjcSpaceBetween, fjcSpaceAround);
+  TFlexboxAlignItems = (faiStretch, faiFlexStart, faiCenter, faiFlexEnd);
+  IFlexDirection = interface
+    ['{D7B4E653-9D3F-4F55-9E98-7B8C47929358}']
+    function GetDirection: TFlexboxDirection;
+    procedure SetDirection(Value: TFlexboxDirection);
+    property Direction: TFlexboxDirection read GetDirection write SetDirection;
+  end;
+  IJustifyContent = interface
+    ['{65BF6FFA-0723-4326-BAA9-3878A9D8EB63}']
+    function GetJustifyContent: TFlexboxJustifyContent;
+    procedure SetJustifyContent(Value: TFlexboxJustifyContent);
+    property JustifyContent: TFlexboxJustifyContent read GetJustifyContent write SetJustifyContent;
+  end;
+  IAlignItems = interface
+    ['{98B39463-91A3-48E2-9208-4E4D7F114D21}']
+    function GetAlignItems: TFlexboxAlignItems;
+    procedure SetAlignItems(Value: TFlexboxAlignItems);
+    property AlignItems: TFlexboxAlignItems read GetAlignItems write SetAlignItems;
+  end;
+implementation
+end.
