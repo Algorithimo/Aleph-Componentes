@@ -1,0 +1,17 @@
+unit InterfAlephTipo;
+
+interface
+
+uses
+  System.Classes, AlephTipos;
+
+type
+  IAdjustable = interface
+    ['{F2355B11-EB4B-41E6-8E6D-3241BFE56A4E}']  // Um GUID único
+    procedure AdjustSize;
+  end;
+
+
+implementation
+
+end.

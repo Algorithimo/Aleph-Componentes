@@ -1,0 +1,92 @@
+unit AlephRem;
+
+interface
+
+uses
+  System.SysUtils,
+  System.Classes,
+  System.Generics.Collections;
+
+type
+  TFontBase = class(TPersistent)
+  private
+    FOnChange: TNotifyEvent;
+    procedure SetFontBase(const Value: Single);
+  public
+    FAlephFonteBase: Single;
+    constructor Create(ABaseSize: Single);
+    destructor Destroy; override;
+  published
+    property FontBase: Single read FAlephFonteBase write SetFontBase;
+    property OnChange: TNotifyEvent read FOnChange write FOnChange;
+  end;
+
+  TREmSize = class(TPersistent)
+  private
+    FFontBase: TFontBase;
+    FREM: Single;
+    FOnChange: TNotifyEvent;
+    procedure SetREM(const Value: Single);
+  public
+    constructor Create(AFontBase: TFontBase);
+    destructor Destroy; override;
+    function ToPixels: Single;
+  published
+    property REM: Single read FREM write SetREM;
+    property OnChange: TNotifyEvent read FOnChange write FOnChange;
+  end;
+
+implementation
+
+{ TREmSize }
+
+constructor TREmSize.Create(AFontBase: TFontBase);
+begin
+  FFontBase := AFontBase;
+  FREM := 1; // Valor padrão de 1 rem
+end;
+
+destructor TREmSize.Destroy;
+begin
+  inherited;
+end;
+
+procedure TREmSize.SetREM(const Value: Single);
+begin
+  if FREM <> Value then
+  begin
+    FREM := Value;
+    if Assigned(FOnChange) then
+      FOnChange(Self);
+  end;
+end;
+
+function TREmSize.ToPixels: Single;
+begin
+  Result := FREM * FFontBase.FAlephFonteBase;
+end;
+
+{ TFontBase }
+
+constructor TFontBase.Create(ABaseSize: Single);
+begin
+  FAlephFonteBase := ABaseSize;
+end;
+
+destructor TFontBase.Destroy;
+begin
+  inherited;
+end;
+
+procedure TFontBase.SetFontBase(const Value: Single);
+begin
+  if FAlephFonteBase <> Value then
+  begin
+    FAlephFonteBase := Value;
+    if Assigned(FOnChange) then
+      FOnChange(Self);
+  end;
+end;
+
+end.
+

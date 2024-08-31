@@ -12,10 +12,11 @@ uses
   FMX.Objects,
   FMX.Forms,
   System.Generics.Collections,
-  AlephTipos;
+  AlephTipos,
+  ResizeManager;
 
 type
-  TAlephRectangle = class(TRectangle)
+  TAlephRectangle = class(TRectangle, IResizable)
   private
     FAlephTipo: TAlephTipo;
     FCornerPerWidthPercent: Integer;
@@ -38,7 +39,7 @@ type
       Top, Bottom, Left, Right: Single);
     procedure AdjustCornerSize(Sender: TObject);
   published
-    property Tipo: TAlephTipo read GetTipo write SetTipo;
+    property AlephPercentage: TAlephTipo read GetTipo write SetTipo;
     property CornerHeightPercent: Integer read FCornerPerHeightPercent
       write SetCornerPerHeightPercent;
     property CornerWidthPercent: Integer read FCornerPerWidthPercent
@@ -62,7 +63,11 @@ end;
 procedure UnregisterAlephRectangle(ARect: TAlephRectangle);
 begin
   if Assigned(AlephRectangles) then
+  begin
     AlephRectangles.Remove(ARect);
+    if AlephRectangles.Count = 0 then
+      FreeAndNil(AlephRectangles);
+  end;
 end;
 
 function TAlephRectangle.GetTipo: TAlephTipo;
@@ -134,28 +139,38 @@ end;
 
 { TAlephRectangle }
 
+procedure TAlephRectangle.SetTipo(const Value: TAlephTipo);
+begin
+  FAlephTipo.Assign(Value);
+  AdjustSize(nil);
+end;
+
 procedure TAlephRectangle.AdjustSize(Sender: TObject);
 begin
-  FAlephTipo.AdjustSize;
+  if Assigned(FAlephTipo) then
+    FAlephTipo.AdjustSize(sender);
 end;
 
 constructor TAlephRectangle.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FAlephTipo := TAlephTipo.Create(self);
+  GlobalResizeManager.RegisterComponent(Self);
+  //RegisterAlephRectangle(Self);
   if AOwner is TForm then
   begin
-    TForm(AOwner).OnResize := FormResizeHandler;
+    TForm(AOwner).OnResize := GlobalResizeManager.FormResizeHandler;
     // Registra o evento de redimensionamento global
   end;
-  RegisterAlephRectangle(Self); // Registra o componente na lista
+  // Registra o componente na lista
 end;
 
 destructor TAlephRectangle.Destroy;
 begin
+  GlobalResizeManager.UnregisterComponent(Self);
+  //UnregisterAlephRectangle(Self);
   FreeAndNil(AlephRectangles);
   FreeAndNil(FAlephTipo);
-  UnregisterAlephRectangle(Self);
   inherited Destroy;
 end;
 
@@ -219,12 +234,6 @@ begin
   Self.Margins.Left := NewMarginSizeLeft;
   Self.Margins.Right := NewMarginSizeRight;
   Self.EndUpdate;
-end;
-
-procedure TAlephRectangle.SetTipo(const Value: TAlephTipo);
-begin
-  FAlephTipo.Assign(Value);
-  AdjustSize(nil);
 end;
 
 procedure TAlephRectangle.AdjustCornerSize(Sender: TObject);

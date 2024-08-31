@@ -1,0 +1,83 @@
+unit ResizeManager;
+
+interface
+
+uses
+  System.Classes, Vcl.Forms, System.Generics.Collections;
+
+type
+  IResizable = interface
+    ['{YOUR-GUID-HERE}']
+    procedure AdjustSize(Sender: TObject);
+  end;
+
+  TResizeManager = class
+  private
+    FResizableComponents: TList<IResizable>;
+    procedure FormResizeHandler(Sender: TObject);
+  public
+    constructor Create;
+    destructor Destroy; override;
+    procedure RegisterComponent(AComponent: IResizable);
+    procedure UnregisterComponent(AComponent: IResizable);
+    class function GetInstance: TResizeManager;
+  end;
+
+function ResizeManager: TResizeManager;
+
+implementation
+
+var
+  FResizeManager: TResizeManager = nil;
+
+function ResizeManager: TResizeManager;
+begin
+  Result := TResizeManager.GetInstance;
+end;
+
+{ TResizeManager }
+
+constructor TResizeManager.Create;
+begin
+  inherited;
+  FResizableComponents := TList<IResizable>.Create;
+end;
+
+destructor TResizeManager.Destroy;
+begin
+  FResizableComponents.Free;
+  inherited;
+end;
+
+procedure TResizeManager.FormResizeHandler(Sender: TObject);
+var
+  Component: IResizable;
+begin
+  for Component in FResizableComponents do
+    Component.AdjustSize(Sender);
+end;
+
+class function TResizeManager.GetInstance: TResizeManager;
+begin
+  if FResizeManager = nil then
+    FResizeManager := TResizeManager.Create;
+  Result := FResizeManager;
+end;
+
+procedure TResizeManager.RegisterComponent(AComponent: IResizable);
+begin
+  if not FResizableComponents.Contains(AComponent) then
+    FResizableComponents.Add(AComponent);
+end;
+
+procedure TResizeManager.UnregisterComponent(AComponent: IResizable);
+begin
+  FResizableComponents.Remove(AComponent);
+end;
+
+initialization
+
+finalization
+  FResizeManager.Free;
+
+end.

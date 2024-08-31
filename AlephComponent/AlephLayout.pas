@@ -13,33 +13,39 @@ uses
   FMX.Objects,
   FMX.Forms,
   System.Generics.Collections,
+  AlephRem,
   AlephTipos,
-  AlephFlexbox;
+  ResizeManager;
 
 type
-  TAlephLayout = class(TLayout)
+  TAlephLayout = class(TLayout, IResizable)
   private
     FAlephTipo: TAlephTipo;
-    FFlexboxContainer: TFlexContainer;
-    procedure AdjustSize(Sender: TObject);
-    procedure ApplyFlexboxLayout(Sender: TObject);
+    FRemMargins : TREmMargins;
+    FFontBase : TFontBase;
     procedure FormResizeHandler(Sender: TObject);
     class procedure GlobalFormResizeHandler(Sender: TObject); static;
     function GetTipo: TAlephTipo;
-    function GetFlexboxContainer: TFlexContainer;
     procedure SetTipo(const Value: TAlephTipo);
-    procedure SetFlexboxContainer(const Value: TFlexContainer);
+    function GetRemMargins: TREmMargins;
+    procedure SetRemMargins(const Value: TREmMargins);
+    function GetFontBase: TFontBase;
+    procedure setFontBase(const Value: TFontBase);
   protected
+    procedure AdjustSize(Sender: TObject);
     procedure Resize; override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
   published
     property AlephPercentage: TAlephTipo read GetTipo write SetTipo;
-    property FlexboxContainer: TFlexContainer read GetFlexboxContainer write SetFlexboxContainer;
+    property REmMargins: TREmMargins  read GetRemMargins write SetRemMargins;
+    property FontBase : TFontBase read GetFontBase write setFontBase;
   end;
 
 procedure Register;
+
+
 
 implementation
 
@@ -50,6 +56,9 @@ procedure Register;
 begin
   // Registrar os componentes na paleta de componentes da IDE
   RegisterComponents('Aleph', [TAlephLayout]);
+
+//  RegisterPropertyEditor(TypeInfo(Integer), TAlephLayout, 'PHeight', TAlephWidthHeightPropertyEditor);
+//  RegisterPropertyEditor(TypeInfo(Integer), TAlephLayout, 'PWidth', TAlephWidthHeightPropertyEditor);
 end;
 
 procedure RegisterAlephLayout(ALayout: TAlephLayout);
@@ -62,12 +71,21 @@ end;
 procedure UnregisterAlephLayout(ALayout: TAlephLayout);
 begin
   if Assigned(AlephLayouts) then
+  begin
     AlephLayouts.Remove(ALayout);
+    if AlephLayouts.Count = 0 then
+      FreeAndNil(AlephLayouts);
+  end;
 end;
 
-function TAlephLayout.GetFlexboxContainer: TFlexContainer;
+function TAlephLayout.GetFontBase: TFontBase;
 begin
-  Result := FFlexboxContainer;
+  Result := FFontBase;
+end;
+
+function TAlephLayout.GetRemMargins: TREmMargins;
+begin
+  Result := FRemMargins;
 end;
 
 function TAlephLayout.GetTipo: TAlephTipo;
@@ -84,7 +102,6 @@ begin
     for i := 0 to AlephLayouts.Count - 1 do
     begin
       AlephLayouts[i].AdjustSize(Sender);
-      AlephLayouts[i].ApplyFlexboxLayout(sender);
     end;
   end;
 end;
@@ -96,11 +113,16 @@ begin
     FAlephTipo.Resize;
 end;
 
-procedure TAlephLayout.SetFlexboxContainer(const Value: TFlexContainer);
+procedure TAlephLayout.setFontBase(const Value: TFontBase);
 begin
-  if Assigned(FFlexboxContainer) then
-    FFlexboxContainer.Assign(Value);
-  AdjustSize(nil);
+  if Assigned(FFontBase) then
+    FFontBase.Assign(Value);
+end;
+
+procedure TAlephLayout.SetRemMargins(const Value: TREmMargins);
+begin
+  if Assigned(FRemMargins) then
+    FRemMargins.Assign(Value);
 end;
 
 procedure TAlephLayout.SetTipo(const Value: TAlephTipo);
@@ -113,41 +135,40 @@ end;
 procedure TAlephLayout.AdjustSize(Sender: TObject);
 begin
   if Assigned(FAlephTipo) then
-    FAlephTipo.AdjustSize;
-end;
-
-procedure TAlephLayout.ApplyFlexboxLayout(Sender: TObject);
-begin
-  if Assigned(FFlexboxContainer) then
-  begin
-    FFlexboxContainer.CalculateLayout;
-  end;
+    FAlephTipo.AdjustSize(sender);
 end;
 
 constructor TAlephLayout.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FAlephTipo := TAlephTipo.Create(Self);
-  FFlexboxContainer := TFlexContainer.Create(self);
+  FFontBase := TFontBase.Create(12);
+  FREmMargins := TREmMargins.Create(FFontBase, Self);
+  GlobalResizeManager.RegisterComponent(Self);
+  //RegisterAlephLayout(Self);
   if AOwner is TForm then
   begin
-    TForm(AOwner).OnResize := FormResizeHandler;
+    TForm(AOwner).OnResize := GlobalResizeManager.FormResizeHandler;
     // Registra o evento de redimensionamento global
   end;
-  RegisterAlephLayout(Self); // Registra o componente na lista
+   // Registra o componente na lista
 end;
 
 destructor TAlephLayout.Destroy;
 begin
-  if Assigned(AlephLayouts) then
-  begin
-    UnregisterAlephLayout(Self);
-    if AlephLayouts.Count = 0 then
-      FreeAndNil(AlephLayouts); // Liberar a lista se estiver vazia
-  end;
+  GlobalResizeManager.UnregisterComponent(Self);
+  //UnregisterAlephLayout(Self);
   FreeAndNil(FAlephTipo);
-  FreeAndNil(FFlexboxContainer); // Libera a referência ao FlexContainer
   inherited Destroy;
+
+//  if Assigned(AlephLayouts) then
+//  begin
+//    UnregisterAlephLayout(Self);
+//    if AlephLayouts.Count = 0 then
+//      FreeAndNil(AlephLayouts); // Liberar a lista se estiver vazia
+//  end;
+//  FreeAndNil(FAlephTipo);
+//  inherited Destroy;
 end;
 
 procedure TAlephLayout.FormResizeHandler(Sender: TObject);

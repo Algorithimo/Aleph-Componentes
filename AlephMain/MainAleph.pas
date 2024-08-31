@@ -21,14 +21,14 @@ type
     FOnChange: TNotifyEvent;
     procedure SetFontBase(const Value: Single);
     procedure SetREM(const Value: Single);
+    property OnChange: TNotifyEvent read FOnChange write FOnChange;
+    property FontBase: Single read FFontBase write SetFontBase;
   public
     constructor Create(ABaseSize: Single);
     destructor Destroy; override;
     function ToPixels: Single;
   published
     property REM: Single read FREM write SetREM;
-    property FontBase: Single read FFontBase write SetFontBase;
-    property OnChange: TNotifyEvent read FOnChange write FOnChange;
   end;
 
   TREmMargins = class(TPersistent)
