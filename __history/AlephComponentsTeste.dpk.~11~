@@ -48,7 +48,6 @@ contains
   AlephTipos in 'AlephComponent\AlephTipos.pas',
   AlephRem in 'AlephComponent\AlephRem.pas',
   ResizeManager in 'AlephComponent\ResizeManager.pas',
-  AlephLabel in 'AlephComponent\AlephLabel.pas',
-  AlephREmFont in 'AlephComponent\AlephREmFont.pas';
+  AlephLabel in 'AlephComponent\AlephLabel.pas';
 
 end.

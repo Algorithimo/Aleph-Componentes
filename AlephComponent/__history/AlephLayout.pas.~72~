@@ -13,17 +13,16 @@ uses
   FMX.Objects,
   FMX.Forms,
   System.Generics.Collections,
-  InterfAlephTipo,
   AlephRem,
-  AlephTipos;
+  AlephTipos,
+  ResizeManager;
 
 type
-  TAlephLayout = class(TLayout, IInterfAlephTipo)
+  TAlephLayout = class(TLayout, IResizable)
   private
     FAlephTipo: TAlephTipo;
     FRemMargins : TREmMargins;
     FFontBase : TFontBase;
-    procedure AdjustSize(Sender: TObject);
     procedure FormResizeHandler(Sender: TObject);
     class procedure GlobalFormResizeHandler(Sender: TObject); static;
     function GetTipo: TAlephTipo;
@@ -33,6 +32,7 @@ type
     function GetFontBase: TFontBase;
     procedure setFontBase(const Value: TFontBase);
   protected
+    procedure AdjustSize(Sender: TObject);
     procedure Resize; override;
   public
     constructor Create(AOwner: TComponent); override;
@@ -144,19 +144,22 @@ begin
   FAlephTipo := TAlephTipo.Create(Self);
   FFontBase := TFontBase.Create(12);
   FREmMargins := TREmMargins.Create(FFontBase, Self);
-
+  GlobalResizeManager.RegisterComponent(Self);
+  //RegisterAlephLayout(Self);
   if AOwner is TForm then
   begin
-    TForm(AOwner).OnResize := FormResizeHandler;
+    TForm(AOwner).OnResize := GlobalResizeManager.FormResizeHandler;
     // Registra o evento de redimensionamento global
   end;
-  RegisterAlephLayout(Self); // Registra o componente na lista
+   // Registra o componente na lista
 end;
 
 destructor TAlephLayout.Destroy;
 begin
-
-  UnregisterAlephLayout(Self);
+  GlobalResizeManager.UnregisterComponent(Self);
+  //UnregisterAlephLayout(Self);
+  FreeAndNil(FFontBase);
+  FreeAndNil(FREmMargins);
   FreeAndNil(FAlephTipo);
   inherited Destroy;
 

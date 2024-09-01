@@ -10,15 +10,14 @@ uses
 type
   TFontBase = class(TPersistent)
   private
-
     FOnChange: TNotifyEvent;
     procedure SetFontBase(const Value: Single);
   public
-    FFontBase: Single;
+    FAlephFonteBase: Single;
     constructor Create(ABaseSize: Single);
     destructor Destroy; override;
   published
-    property FontBase: Single read FFontBase write SetFontBase;
+    property FontBase: Single read FAlephFonteBase write SetFontBase;
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
   end;
 
@@ -28,10 +27,11 @@ type
     FREM: Single;
     FOnChange: TNotifyEvent;
     procedure SetREM(const Value: Single);
+    procedure FontBaseChanged(Sender: TObject);
   public
-    constructor Create(ABaseSize: Single);
+    constructor Create(AFontBase: TFontBase);
     destructor Destroy; override;
-    function ToPixels: Single;
+    function ToPixels: Integer;
   published
     property REM: Single read FREM write SetREM;
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
@@ -41,15 +41,26 @@ implementation
 
 { TREmSize }
 
-constructor TREmSize.Create(ABaseSize: Single);
+constructor TREmSize.Create(AFontBase: TFontBase);
 begin
-  FFontBase.FontBase := ABaseSize;
-  FREM := 0; // Valor padrão de 1 rem
+  FFontBase := AFontBase;
+  FREM := 0; // Valor padrão de 0 rem
+
+  // Inscreve-se para ser notificado quando a FontBase mudar
+  FFontBase.OnChange := FontBaseChanged;
 end;
 
 destructor TREmSize.Destroy;
 begin
+  FFontBase.OnChange := nil;
   inherited;
+end;
+
+procedure TREmSize.FontBaseChanged(Sender: TObject);
+begin
+  // Notifica qualquer mudança relevante
+  if Assigned(FOnChange) then
+    FOnChange(Self);
 end;
 
 procedure TREmSize.SetREM(const Value: Single);
@@ -62,16 +73,16 @@ begin
   end;
 end;
 
-function TREmSize.ToPixels: Single;
+function TREmSize.ToPixels: Integer;
 begin
-  Result := FREM * FFontBase.FFontBase;
+  Result := FREM * FFontBase.FAlephFonteBase;
 end;
 
 { TFontBase }
 
 constructor TFontBase.Create(ABaseSize: Single);
 begin
-  FFontBase := ABaseSize;
+  FAlephFonteBase := ABaseSize;
 end;
 
 destructor TFontBase.Destroy;
@@ -81,12 +92,13 @@ end;
 
 procedure TFontBase.SetFontBase(const Value: Single);
 begin
-  if FFontBase <> Value then
+  if FAlephFonteBase <> Value then
   begin
-    FFontBase := Value;
+    FAlephFonteBase := Value;
     if Assigned(FOnChange) then
       FOnChange(Self);
   end;
 end;
 
 end.
+

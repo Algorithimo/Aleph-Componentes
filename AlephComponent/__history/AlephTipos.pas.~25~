@@ -50,7 +50,7 @@ type
     property PWidth: Integer read FPWidth write SetPWidth;
   public
     procedure Resize;
-    procedure AdjustSize;
+    procedure AdjustSize(Sender: TObject);
     constructor Create(AControl: TControl);
     destructor Destroy; override;
   end;
@@ -71,7 +71,7 @@ end;
 
 { TAlephTipo }
 
-procedure TAlephTipo.AdjustSize;
+procedure TAlephTipo.AdjustSize(Sender: TObject);
 var
 
   ParentWidth, ParentHeight: Single;
@@ -97,13 +97,13 @@ begin
     begin
       FControl.BeginUpdate;
       try
-        if PWidth > 0 then
+        if FPWidth > 0 then
         begin
           FControl.Width := ParentWidth * FPWidth / 100;
         end;
-        if PHeight > 0 then
+        if FPHeight > 0 then
         begin
-          FControl.Height := ParentHeight * PHeight / 100;
+          FControl.Height := ParentHeight * FPHeight / 100;
         end;
       finally
         FControl.EndUpdate
@@ -175,7 +175,7 @@ begin
   if FPHeight <> Value then
   begin
     FPHeight := Value;
-    AdjustSize;
+    AdjustSize(nil);
   end;
 end;
 
@@ -184,7 +184,7 @@ begin
   if FPWidth <> Value then
   begin
     FPWidth := Value;
-    AdjustSize;
+    AdjustSize(nil);
   end;
 end;
 
@@ -194,11 +194,11 @@ constructor TREmMargins.Create(AFontBase: TFontBase; AControl: TControl);
 begin
   inherited Create;
   FControl := AControl;
-//
-//  if not Assigned(AFontBase) then
-//  begin
-//    AFontBase := TFontBase.Create(12);
-//  end;
+
+  if not Assigned(AFontBase) then
+  begin
+    AFontBase := TFontBase.Create(12);
+  end;
 
  if Assigned(AFontBase) then
   begin

@@ -50,7 +50,7 @@ type
     property PWidth: Integer read FPWidth write SetPWidth;
   public
     procedure Resize;
-
+    procedure AdjustSize(Sender: TObject);
     constructor Create(AControl: TControl);
     destructor Destroy; override;
   end;
@@ -70,6 +70,47 @@ begin
 end;
 
 { TAlephTipo }
+
+procedure TAlephTipo.AdjustSize(Sender: TObject);
+var
+
+  ParentWidth, ParentHeight: Single;
+begin
+  if Assigned(FControl.Parent) then
+  begin
+    // Verifica se o Parent é um TForm
+    if FControl.Parent is TForm then
+    begin
+      ParentWidth := TForm(FControl.Parent).ClientWidth;
+      ParentHeight := TForm(FControl.Parent).ClientHeight;
+    end
+    // Verifica se o Parent é um TControl (layout ou retângulo)
+    else if FControl.Parent is TControl then
+    begin
+      ParentWidth := TControl(FControl.Parent).Width;
+      ParentHeight := TControl(FControl.Parent).Height;
+    end
+    else
+      Exit; // Se não for um TForm ou TControl, não faz ajuste
+
+    if Assigned(FControl) then
+    begin
+      FControl.BeginUpdate;
+      try
+        if FPWidth > 0 then
+        begin
+          FControl.Width := ParentWidth * FPWidth / 100;
+        end;
+        if FPHeight > 0 then
+        begin
+          FControl.Height := ParentHeight * FPHeight / 100;
+        end;
+      finally
+        FControl.EndUpdate
+      end;
+    end;
+  end;
+end;
 
 constructor TAlephTipo.Create(AControl: TControl);
 begin
@@ -134,7 +175,7 @@ begin
   if FPHeight <> Value then
   begin
     FPHeight := Value;
-    AdjustSize;
+    AdjustSize(nil);
   end;
 end;
 
@@ -143,7 +184,7 @@ begin
   if FPWidth <> Value then
   begin
     FPWidth := Value;
-    AdjustSize;
+    AdjustSize(nil);
   end;
 end;
 

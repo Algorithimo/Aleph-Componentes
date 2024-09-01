@@ -22,15 +22,13 @@ type
   private
     FAlephTipo: TAlephTipo;
     FRemMargins : TREmMargins;
-    FFontBase : TFontBase;
+
     procedure FormResizeHandler(Sender: TObject);
     class procedure GlobalFormResizeHandler(Sender: TObject); static;
     function GetTipo: TAlephTipo;
     procedure SetTipo(const Value: TAlephTipo);
     function GetRemMargins: TREmMargins;
     procedure SetRemMargins(const Value: TREmMargins);
-    function GetFontBase: TFontBase;
-    procedure setFontBase(const Value: TFontBase);
   protected
     procedure AdjustSize(Sender: TObject);
     procedure Resize; override;
@@ -39,8 +37,8 @@ type
     destructor Destroy; override;
   published
     property AlephPercentage: TAlephTipo read GetTipo write SetTipo;
-    property REmMargins: TREmMargins  read GetRemMargins write SetRemMargins;
-    property FontBase : TFontBase read GetFontBase write setFontBase;
+    property MarginsREm: TREmMargins  read GetRemMargins write SetRemMargins;
+
   end;
 
 procedure Register;
@@ -78,10 +76,6 @@ begin
   end;
 end;
 
-function TAlephLayout.GetFontBase: TFontBase;
-begin
-  Result := FFontBase;
-end;
 
 function TAlephLayout.GetRemMargins: TREmMargins;
 begin
@@ -113,11 +107,6 @@ begin
     FAlephTipo.Resize;
 end;
 
-procedure TAlephLayout.setFontBase(const Value: TFontBase);
-begin
-  if Assigned(FFontBase) then
-    FFontBase.Assign(Value);
-end;
 
 procedure TAlephLayout.SetRemMargins(const Value: TREmMargins);
 begin
@@ -142,8 +131,7 @@ constructor TAlephLayout.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FAlephTipo := TAlephTipo.Create(Self);
-  FFontBase := TFontBase.Create(12);
-  FREmMargins := TREmMargins.Create(FFontBase, Self);
+  FREmMargins := TREmMargins.Create(Self);
   GlobalResizeManager.RegisterComponent(Self);
   //RegisterAlephLayout(Self);
   if AOwner is TForm then
@@ -158,6 +146,7 @@ destructor TAlephLayout.Destroy;
 begin
   GlobalResizeManager.UnregisterComponent(Self);
   //UnregisterAlephLayout(Self);
+  FreeAndNil(FREmMargins);
   FreeAndNil(FAlephTipo);
   inherited Destroy;
 

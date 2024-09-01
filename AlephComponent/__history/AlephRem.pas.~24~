@@ -11,13 +11,13 @@ type
   TFontBase = class(TPersistent)
   private
     FOnChange: TNotifyEvent;
-    procedure SetFontBase(const Value: Integer);
+    procedure SetFontBase(const Value: Single);
   public
-    FAlephFonteBase: Integer;
-    constructor Create(ABaseSize: Integer);
+    FAlephFonteBase: Single;
+    constructor Create(ABaseSize: Single);
     destructor Destroy; override;
   published
-    property FontBase: Integer read FAlephFonteBase write SetFontBase;
+    property FontBase: Single read FAlephFonteBase write SetFontBase;
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
   end;
 
@@ -31,7 +31,7 @@ type
   public
     constructor Create(AFontBase: TFontBase);
     destructor Destroy; override;
-    function ToPixels: Integer;
+    function ToPixels: Single;
   published
     property REM: Single read FREM write SetREM;
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
@@ -73,14 +73,14 @@ begin
   end;
 end;
 
-function TREmSize.ToPixels: Integer;
+function TREmSize.ToPixels: Single;
 begin
-  Result := Round(FREM * FFontBase.FAlephFonteBase);
+  Result := FREM * FFontBase.FAlephFonteBase;
 end;
 
 { TFontBase }
 
-constructor TFontBase.Create(ABaseSize: Integer);
+constructor TFontBase.Create(ABaseSize: Single);
 begin
   FAlephFonteBase := ABaseSize;
 end;
@@ -90,7 +90,7 @@ begin
   inherited;
 end;
 
-procedure TFontBase.SetFontBase(const Value: Integer);
+procedure TFontBase.SetFontBase(const Value: Single);
 begin
   if FAlephFonteBase <> Value then
   begin

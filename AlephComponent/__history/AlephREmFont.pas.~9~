@@ -1,0 +1,88 @@
+unit AlephREmFont;
+
+interface
+
+uses
+  System.Classes, Fmx.Controls, Fmx.StdCtrls;
+
+type
+  IRemFontSize = interface
+    ['{6719F41F-D2BC-4C5F-A9E4-828F52E45BA7}']
+    procedure ResizeFont(Sender: TObject);
+  end;
+
+  TREmFontSize = class(TPersistent)
+  private
+    FBaseSize: Single;
+    FREM: Single;
+    FOnChange: TNotifyEvent;
+    FControl: TControl;
+    procedure SetBaseSize(const Value: Single);
+    procedure SetREM(const Value: Single);
+  public
+    procedure TextResizeHandler(Sender: TObject);
+    constructor Create(AControl: TControl);
+    destructor Destroy; override;
+    function ToPixels: Integer;
+  published
+    property FontSize: Single read FBaseSize write SetBaseSize;
+    property REM: Single read FREM write SetREM;
+    property OnChange: TNotifyEvent read FOnChange write FOnChange;
+  end;
+
+implementation
+
+var
+  FResizeManager: TREmFontSize = nil;
+
+{ TREmFontSize }
+
+constructor TREmFontSize.Create(AControl: TControl);
+begin
+  inherited Create;
+  FControl := AControl;
+  FBaseSize := 12; // Valor padrão para o tamanho base da fonte
+  FREM := 1; // Valor padrão de 1 rem
+end;
+
+destructor TREmFontSize.Destroy;
+begin
+  inherited;
+end;
+
+procedure TREmFontSize.SetBaseSize(const Value: Single);
+begin
+  if FBaseSize <> Value then
+  begin
+    FBaseSize := Value;
+    TextResizeHandler(nil);
+    if Assigned(FOnChange) then
+      FOnChange(Self);
+  end;
+end;
+
+procedure TREmFontSize.SetREM(const Value: Single);
+begin
+  if FREM <> Value then
+  begin
+    FREM := Value;
+    TextResizeHandler(nil);
+    if Assigned(FOnChange) then
+      FOnChange(Self);
+  end;
+end;
+
+procedure TREmFontSize.TextResizeHandler(Sender: TObject);
+var
+  Component: IRemFontSize;
+begin
+    Component.ResizeFont(Sender);
+end;
+
+function TREmFontSize.ToPixels: Integer;
+begin
+  Result := Round(FREM * FBaseSize);
+end;
+
+
+end.

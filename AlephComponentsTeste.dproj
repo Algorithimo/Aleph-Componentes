@@ -158,7 +158,7 @@
         <DCCReference Include="vclx.dcp"/>
         <DCCReference Include="xmlrtl.dcp"/>
         <DCCReference Include="fmx.dcp"/>
-        <DCCReference Include="Label\AlephLabel.pas"/>
+        <DCCReference Include="Label\AlephLabelteste.pas"/>
         <DCCReference Include="AlephMain\MainAleph.pas"/>
         <DCCReference Include="AlephMain\AlephControl.pas"/>
         <DCCReference Include="AlephMain\RemControlInterface.pas"/>
@@ -169,6 +169,8 @@
         <DCCReference Include="AlephComponent\AlephTipos.pas"/>
         <DCCReference Include="AlephComponent\AlephRem.pas"/>
         <DCCReference Include="AlephComponent\ResizeManager.pas"/>
+        <DCCReference Include="AlephComponent\AlephLabel.pas"/>
+        <DCCReference Include="AlephComponent\AlephREmFont.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

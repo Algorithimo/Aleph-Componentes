@@ -3,7 +3,7 @@ unit ResizeManager;
 interface
 
 uses
-  System.Classes, Fmx.Forms, System.Generics.Collections;
+  System.Classes, Vcl.Forms, System.Generics.Collections;
 
 type
   IResizable = interface

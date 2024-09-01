@@ -8,7 +8,7 @@ uses
   System.Generics.Collections;
 
 type
-  TFontBase = class(TPersistent)
+  TFontBase = class
   private
     FOnChange: TNotifyEvent;
     procedure SetFontBase(const Value: Integer);
@@ -21,7 +21,7 @@ type
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
   end;
 
-  TREmSize = class(TPersistent)
+  TREmSize = class
   private
     FFontBase: TFontBase;
     FREM: Single;
