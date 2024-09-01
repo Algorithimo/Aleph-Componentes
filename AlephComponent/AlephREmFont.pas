@@ -3,7 +3,7 @@ unit AlephREmFont;
 interface
 
 uses
-  System.Classes, Fmx.Controls, Fmx.StdCtrls, System.SysUtils, FMX.Objects;
+  System.Classes, Fmx.Controls, Fmx.StdCtrls, System.SysUtils, Fmx.Objects;
 
 type
 
@@ -12,7 +12,7 @@ type
     procedure ResizeFont(Sender: TObject);
   end;
 
-  type
+type
   TLabelAutoResizer = class
   private
     FLabel: TLabel;
@@ -22,7 +22,8 @@ type
     constructor Create(ALabel: TLabel);
     destructor Destroy; override;
     procedure ResizeLabel;
-    property AutoResizeHeight: Boolean read FAutoResizeHeight write SetAutoResizeHeight;
+    property AutoResizeHeight: Boolean read FAutoResizeHeight
+      write SetAutoResizeHeight;
   end;
 
   TREmFontSize = class(TPersistent)
@@ -49,7 +50,7 @@ implementation
 var
   FResizeManager: TREmFontSize = nil;
 
-{ TREmFontSize }
+  { TREmFontSize }
 
 constructor TREmFontSize.Create(AControl: TControl);
 begin
@@ -61,7 +62,6 @@ end;
 
 destructor TREmFontSize.Destroy;
 begin
-  FreeAndNil(FControl);
   inherited;
 end;
 
@@ -102,17 +102,18 @@ begin
   Result := Round(FREM * FBaseSize);
 end;
 
-
 { TLabelAutoResizer }
 
 constructor TLabelAutoResizer.Create(ALabel: TLabel);
 begin
   FLabel := ALabel;
-  FAutoResizeHeight := False; // Por padrão, o redimensionamento automático está ativado
+  FAutoResizeHeight := False;
+  //FLabel.OnResize := nil;
+  // Por padrão, o redimensionamento automático está ativado
 end;
+
 destructor TLabelAutoResizer.Destroy;
 begin
-  FreeAndNil(FLabel);
   inherited;
 end;
 
@@ -128,6 +129,7 @@ begin
     FLabel.Height := TextHeight + FLabel.Margins.Top + FLabel.Margins.Bottom;
   end;
 end;
+
 procedure TLabelAutoResizer.SetAutoResizeHeight(const Value: Boolean);
 begin
   if FAutoResizeHeight <> Value then
@@ -138,6 +140,7 @@ begin
       ResizeLabel;
   end;
 end;
-end.
 
 end.
+
+  end.

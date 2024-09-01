@@ -3,7 +3,7 @@ unit AlephREmFont;
 interface
 
 uses
-  System.Classes, Fmx.Controls, Fmx.StdCtrls, System.SysUtils, FMX.Objects;
+  System.Classes, Fmx.Controls, Fmx.StdCtrls, System.SysUtils, Fmx.Objects;
 
 type
 
@@ -12,17 +12,18 @@ type
     procedure ResizeFont(Sender: TObject);
   end;
 
-  TSizeText = class(TPersistent)
-   private
+type
+  TLabelAutoResizer = class
+  private
+    FLabel: TLabel;
     FAutoResizeHeight: Boolean;
     procedure SetAutoResizeHeight(const Value: Boolean);
-  protected
-    procedure ResizeFont(Sender: TObject);
   public
-    constructor Create(AControl: TControl); override;
+    constructor Create(ALabel: TLabel);
     destructor Destroy; override;
-  published
-    property AutoResizeHeight: Boolean read FAutoResizeHeight write SetAutoResizeHeight;
+    procedure ResizeLabel;
+    property AutoResizeHeight: Boolean read FAutoResizeHeight
+      write SetAutoResizeHeight;
   end;
 
   TREmFontSize = class(TPersistent)
@@ -31,11 +32,8 @@ type
     FREM: Single;
     FOnChange: TNotifyEvent;
     FControl: TControl;
-    FAutoResizeHeight: Boolean;
     procedure SetBaseSize(const Value: Single);
     procedure SetREM(const Value: Single);
-    procedure SetAutoResizeHeight(const Value: Boolean);
-    procedure ResizeHeightFont(Sender: TObject);
   public
     procedure TextResizeHandler(Sender: TObject);
     constructor Create(AControl: TControl);
@@ -45,7 +43,6 @@ type
     property FontSize: Single read FBaseSize write SetBaseSize;
     property REM: Single read FREM write SetREM;
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
-    property AutoResizeHeight: Boolean read FAutoResizeHeight write SetAutoResizeHeight;
   end;
 
 implementation
@@ -53,7 +50,7 @@ implementation
 var
   FResizeManager: TREmFontSize = nil;
 
-{ TREmFontSize }
+  { TREmFontSize }
 
 constructor TREmFontSize.Create(AControl: TControl);
 begin
@@ -61,24 +58,11 @@ begin
   FControl := AControl;
   FBaseSize := 12; // Valor padrão para o tamanho base da fonte
   FREM := 1; // Valor padrão de 1 rem
-  FAutoResizeHeight := False;
 end;
 
 destructor TREmFontSize.Destroy;
 begin
-  FreeAndNil(FControl);
   inherited;
-end;
-
-procedure TREmFontSize.SetAutoResizeHeight(const Value: Boolean);
-begin
-    if FAutoResizeHeight <> Value then
-  begin
-    FAutoResizeHeight := Value;
-    // Se a propriedade for ativada, redimensiona imediatamente
-    if FAutoResizeHeight then
-      ResizeHeightFont(Self);
-  end;
 end;
 
 procedure TREmFontSize.SetBaseSize(const Value: Single);
@@ -118,5 +102,45 @@ begin
   Result := Round(FREM * FBaseSize);
 end;
 
+{ TLabelAutoResizer }
+
+constructor TLabelAutoResizer.Create(ALabel: TLabel);
+begin
+  FLabel := ALabel;
+  FAutoResizeHeight := False;
+  //FLabel.OnResize := nil;
+  // Por padrão, o redimensionamento automático está ativado
+end;
+
+destructor TLabelAutoResizer.Destroy;
+begin
+  inherited;
+end;
+
+procedure TLabelAutoResizer.ResizeLabel;
+var
+  TextHeight: Single;
+begin
+  if FAutoResizeHeight and Assigned(FLabel) then
+  begin
+    // Calcula a altura do texto
+    TextHeight := FLabel.Canvas.TextHeight(FLabel.Text);
+    // Ajusta a altura do TLabel de acordo com a altura do texto
+    FLabel.Height := TextHeight + FLabel.Margins.Top + FLabel.Margins.Right;
+  end;
+end;
+
+procedure TLabelAutoResizer.SetAutoResizeHeight(const Value: Boolean);
+begin
+  if FAutoResizeHeight <> Value then
+  begin
+    FAutoResizeHeight := Value;
+    // Se a propriedade for ativada, redimensiona imediatamente
+    if FAutoResizeHeight then
+      ResizeLabel;
+  end;
+end;
 
 end.
+
+  end.

@@ -20,10 +20,13 @@ type
   private
     FRemMargins: TREmMargins;
     FRemFontSize: TREmFontSize;
+    FAutoResizer: TLabelAutoResizer;
     function GetRemMargins: TREmMargins;
     procedure SetRemMargins(const Value: TREmMargins);
     function GetTextRem: TREmFontSize;
     procedure SetTextRem(const Value: TREmFontSize);
+    function GetAutoResizeHeight: Boolean;
+    procedure SetAutoResizeHeight(const Value: Boolean);
   protected
     procedure ResizeFont(Sender: TObject);
   public
@@ -32,6 +35,7 @@ type
   published
     property MarginsREm: TREmMargins read GetRemMargins write SetRemMargins;
     property TextRem: TREmFontSize  read GetTextRem write SetTextRem;
+    property TextAutoResize: Boolean read GetAutoResizeHeight write SetAutoResizeHeight;
   end;
 
 procedure Register;
@@ -50,12 +54,24 @@ begin
    inherited Create(AOwner);
   FREmMargins := TREmMargins.Create(Self);
   FRemFontSize := TREmFontSize.Create(Self);
+  FAutoResizer := TLabelAutoResizer.Create(Self);
 end;
 
 destructor TAlephLabel.Destroy;
 begin
+  if Assigned(FAutoResizer) then
+  begin
+    //FAutoResizer.OnResize := nil; // Desassociar o evento
+    FreeAndNil(FAutoResizer);
+  end;
   FreeAndNil(FREmMargins);
+  FreeAndNil(FRemFontSize);
   inherited;
+end;
+
+function TAlephLabel.GetAutoResizeHeight: Boolean;
+begin
+  Result := FAutoResizer.AutoResizeHeight;
 end;
 
 function TAlephLabel.GetRemMargins: TREmMargins;
@@ -72,6 +88,12 @@ procedure TAlephLabel.ResizeFont(Sender: TObject);
 begin
    if Assigned(FRemFontSize) then
       self.TextSettings.Font.Size := FRemFontSize.ToPixels;
+end;
+
+procedure TAlephLabel.SetAutoResizeHeight(const Value: Boolean);
+begin
+  if Assigned(FAutoResizer) then
+    FAutoResizer.AutoResizeHeight := Value;
 end;
 
 procedure TAlephLabel.SetRemMargins(const Value: TREmMargins);

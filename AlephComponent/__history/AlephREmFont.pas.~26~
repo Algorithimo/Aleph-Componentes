@@ -3,13 +3,27 @@ unit AlephREmFont;
 interface
 
 uses
-  System.Classes, Fmx.Controls, Fmx.StdCtrls, System.SysUtils;
+  System.Classes, Fmx.Controls, Fmx.StdCtrls, System.SysUtils, Fmx.Objects;
 
 type
 
   IRemFontSize = interface
     ['{6719F41F-D2BC-4C5F-A9E4-828F52E45BA7}']
     procedure ResizeFont(Sender: TObject);
+  end;
+
+type
+  TLabelAutoResizer = class
+  private
+    FLabel: TLabel;
+    FAutoResizeHeight: Boolean;
+    procedure SetAutoResizeHeight(const Value: Boolean);
+  public
+    constructor Create(ALabel: TLabel);
+    destructor Destroy; override;
+    procedure ResizeLabel;
+    property AutoResizeHeight: Boolean read FAutoResizeHeight
+      write SetAutoResizeHeight;
   end;
 
   TREmFontSize = class(TPersistent)
@@ -36,7 +50,7 @@ implementation
 var
   FResizeManager: TREmFontSize = nil;
 
-{ TREmFontSize }
+  { TREmFontSize }
 
 constructor TREmFontSize.Create(AControl: TControl);
 begin
@@ -48,6 +62,7 @@ end;
 
 destructor TREmFontSize.Destroy;
 begin
+  FreeAndNil(FControl);
   inherited;
 end;
 
@@ -88,5 +103,45 @@ begin
   Result := Round(FREM * FBaseSize);
 end;
 
+{ TLabelAutoResizer }
+
+constructor TLabelAutoResizer.Create(ALabel: TLabel);
+begin
+  FLabel := ALabel;
+  FAutoResizeHeight := False;
+  // Por padrão, o redimensionamento automático está ativado
+end;
+
+destructor TLabelAutoResizer.Destroy;
+begin
+  FreeAndNil(FLabel);
+  inherited;
+end;
+
+procedure TLabelAutoResizer.ResizeLabel;
+var
+  TextHeight: Single;
+begin
+  if FAutoResizeHeight and Assigned(FLabel) then
+  begin
+    // Calcula a altura do texto
+    TextHeight := FLabel.Canvas.TextHeight(FLabel.Text);
+    // Ajusta a altura do TLabel de acordo com a altura do texto
+    FLabel.Height := TextHeight + FLabel.Margins.Top + FLabel.Margins.Bottom;
+  end;
+end;
+
+procedure TLabelAutoResizer.SetAutoResizeHeight(const Value: Boolean);
+begin
+  if FAutoResizeHeight <> Value then
+  begin
+    FAutoResizeHeight := Value;
+    // Se a propriedade for ativada, redimensiona imediatamente
+    if FAutoResizeHeight then
+      ResizeLabel;
+  end;
+end;
 
 end.
+
+  end.

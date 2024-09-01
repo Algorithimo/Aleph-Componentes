@@ -59,8 +59,7 @@ end;
 
 destructor TAlephLabel.Destroy;
 begin
-  //FreeAndNil(FAutoResizer);
-  FAutoResizer.Free;
+  FreeAndNil(FAutoResizer);
   FreeAndNil(FREmMargins);
   FreeAndNil(FRemFontSize);
   inherited;
@@ -89,7 +88,8 @@ end;
 
 procedure TAlephLabel.SetAutoResizeHeight(const Value: Boolean);
 begin
-  FAutoResizer.AutoResizeHeight := Value;
+  if Assigned(FAutoResizer) then
+    FAutoResizer.AutoResizeHeight := Value;
 end;
 
 procedure TAlephLabel.SetRemMargins(const Value: TREmMargins);
