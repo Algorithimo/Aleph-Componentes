@@ -1,34 +1,36 @@
+unit ResizeManager;
+
 interface
 
 uses
-  System.Classes, Vcl.Forms, System.Generics.Collections;
+  System.Classes, Fmx.Forms, System.Generics.Collections;
 
 type
   IResizable = interface
-    ['{63B7CC27-6B8A-4E4E-BAF1-8DCCF7BC11D3}']
+    ['{888720A6-8410-4D74-B289-433A4295A57B}']
     procedure AdjustSize(Sender: TObject);
   end;
 
   TResizeManager = class
   private
     FResizableComponents: TList<IResizable>;
-    procedure FormResizeHandler(Sender: TObject);
   public
     constructor Create;
     destructor Destroy; override;
+    procedure FormResizeHandler(Sender: TObject);
     procedure RegisterComponent(AComponent: IResizable);
     procedure UnregisterComponent(AComponent: IResizable);
     class function GetInstance: TResizeManager;
   end;
 
-function ResizeManager: TResizeManager;
+function GlobalResizeManager: TResizeManager;
 
 implementation
 
 var
   FResizeManager: TResizeManager = nil;
 
-function ResizeManager: TResizeManager;
+function GlobalResizeManager: TResizeManager;
 begin
   Result := TResizeManager.GetInstance;
 end;

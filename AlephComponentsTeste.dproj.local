@@ -89,14 +89,14 @@
     <Transaction>2024/08/30 20:22:17.000.457,E:\Aleph\Aleph-Componentes\GofComponent\Layout\LayoutGof.pas=</Transaction>
     <Transaction>2024/08/30 20:22:27.000.914,=E:\Aleph\Aleph-Componentes\CodeZip\src\DirectorZip_Impl.pas</Transaction>
     <Transaction>2024/08/30 20:22:27.000.919,=E:\Aleph\Aleph-Componentes\CodeZip\src\ListType.pas</Transaction>
-    <Transaction>2024/08/30 20:22:27.000.996,=E:\Aleph\Aleph-Componentes\CodeZip\src\MainZip.pas</Transaction>
     <Transaction>2024/08/30 20:22:27.000.250,=E:\Aleph\Aleph-Componentes\CodeZip\src\ConcreteBuilder_Impl.pas</Transaction>
     <Transaction>2024/08/30 20:22:27.000.901,=E:\Aleph\Aleph-Componentes\CodeZip\src\DataService_Impl.pas</Transaction>
+    <Transaction>2024/08/30 20:22:27.000.996,=E:\Aleph\Aleph-Componentes\CodeZip\src\MainZip.pas</Transaction>
     <Transaction>2024/08/30 20:22:28.000.007,=E:\Aleph\Aleph-Componentes\CodeZip\src\Zip_Impl.pas</Transaction>
     <Transaction>2024/08/30 20:29:08.000.463,E:\Aleph\Aleph-Componentes\CodeZip\src\Builder_Impl.pas=</Transaction>
     <Transaction>2024/08/30 20:29:13.000.353,E:\Aleph\Aleph-Componentes\CodeZip\src\ListType.pas=</Transaction>
-    <Transaction>2024/08/30 20:29:13.000.332,E:\Aleph\Aleph-Componentes\CodeZip\src\DataService_Impl.pas=</Transaction>
     <Transaction>2024/08/30 20:29:13.000.364,E:\Aleph\Aleph-Componentes\CodeZip\src\MainZip.pas=</Transaction>
+    <Transaction>2024/08/30 20:29:13.000.332,E:\Aleph\Aleph-Componentes\CodeZip\src\DataService_Impl.pas=</Transaction>
     <Transaction>2024/08/30 20:29:13.000.297,E:\Aleph\Aleph-Componentes\CodeZip\src\ConcreteBuilder_Impl.pas=</Transaction>
     <Transaction>2024/08/30 20:29:13.000.374,E:\Aleph\Aleph-Componentes\CodeZip\src\Zip_Impl.pas=</Transaction>
     <Transaction>2024/08/30 20:29:13.000.343,E:\Aleph\Aleph-Componentes\CodeZip\src\DirectorZip_Impl.pas=</Transaction>
@@ -106,6 +106,7 @@
     <Transaction>2024/08/31 22:16:04.000.183,E:\Aleph\Aleph-Componentes\Unit1.pas=E:\Aleph\Aleph-Componentes\AlephComponent\AlephLabel.pas</Transaction>
     <Transaction>2024/08/31 22:38:47.000.773,=E:\Aleph\Aleph-Componentes\Unit1.pas</Transaction>
     <Transaction>2024/08/31 22:38:59.000.345,E:\Aleph\Aleph-Componentes\Unit1.pas=E:\Aleph\Aleph-Componentes\AlephComponent\AlephREmFont.pas</Transaction>
+    <Transaction>2024/09/03 22:18:52.000.657,F:\Aleph\Aleph-Componentes\Label\AlephLabelteste.pas=</Transaction>
   </Transactions>
 	<ProjectSortOrder AutoSort="0" SortType="0">
     <File Path="AlephComponent"/>
@@ -122,8 +123,6 @@
     <File Path="AlephMain\AlephControl.pas"/>
     <File Path="AlephMain\MainAleph.pas"/>
     <File Path="AlephMain\RemControlInterface.pas"/>
-    <File Path="Label"/>
-    <File Path="Label\AlephLabelteste.pas"/>
     <File Path="designide.dcp"/>
     <File Path="fmx.dcp"/>
     <File Path="rtl.dcp"/>

@@ -158,7 +158,6 @@
         <DCCReference Include="vclx.dcp"/>
         <DCCReference Include="xmlrtl.dcp"/>
         <DCCReference Include="fmx.dcp"/>
-        <DCCReference Include="Label\AlephLabelteste.pas"/>
         <DCCReference Include="AlephMain\MainAleph.pas"/>
         <DCCReference Include="AlephMain\AlephControl.pas"/>
         <DCCReference Include="AlephMain\RemControlInterface.pas"/>

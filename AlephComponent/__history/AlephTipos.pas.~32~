@@ -16,6 +16,7 @@ uses
 type
   TREmMargins = class(TPersistent)
   private
+    FFontBase : TFontBase;
     FTop: TREmSize;
     FLeft: TREmSize;
     FRight: TREmSize;
@@ -26,11 +27,14 @@ type
     procedure SetRight(const Value: TREmSize);
     procedure SetTop(const Value: TREmSize);
     procedure OnChange(Sender: TObject);
+    function GetFontBase: TFontBase;
+    procedure setFontBase(const Value: TFontBase);
   public
-    constructor Create(AFontBase: TFontBase; AControl: TControl);
+    constructor Create(AControl: TControl);
     destructor Destroy; override;
     procedure ApplyToControl;
   published
+    property AMarginBase : TFontBase read GetFontBase write setFontBase;
     property Top: TREmSize read FTop write SetTop;
     property Left: TREmSize read FLeft write SetLeft;
     property Right: TREmSize read FRight write SetRight;
@@ -97,13 +101,13 @@ begin
     begin
       FControl.BeginUpdate;
       try
-        if PWidth > 0 then
+        if FPWidth > 0 then
         begin
-          FControl.Width := ParentWidth * PWidth / 100;
+          FControl.Width := ParentWidth * FPWidth / 100;
         end;
-        if PHeight > 0 then
+        if FPHeight > 0 then
         begin
-          FControl.Height := ParentHeight * PHeight / 100;
+          FControl.Height := ParentHeight * FPHeight / 100;
         end;
       finally
         FControl.EndUpdate
@@ -190,22 +194,22 @@ end;
 
 { TREmMargins }
 
-constructor TREmMargins.Create(AFontBase: TFontBase; AControl: TControl);
+constructor TREmMargins.Create(AControl: TControl);
 begin
   inherited Create;
   FControl := AControl;
 
-  if not Assigned(AFontBase) then
+  if not Assigned(FFontBase) then
   begin
-    AFontBase := TFontBase.Create(12);
+    FFontBase := TFontBase.Create(12);
   end;
 
- if Assigned(AFontBase) then
+ if Assigned(FFontBase) then
   begin
-    FTop := TREmSize.Create(AFontBase);
-    FLeft := TREmSize.Create(AFontBase);
-    FRight := TREmSize.Create(AFontBase);
-    FBottom := TREmSize.Create(AFontBase);
+    FTop := TREmSize.Create(FFontBase);
+    FLeft := TREmSize.Create(FFontBase);
+    FRight := TREmSize.Create(FFontBase);
+    FBottom := TREmSize.Create(FFontBase);
   end
   else
   begin
@@ -229,6 +233,11 @@ begin
   if Assigned(FBottom) then
     FBottom.Free;
   inherited Destroy;
+end;
+
+function TREmMargins.GetFontBase: TFontBase;
+begin
+  Result := FFontBase;
 end;
 
 procedure TREmMargins.OnChange(Sender: TObject);
@@ -260,6 +269,12 @@ begin
   ApplyToControl; // Aplica as margens automaticamente
 end;
 
+procedure TREmMargins.setFontBase(const Value: TFontBase);
+begin
+  if Assigned(FFontBase) then
+    FFontBase.Assign(Value);
+end;
+
 procedure TREmMargins.SetLeft(const Value: TREmSize);
 begin
   FLeft.Assign(Value);
@@ -279,3 +294,15 @@ begin
 end;
 
 end.
+
+//procedure TREmFontSize.ResizeFont;
+//begin
+//  if Assigned(FControl) then
+//  begin
+////    if FControl is TLabel then
+////      TLabel(FControl).TextSettings.Font.Size := ToPixels
+////    else if FControl is TButton then
+////      TButton(FControl).TextSettings.Font.Size := ToPixels;
+//    // Adicione outros controles conforme necessário
+//  end;
+//end;

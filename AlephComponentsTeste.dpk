@@ -37,7 +37,6 @@ requires
   fmx;
 
 contains
-  AlephLabelteste in 'Label\AlephLabelteste.pas',
   MainAleph in 'AlephMain\MainAleph.pas',
   AlephControl in 'AlephMain\AlephControl.pas',
   RemControlInterface in 'AlephMain\RemControlInterface.pas',

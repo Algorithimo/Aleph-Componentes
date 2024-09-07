@@ -104,7 +104,7 @@ procedure TAlephLayout.Resize;
 begin
   inherited;
   if Assigned(FAlephTipo) then
-    FAlephTipo.Resize;
+      FAlephTipo.Resize;
 end;
 
 

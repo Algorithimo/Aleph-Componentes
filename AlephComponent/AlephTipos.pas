@@ -10,7 +10,7 @@ uses
   FMX.Controls.Presentation,
   FMX.StdCtrls,
   FMX.Objects,
-  FMX.Forms,
+  FMX.Forms,System.UITypes,
   AlephRem;
 
 type
@@ -132,46 +132,49 @@ var
   ParentWidth, ParentHeight: Single;
   CurrentWidthPercent, CurrentHeightPercent: Integer;
 begin
-  if Assigned(FControl.Parent) then
-  begin
+  if csDesigning in FControl.ComponentState then
+  Begin
     if Assigned(FControl.Parent) then
     begin
-      // Verifica se o Parent é um TForm
-      if FControl.Parent is TForm then
+      if Assigned(FControl.Parent) then
       begin
-        ParentWidth := TForm(FControl.Parent).ClientWidth;
-        ParentHeight := TForm(FControl.Parent).ClientHeight;
-      end
-      // Verifica se o Parent é um TControl (layout ou retângulo)
-      else if FControl.Parent is TControl then
-      begin
-        ParentWidth := TControl(FControl.Parent).Width;
-        ParentHeight := TControl(FControl.Parent).Height;
-      end
-      else
-      begin
-        Exit; // Se não for um TForm ou TControl, não faz ajuste
-      end;
+        // Verifica se o Parent é um TForm
+        if FControl.Parent is TForm then
+        begin
+          ParentWidth := TForm(FControl.Parent).ClientWidth;
+          ParentHeight := TForm(FControl.Parent).ClientHeight;
+        end
+        // Verifica se o Parent é um TControl (layout ou retângulo)
+        else if FControl.Parent is TControl then
+        begin
+          ParentWidth := TControl(FControl.Parent).Width;
+          ParentHeight := TControl(FControl.Parent).Height;
+        end
+        else
+        begin
+          Exit; // Se não for um TForm ou TControl, não faz ajuste
+        end;
 
-      // Calcula a porcentagem atual da largura e altura em relação ao pai
-      if ParentWidth > 0 then
-        CurrentWidthPercent := Round((FControl.Width / ParentWidth) * 100)
-      else
-        CurrentWidthPercent := 0;
+        // Calcula a porcentagem atual da largura e altura em relação ao pai
+        if ParentWidth > 0 then
+          CurrentWidthPercent := Round((FControl.Width / ParentWidth) * 100)
+        else
+          CurrentWidthPercent := 0;
 
-      if ParentHeight > 0 then
-        CurrentHeightPercent := Round((FControl.Height / ParentHeight) * 100)
-      else
-        CurrentHeightPercent := 0;
+        if ParentHeight > 0 then
+          CurrentHeightPercent := Round((FControl.Height / ParentHeight) * 100)
+        else
+          CurrentHeightPercent := 0;
 
-      // Agora você pode usar CurrentWidthPercent e CurrentHeightPercent como desejar
-      if Self <> nil then
-      begin
-        PWidth := CurrentWidthPercent;
-        PHeight := CurrentHeightPercent;
+        // Agora você pode usar CurrentWidthPercent e CurrentHeightPercent como desejar
+        if Self <> nil then
+        begin
+          PWidth := CurrentWidthPercent;
+          PHeight := CurrentHeightPercent;
+        end;
       end;
     end;
-  end;
+  End;
 end;
 
 procedure TAlephTipo.SetPHeight(const Value: Integer);

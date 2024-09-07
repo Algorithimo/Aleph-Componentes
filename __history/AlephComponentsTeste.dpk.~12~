@@ -37,22 +37,18 @@ requires
   fmx;
 
 contains
-  AlephLabel in 'Label\AlephLabel.pas',
+  AlephLabelteste in 'Label\AlephLabelteste.pas',
   MainAleph in 'AlephMain\MainAleph.pas',
   AlephControl in 'AlephMain\AlephControl.pas',
   RemControlInterface in 'AlephMain\RemControlInterface.pas',
-  ConcreteBuilder_Impl in 'GofComponent\Layout\ConcreteBuilder_Impl.pas',
-  InterfaceBuilder_Impl in 'GofComponent\Layout\InterfaceBuilder_Impl.pas',
-  Diretor_Impl in 'GofComponent\Layout\Diretor_Impl.pas',
-  MainLayout in 'GofComponent\Layout\MainLayout.pas',
-  LayoutGof in 'GofComponent\Layout\LayoutGof.pas',
   AlephLayout in 'AlephComponent\AlephLayout.pas',
   AlephRectangle in 'AlephComponent\AlephRectangle.pas',
   AlephLayout_Editor in 'AlephComponent\AlephLayout_Editor.pas',
   AlephPropertyEditor in 'AlephComponent\AlephPropertyEditor.pas',
   AlephTipos in 'AlephComponent\AlephTipos.pas',
-  AlephFlexbox in 'AlephComponent\AlephFlexbox.pas',
-  AlephFlexboxEnums in 'AlephComponent\AlephFlexboxEnums.pas',
-  AlephFlexboxInterfaces in 'AlephComponent\AlephFlexboxInterfaces.pas';
+  AlephRem in 'AlephComponent\AlephRem.pas',
+  ResizeManager in 'AlephComponent\ResizeManager.pas',
+  AlephLabel in 'AlephComponent\AlephLabel.pas',
+  AlephREmFont in 'AlephComponent\AlephREmFont.pas';
 
 end.

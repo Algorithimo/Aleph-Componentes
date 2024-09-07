@@ -8,16 +8,17 @@ uses
 type
   IResizable = interface
     ['{888720A6-8410-4D74-B289-433A4295A57B}']
-    procedure AdjustSize(Sender: TObject);
+
   end;
 
   TResizeManager = class
+  procedure FormResizeHandler(Sender: TObject);
   private
     FResizableComponents: TList<IResizable>;
   public
     constructor Create;
     destructor Destroy; override;
-     procedure FormResizeHandler(Sender: TObject);
+    procedure AdjustSize(Sender: TObject);
     procedure RegisterComponent(AComponent: IResizable);
     procedure UnregisterComponent(AComponent: IResizable);
     class function GetInstance: TResizeManager;
