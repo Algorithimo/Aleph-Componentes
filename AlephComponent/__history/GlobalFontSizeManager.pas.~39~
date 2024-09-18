@@ -46,6 +46,7 @@ type
     procedure CalculateAndUpdateFontSize;
   published
     property FontBase: Integer read GetFontBase write SetFontBase;
+    property FontBase: TFontBase read FFontBase;
     property RemFontSize: TREmFontSize read GetRemFontSize write SetRemFontSize;
     property FontPercentage: Single read GetFontPercentage write SetFontPercentage;
     property MinFontSize: Integer read GetMinFontSize write SetMinFontSize;
@@ -60,7 +61,7 @@ constructor TGlobalFontSizeManager.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FFontBase := TFontBase.Create(12);  // Valor padrão inicial
-  //FRemFontSize := TREmFontSize.Create(12); // Valor padrão inicial
+  FRemFontSize := TREmFontSize.Create(12); // Valor padrão inicial
   FFontPercentage := 1.0;  // Percentual padrão
   FMinFontSize := 10;      // Tamanho mínimo padrão
   FComponents := TList<IGlobalFontSizeAware>.Create;
@@ -86,14 +87,24 @@ begin
   Result := FFontPercentage;
 end;
 
+//procedure TGlobalFontSizeManager.SetFontBase(const Value: Integer);
+//begin
+//  if Assigned(FFontBase) then
+//    begin
+//      FFontBase.FontBase := Value;
+//      FRemFontSize.FontSize := Value;
+//      UpdateAllFontSizes;
+//    end;
+//end;
+
 procedure TGlobalFontSizeManager.SetFontBase(const Value: Integer);
 begin
-  if Assigned(FFontBase) then
-    begin
-      FFontBase.FontBase := Value;
-      FRemFontSize.FontSize := Value;
-      UpdateAllFontSizes;
-    end;
+  if FFontBase.FontBase <> Value then
+  begin
+    FFontBase.FontBase := Value;
+    FRemFontSize.FontSize := Value;
+    UpdateAllFontSizes;
+  end;
 end;
 
 function TGlobalFontSizeManager.GetFontSize: Integer;
@@ -111,6 +122,17 @@ begin
   Result := FRemFontSize;     //Verificar depois
 end;
 
+//procedure TGlobalFontSizeManager.CalculateAndUpdateFontSize;
+//var
+//  NewFontSize: Integer;
+//begin
+//  if Assigned(FForm) then
+//  begin
+//    NewFontSize := Max(Round(FForm.ClientWidth * FFontPercentage / 100), FMinFontSize);
+//    UpdateFontSizeAndBase(NewFontSize);
+//  end;
+//end;
+
 procedure TGlobalFontSizeManager.CalculateAndUpdateFontSize;
 var
   NewFontSize: Integer;
@@ -118,7 +140,7 @@ begin
   if Assigned(FForm) then
   begin
     NewFontSize := Max(Round(FForm.ClientWidth * FFontPercentage / 100), FMinFontSize);
-    UpdateFontSizeAndBase(NewFontSize);
+    SetFontBase(NewFontSize);
   end;
 end;
 

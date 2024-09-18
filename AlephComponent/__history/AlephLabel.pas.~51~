@@ -1,0 +1,202 @@
+unit AlephLabel;
+
+interface
+
+uses
+  System.SysUtils,
+  System.Classes,
+  FMX.Types,
+  FMX.Controls,
+  FMX.Controls.Presentation,
+  FMX.StdCtrls,
+  FMX.Objects,
+  Fmx.Forms,
+  System.Generics.Collections,
+  AlephRem,
+  AlephTipos,
+  AlephREmFont,
+  GlobalFontSizeManager;
+
+type
+  TAlephLabel = class(TLabel, IRemFontSize, IGlobalFontSizeAware)
+  private
+    FRemMargins: TREmMargins;
+    FRemFontSize: TREmFontSize;
+    FGlobalFontSizeManager: TGlobalFontSizeManager;
+    FGlobalFontSizeManagerRef: TComponent;
+    function GetRemMargins: TREmMargins;
+    procedure SetRemMargins(const Value: TREmMargins);
+    function GetTextRem: TREmFontSize;
+    procedure SetTextRem(const Value: TREmFontSize);
+
+//    procedure DefineProperties(Filer: TFiler);
+//    procedure ReadGlobalFontSizeManager(Reader: TReader);
+//    procedure WriteGlobalFontSizeManager(Writer: TWriter);
+
+    function GetGlobalFontSizeManager: TGlobalFontSizeManager;
+    procedure SetGlobalFontSizeManager(const Value: TGlobalFontSizeManager);
+  protected
+    procedure FormResize(Sender: TObject);
+    procedure ResizeFont(Sender: TObject);
+    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
+    procedure DoRootChanging(const NewRoot: IRoot); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure UpdateFontSize;
+  published
+    property MarginsREm: TREmMargins read GetRemMargins write SetRemMargins;
+    property TextRem: TREmFontSize  read GetTextRem write SetTextRem;
+    property GlobalFontSizeManager: TGlobalFontSizeManager read GetGlobalFontSizeManager write SetGlobalFontSizeManager;
+  end;
+
+procedure Register;
+
+implementation
+
+procedure Register;
+begin
+  RegisterComponents('Aleph', [TAlephLabel]);
+end;
+
+{ TAlephLabel }
+
+//constructor TAlephLabel.Create(AOwner: TComponent);
+////begin
+////   inherited Create(AOwner);
+////  FREmMargins := TREmMargins.Create(Self);
+////  FRemFontSize := TREmFontSize.Create(12);
+////  FRemFontSize.OnChange := ResizeFont;
+////end;
+constructor TAlephLabel.Create(AOwner: TComponent);
+var
+  GlobalManager: TGlobalFontSizeManager;
+begin
+  inherited Create(AOwner);
+  FREmMargins := TREmMargins.Create(Self);
+  GlobalManager := nil;
+  if AOwner is TForm then
+    GlobalManager := TForm(AOwner).FindComponent('GlobalFontSizeManager') as TGlobalFontSizeManager;
+  if Assigned(GlobalManager) then
+    SetGlobalFontSizeManager(GlobalManager);
+  FRemFontSize := TREmFontSize.Create(12);
+  FRemFontSize.OnChange := ResizeFont;
+end;
+
+destructor TAlephLabel.Destroy;
+begin
+  if Assigned(FGlobalFontSizeManager) then
+    FGlobalFontSizeManager.UnregisterComponent(Self);
+  FreeAndNil(FREmMargins);
+  FreeAndNil(FRemFontSize);
+  inherited;
+end;
+
+procedure TAlephLabel.DoRootChanging(const NewRoot: IRoot);
+begin
+  inherited;
+  if Assigned(NewRoot) and (NewRoot is TForm) then
+    TForm(NewRoot).OnResize := FormResize;
+end;
+procedure TAlephLabel.FormResize(Sender: TObject);
+begin
+  if Assigned(FGlobalFontSizeManager) then
+    UpdateFontSize;
+end;
+
+function TAlephLabel.GetRemMargins: TREmMargins;
+begin
+  Result := FRemMargins;
+end;
+
+function TAlephLabel.GetTextRem: TREmFontSize;
+begin
+  Result := FRemFontSize;
+end;
+
+procedure TAlephLabel.Notification(AComponent: TComponent; Operation: TOperation);
+begin
+  inherited;
+  if (Operation = opRemove) and (AComponent = FGlobalFontSizeManagerRef) then
+  begin
+    FGlobalFontSizeManagerRef := nil;
+    UpdateFontSize;
+  end;
+end;
+
+procedure TAlephLabel.ResizeFont(Sender: TObject);
+begin
+//   if Assigned(FRemFontSize) then
+//      self.TextSettings.Font.Size := FRemFontSize.ToPixels;
+   UpdateFontSize;
+end;
+
+
+function TAlephLabel.GetGlobalFontSizeManager: TGlobalFontSizeManager;
+begin
+  Result := TGlobalFontSizeManager(FGlobalFontSizeManagerRef);
+end;
+
+procedure TAlephLabel.SetGlobalFontSizeManager(const Value: TGlobalFontSizeManager);
+begin
+  if FGlobalFontSizeManagerRef <> Value then
+  begin
+    if Assigned(FGlobalFontSizeManagerRef) then
+    begin
+      TGlobalFontSizeManager(FGlobalFontSizeManagerRef).UnregisterComponent(Self);
+      RemoveFreeNotification(FGlobalFontSizeManagerRef);
+    end;
+    FGlobalFontSizeManagerRef := Value;
+    if Assigned(FGlobalFontSizeManagerRef) then
+    begin
+      TGlobalFontSizeManager(FGlobalFontSizeManagerRef).RegisterComponent(Self);
+      FreeNotification(FGlobalFontSizeManagerRef);
+      UpdateFontSize;
+    end;
+  end;
+end;
+
+procedure TAlephLabel.SetRemMargins(const Value: TREmMargins);
+begin
+  if Assigned(FRemMargins) then
+    FRemMargins.Assign(Value);
+end;
+
+procedure TAlephLabel.SetTextRem(const Value: TREmFontSize);
+begin
+    if Assigned(FRemFontSize) then
+  begin
+    FRemFontSize.Assign(Value);
+    UpdateFontSize;
+  end;
+end;
+
+procedure TAlephLabel.UpdateFontSize;
+var
+  Manager: TGlobalFontSizeManager;
+begin
+  Manager := GetGlobalFontSizeManager;
+  if Assigned(Manager) and Assigned(FRemFontSize) then
+  begin
+    FRemFontSize.Assign(Manager.RemFontSize);
+    ResizeFont(Self);
+  end;
+end;
+
+//procedure TAlephLabel.DefineProperties(Filer: TFiler);
+//begin
+//  inherited DefineProperties(Filer);
+//  Filer.DefineProperty('GlobalFontSizeManager', ReadGlobalFontSizeManager, WriteGlobalFontSizeManager, Assigned(FGlobalFontSizeManager));
+//end;
+//
+//procedure TAlephLabel.ReadGlobalFontSizeManager(Reader: TReader);
+//begin
+//  GlobalFontSizeManager := TGlobalFontSizeManager(Reader.ReadComponent(Self));
+//end;
+//
+//procedure TAlephLabel.WriteGlobalFontSizeManager(Writer: TWriter);
+//begin
+//  Writer.WriteComponent(FGlobalFontSizeManager);
+//end;
+
+end.

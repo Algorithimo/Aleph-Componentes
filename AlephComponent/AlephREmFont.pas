@@ -23,7 +23,7 @@ type
     procedure SetREM(const Value: Single);
   public
     procedure TextResizeHandler(Sender: TObject);
-    constructor Create(FBaseSize: Integer);
+    constructor Create(AControl: TControl);
     destructor Destroy; override;
     function ToPixels: Integer;
   published
@@ -39,9 +39,10 @@ var
 
   { TREmFontSize }
 
-constructor TREmFontSize.Create(FBaseSize: Integer);
+constructor TREmFontSize.Create(AControl: TControl);
 begin
   inherited Create;
+  FControl := AControl;
   FBaseSize := 12; // Valor padrão para o tamanho base da fonte
   FREM := 1; // Valor padrão de 1 rem
 end;

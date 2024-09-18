@@ -60,7 +60,7 @@ constructor TGlobalFontSizeManager.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FFontBase := TFontBase.Create(12);  // Valor padrão inicial
-  //FRemFontSize := TREmFontSize.Create(12); // Valor padrão inicial
+  FRemFontSize := TREmFontSize.Create(12); // Valor padrão inicial
   FFontPercentage := 1.0;  // Percentual padrão
   FMinFontSize := 10;      // Tamanho mínimo padrão
   FComponents := TList<IGlobalFontSizeAware>.Create;
