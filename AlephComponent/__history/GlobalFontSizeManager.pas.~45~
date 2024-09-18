@@ -4,21 +4,16 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Generics.Collections, System.Math,
-  FMX.Forms, FMX.Controls, AlephRem, AlephREmFont, System.IOUtils, FMX.Types, Winapi.Windows;
+  FMX.Forms, FMX.Controls, AlephRem, AlephREmFont;
 
 type
-
-
   IGlobalFontSizeAware = interface
     ['{E3CF647C-7D56-446A-8089-F641C8F0106B}']
     procedure UpdateFontSize(NewBaseSize: Integer);
   end;
 
   TGlobalFontSizeManager = class(TComponent)
-   procedure DebugLog(const Msg: string);
   private
-    TextWriter: TTextWriter;
-
     FBaseSize: Integer;
     FMinFontSize: Integer;
     FFontPercentage: Single;
@@ -37,8 +32,6 @@ type
     destructor Destroy; override;
     procedure RegisterComponent(AComponent: IGlobalFontSizeAware);
     procedure UnregisterComponent(AComponent: IGlobalFontSizeAware);
-
-
   published
     property BaseSize: Integer read FBaseSize write SetBaseSize;
     property FontPercentage: Single read FFontPercentage write SetFontPercentage;
@@ -47,15 +40,7 @@ type
 
 implementation
 
-procedure TGlobalFontSizeManager.DebugLog(const Msg: string);
-begin
-  OutputDebugString(PChar(FormatDateTime('yyyy-mm-dd hh:nn:ss', Now) + ': ' + Msg));
-end;
-
 { TGlobalFontSizeManager }
-
-
-
 
 constructor TGlobalFontSizeManager.Create(AOwner: TComponent);
 begin
@@ -64,8 +49,6 @@ begin
   FFontPercentage := 1.0;  // Percentual padrão
   FMinFontSize := 10;  // Tamanho mínimo padrão
   FComponents := TList<IGlobalFontSizeAware>.Create;
-
-  DebugLog('TGlobalFontSizeManager criado');
 end;
 
 destructor TGlobalFontSizeManager.Destroy;
@@ -90,10 +73,6 @@ begin
     else if Owner is TForm then
       Result := TForm(Owner);
   end;
-  if Assigned(Result) then
-    DebugLog('ParentForm encontrado')
-  else
-    DebugLog('ParentForm não encontrado');
 end;
 
 procedure TGlobalFontSizeManager.SetBaseSize(const Value: Integer);
@@ -101,7 +80,6 @@ begin
   if FBaseSize <> Value then
   begin
     FBaseSize := Value;
-    DebugLog('BaseSize atualizado para: ' + IntToStr(Value));
     UpdateAllComponents;
   end;
 end;
@@ -111,7 +89,6 @@ begin
   if FFontPercentage <> Value then
   begin
     FFontPercentage := Value;
-    DebugLog('FontPercentage alterado para: ' + FloatToStr(Value));
     CalculateAndUpdateFontSize;
   end;
 end;
@@ -156,12 +133,7 @@ begin
   if Assigned(ParentForm) then
   begin
     NewBaseSize := Max(Round(ParentForm.ClientWidth * FFontPercentage / 100), FMinFontSize);
-     DebugLog('Novo BaseSize calculado: ' + IntToStr(NewBaseSize));
     SetBaseSize(NewBaseSize);
-  end
-  else
-  begin
-    DebugLog('ParentForm não encontrado');
   end;
 end;
 

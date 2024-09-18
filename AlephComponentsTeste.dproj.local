@@ -165,12 +165,12 @@
     <File Path="AlephComponent\AlephREmFont.pas"/>
     <File Path="AlephComponent\AlephTipos.pas"/>
     <File Path="AlephComponent\GlobalFontSizeManager.pas"/>
-    <File Path="AlephComponent\ResizeManager.pas"/>
-    <File Path="AlephComponent\RegisterGlobalFontSizeManager.pas"/>
-    <File Path="AlephComponent\GlobalFontSizeManagerPropertyEditor.pas"/>
+    <File Path="AlephComponent\GlobalFontSizeManagerComponentEditor.pas"/>
     <File Path="AlephComponent\GlobalFontSizeManagerEditor.pas"/>
     <File Path="AlephComponent\GlobalFontSizeManagerEditor.fmx"/>
-    <File Path="AlephComponent\GlobalFontSizeManagerComponentEditor.pas"/>
+    <File Path="AlephComponent\GlobalFontSizeManagerPropertyEditor.pas"/>
+    <File Path="AlephComponent\RegisterGlobalFontSizeManager.pas"/>
+    <File Path="AlephComponent\ResizeManager.pas"/>
     <File Path="AlephMain"/>
     <File Path="AlephMain\AlephControl.pas"/>
     <File Path="AlephMain\MainAleph.pas"/>

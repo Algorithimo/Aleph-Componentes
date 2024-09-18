@@ -39,14 +39,14 @@ end;
 procedure TGlobalFontSizeManagerEditorForm.LoadSettings(AComponent: TGlobalFontSizeManager);
 begin
   FComponent := AComponent;
-//  EditFontPercentage.Text := FloatToStr(AComponent.GetFontPercentage);
-//  EditMinFontSize.Text := IntToStr(AComponent.GetMinFontSize);
+  EditFontPercentage.Text := FloatToStr(AComponent.GetFontPercentage);
+  EditMinFontSize.Text := IntToStr(AComponent.GetMinFontSize);
 end;
 
 procedure TGlobalFontSizeManagerEditorForm.SaveSettings(AComponent: TGlobalFontSizeManager);
 begin
-//  AComponent.SetFontPercentage(StrToInt(EditFontPercentage.Text));
-//  AComponent.SetMinFontSize(StrToInt(EditMinFontSize.Text));
+  AComponent.SetFontPercentage(StrToInt(EditFontPercentage.Text));
+  AComponent.SetMinFontSize(StrToInt(EditMinFontSize.Text));
 end;
 
 end.
