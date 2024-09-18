@@ -28,6 +28,7 @@ type
     procedure SetFontPercentage(const Value: Single);
     procedure SetMinFontSize(const Value: Integer);
     procedure UpdateAllComponents;
+    procedure CalculatePercentage(Sender: TObject);
     //procedure CalculateAndUpdateFontSize;
     function GetParentForm: TForm;
   protected
@@ -36,7 +37,6 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure RegisterComponent(AComponent: IGlobalFontSizeAware);
-    procedure CalculatePercentage(Sender: TObject);
     procedure UnregisterComponent(AComponent: IGlobalFontSizeAware);
   published
     property BaseSize: Integer read FBaseSize write SetBaseSize;
@@ -85,6 +85,7 @@ end;
 procedure TGlobalFontSizeManager.Loaded;
 begin
   inherited;
+  //CalculateAndUpdateFontSize;
 end;
 
 function TGlobalFontSizeManager.GetParentForm: TForm;
@@ -108,6 +109,16 @@ begin
   end;
 end;
 
+//procedure TGlobalFontSizeManager.SetFontPercentage(const Value: Single);
+//begin
+//  if FFontPercentage <> Value then
+//  begin
+//    FFontPercentage := Value;
+//    if not (csLoading in ComponentState) then
+//      CalculateAndUpdateFontSize;
+//  end;
+//end;
+
 procedure TGlobalFontSizeManager.SetFontPercentage(const Value: Single);
 var
    ValidatedValue: Single;
@@ -126,6 +137,7 @@ begin
   if FMinFontSize <> Value then
   begin
     FMinFontSize := Value;
+    //CalculateAndUpdateFontSize;
   end;
 end;
 
@@ -150,5 +162,22 @@ begin
   for Component in FComponents do
     Component.UpdateFontSize(FBaseSize);
 end;
+//
+//procedure TGlobalFontSizeManager.CalculateAndUpdateFontSize;
+//var
+//  NewBaseSize: Integer;
+//  ParentForm: TForm;
+//begin
+//  ParentForm := GetParentForm;
+//  if Assigned(ParentForm) then
+//  begin
+//    NewBaseSize := Max(Round(ParentForm.ClientWidth * FFontPercentage / 100), FMinFontSize);
+//    if NewBaseSize <> FBaseSize then
+//    begin
+//      FBaseSize := NewBaseSize;
+//      UpdateAllComponents;
+//    end;
+//  end;
+//end;
 
 end.

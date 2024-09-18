@@ -3,11 +3,11 @@
 	<Transactions>
     <Transaction>2024/08/17 17:13:51.000.328,=rtl.dcp</Transaction>
     <Transaction>2024/08/17 17:13:54.000.691,=xmlrtl.dcp</Transaction>
-    <Transaction>2024/08/17 17:13:54.000.561,=E:\Aleph\Componente\Label\AlephLabel.pas</Transaction>
+    <Transaction>2024/08/17 17:13:54.000.636,=vclactnband.dcp</Transaction>
     <Transaction>2024/08/17 17:13:54.000.674,=vclx.dcp</Transaction>
     <Transaction>2024/08/17 17:13:54.000.577,=designide.dcp</Transaction>
     <Transaction>2024/08/17 17:13:54.000.622,=vcl.dcp</Transaction>
-    <Transaction>2024/08/17 17:13:54.000.636,=vclactnband.dcp</Transaction>
+    <Transaction>2024/08/17 17:13:54.000.561,=E:\Aleph\Componente\Label\AlephLabel.pas</Transaction>
     <Transaction>2024/08/17 17:16:37.000.641,=fmx.dcp</Transaction>
     <Transaction>2024/08/17 18:02:13.000.238,=E:\Aleph\Componente\Unit1.pas</Transaction>
     <Transaction>2024/08/17 18:02:28.000.039,E:\Aleph\Componente\Unit1.pas=E:\Aleph\Componente\Rectangle\AlephRectangle.pas</Transaction>
@@ -82,24 +82,24 @@
     <Transaction>2024/08/30 20:17:22.000.325,=E:\Aleph\Aleph-Componentes\Unit1.pas</Transaction>
     <Transaction>2024/08/30 20:17:50.000.063,E:\Aleph\Aleph-Componentes\Unit1.pas=E:\Aleph\Aleph-Componentes\AlephComponent\InterfAlephTipo.pas</Transaction>
     <Transaction>2024/08/30 20:21:34.000.506,=E:\Aleph\Aleph-Componentes\CodeZip\src\Builder_Impl.pas</Transaction>
+    <Transaction>2024/08/30 20:22:17.000.431,E:\Aleph\Aleph-Componentes\GofComponent\Layout\Diretor_Impl.pas=</Transaction>
     <Transaction>2024/08/30 20:22:17.000.457,E:\Aleph\Aleph-Componentes\GofComponent\Layout\LayoutGof.pas=</Transaction>
-    <Transaction>2024/08/30 20:22:17.000.390,E:\Aleph\Aleph-Componentes\GofComponent\Layout\ConcreteBuilder_Impl.pas=</Transaction>
     <Transaction>2024/08/30 20:22:17.000.473,E:\Aleph\Aleph-Componentes\GofComponent\Layout\MainLayout.pas=</Transaction>
     <Transaction>2024/08/30 20:22:17.000.441,E:\Aleph\Aleph-Componentes\GofComponent\Layout\InterfaceBuilder_Impl.pas=</Transaction>
-    <Transaction>2024/08/30 20:22:17.000.431,E:\Aleph\Aleph-Componentes\GofComponent\Layout\Diretor_Impl.pas=</Transaction>
-    <Transaction>2024/08/30 20:22:27.000.914,=E:\Aleph\Aleph-Componentes\CodeZip\src\DirectorZip_Impl.pas</Transaction>
+    <Transaction>2024/08/30 20:22:17.000.390,E:\Aleph\Aleph-Componentes\GofComponent\Layout\ConcreteBuilder_Impl.pas=</Transaction>
     <Transaction>2024/08/30 20:22:27.000.919,=E:\Aleph\Aleph-Componentes\CodeZip\src\ListType.pas</Transaction>
-    <Transaction>2024/08/30 20:22:27.000.901,=E:\Aleph\Aleph-Componentes\CodeZip\src\DataService_Impl.pas</Transaction>
-    <Transaction>2024/08/30 20:22:27.000.250,=E:\Aleph\Aleph-Componentes\CodeZip\src\ConcreteBuilder_Impl.pas</Transaction>
     <Transaction>2024/08/30 20:22:27.000.996,=E:\Aleph\Aleph-Componentes\CodeZip\src\MainZip.pas</Transaction>
+    <Transaction>2024/08/30 20:22:27.000.914,=E:\Aleph\Aleph-Componentes\CodeZip\src\DirectorZip_Impl.pas</Transaction>
+    <Transaction>2024/08/30 20:22:27.000.250,=E:\Aleph\Aleph-Componentes\CodeZip\src\ConcreteBuilder_Impl.pas</Transaction>
+    <Transaction>2024/08/30 20:22:27.000.901,=E:\Aleph\Aleph-Componentes\CodeZip\src\DataService_Impl.pas</Transaction>
     <Transaction>2024/08/30 20:22:28.000.007,=E:\Aleph\Aleph-Componentes\CodeZip\src\Zip_Impl.pas</Transaction>
     <Transaction>2024/08/30 20:29:08.000.463,E:\Aleph\Aleph-Componentes\CodeZip\src\Builder_Impl.pas=</Transaction>
+    <Transaction>2024/08/30 20:29:13.000.374,E:\Aleph\Aleph-Componentes\CodeZip\src\Zip_Impl.pas=</Transaction>
+    <Transaction>2024/08/30 20:29:13.000.353,E:\Aleph\Aleph-Componentes\CodeZip\src\ListType.pas=</Transaction>
     <Transaction>2024/08/30 20:29:13.000.297,E:\Aleph\Aleph-Componentes\CodeZip\src\ConcreteBuilder_Impl.pas=</Transaction>
     <Transaction>2024/08/30 20:29:13.000.364,E:\Aleph\Aleph-Componentes\CodeZip\src\MainZip.pas=</Transaction>
-    <Transaction>2024/08/30 20:29:13.000.374,E:\Aleph\Aleph-Componentes\CodeZip\src\Zip_Impl.pas=</Transaction>
-    <Transaction>2024/08/30 20:29:13.000.343,E:\Aleph\Aleph-Componentes\CodeZip\src\DirectorZip_Impl.pas=</Transaction>
-    <Transaction>2024/08/30 20:29:13.000.353,E:\Aleph\Aleph-Componentes\CodeZip\src\ListType.pas=</Transaction>
     <Transaction>2024/08/30 20:29:13.000.332,E:\Aleph\Aleph-Componentes\CodeZip\src\DataService_Impl.pas=</Transaction>
+    <Transaction>2024/08/30 20:29:13.000.343,E:\Aleph\Aleph-Componentes\CodeZip\src\DirectorZip_Impl.pas=</Transaction>
     <Transaction>2024/08/30 23:32:07.000.930,E:\Aleph\Aleph-Componentes\AlephComponent\ResizeManager.pas=E:\Aleph\Aleph-Componentes\AlephComponent\InterfAlephTipo.pas</Transaction>
     <Transaction>2024/08/31 22:15:22.000.250,=E:\Aleph\Aleph-Componentes\Unit1.pas</Transaction>
     <Transaction>2024/08/31 22:15:55.000.293,E:\Aleph\Aleph-Componentes\Label\AlephLabel.pas=E:\Aleph\Aleph-Componentes\Label\AlephLabelteste.pas</Transaction>
@@ -136,8 +136,8 @@
     <Transaction>2024/09/17 19:51:27.000.634,=F:\Aleph\Aleph-Componentes\AlephComponent\GlobalFontSizeManagerEditor.pas</Transaction>
     <Transaction>2024/09/17 19:54:02.000.053,F:\Aleph\Aleph-Componentes\AlephComponent\GlobalFontSizeManagerEditor.pas=</Transaction>
     <Transaction>2024/09/17 19:54:13.000.693,F:\Aleph\Aleph-Componentes\AlephComponent\RegisterGlobalFontSizeManager.pas=</Transaction>
-    <Transaction>2024/09/17 19:54:33.000.333,F:\Aleph\Aleph-Componentes\AlephComponent\GlobalFontSizeManagerPropertyEditor.pas=F:\Aleph\Aleph-Componentes\AlephComponent\GlobalFontSizeManagerEditor.pas</Transaction>
     <Transaction>2024/09/17 19:54:33.000.312,F:\Aleph\Aleph-Componentes\AlephComponent\GlobalFontSizeManagerEditor.pas=F:\Aleph\Aleph-Componentes\AlephComponent\GlobalFontSizeManagerPropertyEditor.pas</Transaction>
+    <Transaction>2024/09/17 19:54:33.000.333,F:\Aleph\Aleph-Componentes\AlephComponent\GlobalFontSizeManagerPropertyEditor.pas=F:\Aleph\Aleph-Componentes\AlephComponent\GlobalFontSizeManagerEditor.pas</Transaction>
     <Transaction>2024/09/17 19:54:53.000.432,F:\Aleph\Aleph-Componentes\AlephComponent\GlobalFontSizeManagerEditor.pas=F:\Aleph\Aleph-Componentes\AlephComponent\GlobalFontSizeManagerPropertyEditor.pas</Transaction>
     <Transaction>2024/09/17 19:54:53.000.450,F:\Aleph\Aleph-Componentes\AlephComponent\GlobalFontSizeManagerPropertyEditor.pas=F:\Aleph\Aleph-Componentes\AlephComponent\GlobalFontSizeManagerEditor.pas</Transaction>
     <Transaction>2024/09/17 19:56:09.000.298,F:\Aleph\Aleph-Componentes\AlephComponent\GlobalFontSizeManagerPropertyEditor.pas=F:\Aleph\Aleph-Componentes\AlephComponent\GlobalFontSizeManagerEditor.pas</Transaction>
@@ -153,6 +153,7 @@
     <Transaction>2024/09/17 20:15:57.000.915,F:\Aleph\Aleph-Componentes\Unit1.fmx=F:\Aleph\Aleph-Componentes\AlephComponent\GlobalFontSizeManagerEditor.fmx</Transaction>
     <Transaction>2024/09/17 20:47:00.000.304,=F:\Aleph\Aleph-Componentes\Unit1.pas</Transaction>
     <Transaction>2024/09/17 20:47:10.000.966,F:\Aleph\Aleph-Componentes\AlephComponent\GlobalFontSizeManagerComponentEditor.pas=F:\Aleph\Aleph-Componentes\Unit1.pas</Transaction>
+    <Transaction>2024/09/18 18:12:44.000.761,=F:\Aleph\Aleph-Componentes\Unit1.pas</Transaction>
   </Transactions>
 	<ProjectSortOrder AutoSort="0" SortType="0">
     <File Path="AlephComponent"/>

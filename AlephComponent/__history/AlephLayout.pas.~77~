@@ -23,9 +23,8 @@ type
     FAlephTipo: TAlephTipo;
     FRemMargins : TREmMargins;
 
-//    procedure FormResizeHandler(Sender: TObject);
-//    class procedure GlobalFormResizeHandler(Sender: TObject); static;
-
+    procedure FormResizeHandler(Sender: TObject);
+    class procedure GlobalFormResizeHandler(Sender: TObject); static;
     function GetTipo: TAlephTipo;
     procedure SetTipo(const Value: TAlephTipo);
     function GetRemMargins: TREmMargins;
@@ -48,8 +47,8 @@ procedure Register;
 
 implementation
 
-//var
-//  AlephLayouts: TList<TAlephLayout>;
+var
+  AlephLayouts: TList<TAlephLayout>;
 
 procedure Register;
 begin
@@ -60,22 +59,22 @@ begin
 //  RegisterPropertyEditor(TypeInfo(Integer), TAlephLayout, 'PWidth', TAlephWidthHeightPropertyEditor);
 end;
 
-//procedure RegisterAlephLayout(ALayout: TAlephLayout);
-//begin
-//  if not Assigned(AlephLayouts) then
-//    AlephLayouts := TList<TAlephLayout>.Create;
-//  AlephLayouts.Add(ALayout);
-//end;
-//
-//procedure UnregisterAlephLayout(ALayout: TAlephLayout);
-//begin
-//  if Assigned(AlephLayouts) then
-//  begin
-//    AlephLayouts.Remove(ALayout);
-//    if AlephLayouts.Count = 0 then
-//      FreeAndNil(AlephLayouts);
-//  end;
-//end;
+procedure RegisterAlephLayout(ALayout: TAlephLayout);
+begin
+  if not Assigned(AlephLayouts) then
+    AlephLayouts := TList<TAlephLayout>.Create;
+  AlephLayouts.Add(ALayout);
+end;
+
+procedure UnregisterAlephLayout(ALayout: TAlephLayout);
+begin
+  if Assigned(AlephLayouts) then
+  begin
+    AlephLayouts.Remove(ALayout);
+    if AlephLayouts.Count = 0 then
+      FreeAndNil(AlephLayouts);
+  end;
+end;
 
 
 function TAlephLayout.GetRemMargins: TREmMargins;
@@ -88,18 +87,18 @@ begin
   Result := FAlephTipo;
 end;
 
-//class procedure TAlephLayout.GlobalFormResizeHandler(Sender: TObject);
-//var
-//  i: Integer;
-//begin
-//  if Assigned(AlephLayouts) then
-//  begin
-//    for i := 0 to AlephLayouts.Count - 1 do
-//    begin
-//      AlephLayouts[i].AdjustSize(Sender);
-//    end;
-//  end;
-//end;
+class procedure TAlephLayout.GlobalFormResizeHandler(Sender: TObject);
+var
+  i: Integer;
+begin
+  if Assigned(AlephLayouts) then
+  begin
+    for i := 0 to AlephLayouts.Count - 1 do
+    begin
+      AlephLayouts[i].AdjustSize(Sender);
+    end;
+  end;
+end;
 
 procedure TAlephLayout.Resize;
 begin
@@ -161,10 +160,10 @@ begin
 //  inherited Destroy;
 end;
 
-//procedure TAlephLayout.FormResizeHandler(Sender: TObject);
-//begin
-//  GlobalFormResizeHandler(Sender);
-//end;
+procedure TAlephLayout.FormResizeHandler(Sender: TObject);
+begin
+  GlobalFormResizeHandler(Sender);
+end;
 
 end.
 

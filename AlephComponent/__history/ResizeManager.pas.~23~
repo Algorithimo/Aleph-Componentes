@@ -94,6 +94,7 @@ begin
   if not FFontSizeAdjustableComponents.Contains(AComponent) then
     FFontSizeAdjustableComponents.Add(AComponent);
 end;
+
 procedure TResizeManager.UnregisterFontSizeComponent(AComponent: IFontSizeAdjustable);
 begin
   FFontSizeAdjustableComponents.Remove(AComponent);

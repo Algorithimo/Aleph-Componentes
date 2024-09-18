@@ -28,6 +28,7 @@ type
     procedure SetFontPercentage(const Value: Single);
     procedure SetMinFontSize(const Value: Integer);
     procedure UpdateAllComponents;
+    procedure CalculatePercentage(Sender: TObject);
     //procedure CalculateAndUpdateFontSize;
     function GetParentForm: TForm;
   protected
@@ -36,7 +37,6 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure RegisterComponent(AComponent: IGlobalFontSizeAware);
-    procedure CalculatePercentage(Sender: TObject);
     procedure UnregisterComponent(AComponent: IGlobalFontSizeAware);
   published
     property BaseSize: Integer read FBaseSize write SetBaseSize;

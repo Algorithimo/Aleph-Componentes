@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Generics.Collections, System.Math,
-  FMX.Forms, FMX.Controls, AlephRem, AlephREmFont, ResizeManager, System.IOUtils, FMX.Types;
+  FMX.Forms, FMX.Controls, AlephRem, AlephREmFont, System.IOUtils, FMX.Types;
 
 type
 
@@ -14,7 +14,7 @@ type
     procedure UpdateFontSize(NewBaseSize: Integer);
   end;
 
-  TGlobalFontSizeManager = class(TComponent, IFontSizeAdjustable)
+  TGlobalFontSizeManager = class(TComponent)
   private
     TextWriter: TTextWriter;
 
@@ -28,7 +28,7 @@ type
     procedure SetFontPercentage(const Value: Single);
     procedure SetMinFontSize(const Value: Integer);
     procedure UpdateAllComponents;
-    //procedure CalculateAndUpdateFontSize;
+    procedure CalculateAndUpdateFontSize;
     function GetParentForm: TForm;
   protected
     procedure Loaded; override;
@@ -36,7 +36,6 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure RegisterComponent(AComponent: IGlobalFontSizeAware);
-    procedure CalculatePercentage(Sender: TObject);
     procedure UnregisterComponent(AComponent: IGlobalFontSizeAware);
   published
     property BaseSize: Integer read FBaseSize write SetBaseSize;
@@ -47,25 +46,6 @@ type
 implementation
 { TGlobalFontSizeManager }
 
-
-procedure TGlobalFontSizeManager.CalculatePercentage(Sender: TObject);
-var
-   NewBaseSize: Integer;
-   ParentForm: TForm;
-begin
-    ParentForm := GetParentForm;
-    if Assigned(ParentForm) then
-    begin
-      // Recalcula o BaseSize com base apenas no FontPercentage
-      NewBaseSize := Max(Round(ParentForm.ClientWidth * FFontPercentage / 100), FMinFontSize);
-      // Verifica se o novo tamanho base é diferente do atual
-      if NewBaseSize <> FBaseSize then
-      begin
-        FBaseSize := NewBaseSize;  // Atualiza o valor de BaseSize
-        UpdateAllComponents;       // Atualiza os componentes registrados
-      end;
-    end;
-end;
 
 constructor TGlobalFontSizeManager.Create(AOwner: TComponent);
 begin
@@ -85,6 +65,7 @@ end;
 procedure TGlobalFontSizeManager.Loaded;
 begin
   inherited;
+  CalculateAndUpdateFontSize;
 end;
 
 function TGlobalFontSizeManager.GetParentForm: TForm;
@@ -108,16 +89,37 @@ begin
   end;
 end;
 
+//procedure TGlobalFontSizeManager.SetFontPercentage(const Value: Single);
+//begin
+//  if FFontPercentage <> Value then
+//  begin
+//    FFontPercentage := Value;
+//    if not (csLoading in ComponentState) then
+//      CalculateAndUpdateFontSize;
+//  end;
+//end;
+
 procedure TGlobalFontSizeManager.SetFontPercentage(const Value: Single);
 var
-   ValidatedValue: Single;
+  NewBaseSize: Integer;
+   ParentForm: TForm;
 begin
-  ValidatedValue := Max(1, Value);
+  ParentForm := GetParentForm;
 
-  if FFontPercentage <> ValidatedValue then
+  if FFontPercentage <> Value then
   begin
-    FFontPercentage := ValidatedValue;
-    CalculatePercentage(nil);
+    FFontPercentage := Value;
+    if Assigned(ParentForm) then
+    begin
+      // Recalcula o BaseSize com base apenas no FontPercentage
+      NewBaseSize := Max(Round(ParentForm.ClientWidth * FFontPercentage / 100), FMinFontSize);
+      // Verifica se o novo tamanho base é diferente do atual
+      if NewBaseSize <> FBaseSize then
+      begin
+        FBaseSize := NewBaseSize;  // Atualiza o valor de BaseSize
+        UpdateAllComponents;       // Atualiza os componentes registrados
+      end;
+    end;
   end;
 end;
 
@@ -126,6 +128,7 @@ begin
   if FMinFontSize <> Value then
   begin
     FMinFontSize := Value;
+    CalculateAndUpdateFontSize;
   end;
 end;
 
@@ -149,6 +152,23 @@ var
 begin
   for Component in FComponents do
     Component.UpdateFontSize(FBaseSize);
+end;
+
+procedure TGlobalFontSizeManager.CalculateAndUpdateFontSize;
+var
+  NewBaseSize: Integer;
+  ParentForm: TForm;
+begin
+  ParentForm := GetParentForm;
+  if Assigned(ParentForm) then
+  begin
+    NewBaseSize := Max(Round(ParentForm.ClientWidth * FFontPercentage / 100), FMinFontSize);
+    if NewBaseSize <> FBaseSize then
+    begin
+      FBaseSize := NewBaseSize;
+      UpdateAllComponents;
+    end;
+  end;
 end;
 
 end.

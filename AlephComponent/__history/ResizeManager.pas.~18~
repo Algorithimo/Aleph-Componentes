@@ -19,15 +19,12 @@ type
   TResizeManager = class
   private
     FResizableComponents: TList<IResizable>;
-    FFontSizeAdjustableComponents: TList<IFontSizeAdjustable>;
   public
     constructor Create;
     destructor Destroy; override;
      procedure FormResizeHandler(Sender: TObject);
     procedure RegisterComponent(AComponent: IResizable);
     procedure UnregisterComponent(AComponent: IResizable);
-    procedure RegisterFontSizeComponent(AComponent: IFontSizeAdjustable);
-    procedure UnregisterFontSizeComponent(AComponent: IFontSizeAdjustable);
     class function GetInstance: TResizeManager;
   end;
 
@@ -49,26 +46,22 @@ constructor TResizeManager.Create;
 begin
   inherited;
   FResizableComponents := TList<IResizable>.Create;
-  FFontSizeAdjustableComponents := TList<IFontSizeAdjustable>.Create;
 end;
 
 destructor TResizeManager.Destroy;
 begin
   FResizableComponents.Free;
-  FFontSizeAdjustableComponents.Free;
   inherited;
 end;
 
 procedure TResizeManager.FormResizeHandler(Sender: TObject);
 var
   Component: IResizable;
-  FontComponent: IFontSizeAdjustable;
+  FontSizeAdjustable: IFontSizeAdjustable;
 begin
   for Component in FResizableComponents do
     Component.AdjustSize(Sender);
-
-  for FontComponent in FFontSizeAdjustableComponents do
-    FontComponent.CalculatePercentage(Sender);
+    FontSizeAdjustable.CalculatePercentage(Sender);
 end;
 
 class function TResizeManager.GetInstance: TResizeManager;
@@ -87,16 +80,6 @@ end;
 procedure TResizeManager.UnregisterComponent(AComponent: IResizable);
 begin
   FResizableComponents.Remove(AComponent);
-end;
-
-procedure TResizeManager.RegisterFontSizeComponent(AComponent: IFontSizeAdjustable);
-begin
-  if not FFontSizeAdjustableComponents.Contains(AComponent) then
-    FFontSizeAdjustableComponents.Add(AComponent);
-end;
-procedure TResizeManager.UnregisterFontSizeComponent(AComponent: IFontSizeAdjustable);
-begin
-  FFontSizeAdjustableComponents.Remove(AComponent);
 end;
 
 initialization

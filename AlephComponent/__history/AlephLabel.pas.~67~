@@ -29,7 +29,6 @@ type
     procedure AdjustSize(Sender: TObject);
     procedure CalculatePercentage(Sender: TObject);
     procedure ResizeFont(Sender: TObject);
-    procedure Resize; override;
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
   public
     constructor Create(AOwner: TComponent); override;
@@ -45,6 +44,9 @@ type
 procedure Register;
 
 implementation
+
+var
+  AlephLabels: TList<TAlephLabel>;
 
 procedure Register;
 begin
@@ -68,11 +70,9 @@ end;
 constructor TAlephLabel.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  FAlephTipo := TAlephTipo.Create(Self);
   FRemMargins := TREmMargins.Create(Self);
   FRemFontSize := TREmFontSize.Create(Self);
   GlobalResizeManager.RegisterComponent(Self);
-  GlobalResizeManager.RegisterFontSizeComponent(Self);
   //RegisterAlephLayout(Self);
   if AOwner is TForm then
   begin
@@ -85,11 +85,8 @@ destructor TAlephLabel.Destroy;
 begin
   if Assigned(FGlobalFontSizeManager) then
     FGlobalFontSizeManager.UnregisterComponent(Self);
-  GlobalResizeManager.UnregisterComponent(Self);
-  GlobalResizeManager.UnregisterFontSizeComponent(Self);
   FreeAndNil(FRemMargins);
   FreeAndNil(FRemFontSize);
-  FreeAndNil(FAlephTipo);
   inherited;
 end;
 
@@ -125,13 +122,6 @@ end;
 //    end;
 //  end;
 //end;
-
-procedure TAlephLabel.Resize;
-begin
-  inherited;
-  if Assigned(FAlephTipo) then
-      FAlephTipo.Resize;
-end;
 
 procedure TAlephLabel.ResizeFont(Sender: TObject);
 begin

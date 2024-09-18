@@ -72,7 +72,6 @@ begin
   FRemMargins := TREmMargins.Create(Self);
   FRemFontSize := TREmFontSize.Create(Self);
   GlobalResizeManager.RegisterComponent(Self);
-  GlobalResizeManager.RegisterFontSizeComponent(Self);
   //RegisterAlephLayout(Self);
   if AOwner is TForm then
   begin
@@ -85,8 +84,6 @@ destructor TAlephLabel.Destroy;
 begin
   if Assigned(FGlobalFontSizeManager) then
     FGlobalFontSizeManager.UnregisterComponent(Self);
-  GlobalResizeManager.UnregisterComponent(Self);
-  GlobalResizeManager.UnregisterFontSizeComponent(Self);
   FreeAndNil(FRemMargins);
   FreeAndNil(FRemFontSize);
   FreeAndNil(FAlephTipo);
