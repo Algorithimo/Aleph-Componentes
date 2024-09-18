@@ -1,0 +1,40 @@
+unit GlobalFontSizePropertyEditor;
+
+interface
+
+uses
+  System.Classes, DesignIntf, DesignEditors; // Usar FMX.Dialogs para InputBox
+
+type
+  TGlobalFontSizePropertyEditor = class(TPropertyEditor)
+  public
+    function GetAttributes: TPropertyAttributes; override;
+    procedure Edit; override;
+  end;
+
+implementation
+
+uses
+  System.SysUtils, FMX.Dialogs;
+
+{ TGlobalFontSizePropertyEditor }
+
+function TGlobalFontSizePropertyEditor.GetAttributes: TPropertyAttributes;
+begin
+  Result := [paDialog];
+end;
+
+procedure TGlobalFontSizePropertyEditor.Edit;
+var
+  NewValue: Integer;
+begin
+  NewValue := StrToIntDef(InputBox('Enter Font Base Percentage',
+                                  'Enter new percentage:',
+                                  IntToStr(GetOrdValue)),
+                         GetOrdValue);
+  if NewValue <> GetOrdValue then
+    SetOrdValue(NewValue);
+end;
+
+end.
+

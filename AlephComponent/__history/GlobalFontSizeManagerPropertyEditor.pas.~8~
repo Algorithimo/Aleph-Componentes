@@ -1,0 +1,31 @@
+unit GlobalFontSizeManagerPropertyEditor;
+
+interface
+
+uses
+  System.Classes, DesignIntf, DesignEditors, GlobalFontSizeManager, GlobalFontSizeManagerEditor, FMX.Dialogs;
+
+type
+  TGlobalFontSizeManagerPropertyEditor = class(TPropertyEditor)
+  public
+    procedure Edit; override;
+  end;
+
+implementation
+
+procedure TGlobalFontSizeManagerPropertyEditor.Edit;
+var
+  EditorForm: TGlobalFontSizeManagerEditorForm;
+begin
+  EditorForm := TGlobalFontSizeManagerEditorForm.Create(nil);
+  try
+    EditorForm.SetFontSizeManager(TGlobalFontSizeManager(GetComponent(0)));
+    if EditorForm.ShowModal = 1 then
+      Modified;
+  finally
+    EditorForm.Free;
+  end;
+end;
+
+end.
+

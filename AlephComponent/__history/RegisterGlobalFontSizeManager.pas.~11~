@@ -1,0 +1,23 @@
+unit RegisterGlobalFontSizeManager;
+
+interface
+
+uses
+  System.Classes, DesignIntf, DesignEditors, GlobalFontSizeManager, GlobalFontSizeManagerEditor;
+
+procedure Register;
+
+implementation
+
+procedure Register;
+begin
+  RegisterComponents('Aleph', [TGlobalFontSizeManager]);
+  RegisterPropertyEditor(TypeInfo(Integer), TGlobalFontSizeManager, 'FFontBase', TGlobalFontSizeManagerPropertyEditor);
+  RegisterPropertyEditor(TypeInfo(Integer), TGlobalFontSizeManager, 'FFontPercentage', TGlobalFontSizeManagerPropertyEditor);
+  RegisterPropertyEditor(TypeInfo(Integer), TGlobalFontSizeManager, 'FFormWidth', TGlobalFontSizeManagerPropertyEditor);
+  RegisterPropertyEditor(TypeInfo(Integer), TGlobalFontSizeManager, 'FMinFontSize', TGlobalFontSizeManagerPropertyEditor);
+end;
+
+end.
+
+

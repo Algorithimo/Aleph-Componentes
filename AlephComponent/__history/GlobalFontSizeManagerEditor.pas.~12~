@@ -1,0 +1,69 @@
+unit GlobalFontSizeManagerEditor;
+
+interface
+
+uses
+  System.Classes,
+  System.SysUtils,
+  FMX.Controls,
+  FMX.Forms,
+  FMX.StdCtrls,
+  FMX.Edit,
+  GlobalFontSizeManager;
+
+type
+  TGlobalFontSizeManagerEditorForm = class( TForm )
+    FontBaseEdit : TEdit;
+    FontPercentageEdit : TEdit;
+    FormWidthEdit : TEdit;
+    MinFontSizeEdit : TEdit;
+    BtnOk : TButton;
+    BtnCancel : TButton;
+    procedure BtnOkClick( Sender : TObject );
+    procedure BtnCancelClick( Sender : TObject );
+    private
+      FComponent : TGlobalFontSizeManager;
+    public
+      procedure LoadSettings( AComponent : TGlobalFontSizeManager );
+  end;
+
+implementation
+
+{$R *.fmx}
+{ TGlobalFontSizeManagerEditorForm }
+
+procedure TGlobalFontSizeManagerEditorForm.LoadSettings
+  ( AComponent : TGlobalFontSizeManager );
+  begin
+    FComponent := AComponent;
+    // Carrega as propriedades do componente para os controles do formulário
+    FontBaseEdit.Text := IntToStr( FComponent.FontBase );
+    FontPercentageEdit.Text := IntToStr( FComponent.FontPercentage );
+    FormWidthEdit.Text := IntToStr( FComponent.FormWidth );
+    MinFontSizeEdit.Text := IntToStr( FComponent.MinFontSize );
+  end;
+
+procedure TGlobalFontSizeManagerEditorForm.BtnOkClick( Sender : TObject );
+  begin
+    // Salva as configurações do formulário de volta no componente
+    if Assigned( FComponent )
+    then
+    begin
+      FComponent.FontBase := StrToIntDef( FontBaseEdit.Text,
+        FComponent.FontBase );
+      FComponent.FontPercentage := StrToIntDef( FontPercentageEdit.Text,
+        FComponent.FontPercentage );
+      FComponent.FormWidth := StrToIntDef( FormWidthEdit.Text,
+        FComponent.FormWidth );
+      FComponent.MinFontSize := StrToIntDef( MinFontSizeEdit.Text,
+        FComponent.MinFontSize );
+    end;
+    ModalResult := 1;
+  end;
+
+procedure TGlobalFontSizeManagerEditorForm.BtnCancelClick( Sender : TObject );
+  begin
+    ModalResult := 2;
+  end;
+
+end.

@@ -1,0 +1,45 @@
+unit GlobalFontSizeManagerPropertyEditor;
+
+interface
+
+uses
+  System.Classes, DesignIntf, DesignEditors, GlobalFontSizeManager, FMX.Forms;
+
+type
+  TGlobalFontSizeManagerPropertyEditor = class(TPropertyEditor)
+  public
+    function GetAttributes: TPropertyAttributes; override;
+    procedure Edit; override;
+  end;
+
+implementation
+
+uses
+  GlobalFontSizeManagerEditor; // Certifique-se de que o caminho está correto
+
+{ TGlobalFontSizeManagerPropertyEditor }
+
+function TGlobalFontSizeManagerPropertyEditor.GetAttributes: TPropertyAttributes;
+begin
+  Result := [paDialog];
+end;
+
+procedure TGlobalFontSizeManagerPropertyEditor.Edit;
+var
+  EditorForm: TGlobalFontSizeManagerEditorForm;
+  Comp: TGlobalFontSizeManager;
+begin
+  Comp := TGlobalFontSizeManager(GetComponent(0));
+  EditorForm := TGlobalFontSizeManagerEditorForm.Create(nil);
+  try
+    EditorForm.LoadSettings(Comp); // Carregar configurações
+    if EditorForm.ShowModal = 1 then
+      EditorForm.SaveSettings(Comp); // Salvar configurações
+  finally
+    EditorForm.Free;
+  end;
+end;
+
+end.
+
+

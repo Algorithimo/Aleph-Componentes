@@ -1,0 +1,58 @@
+unit GlobalFontSizeManagerPropertyEditor;
+
+interface
+
+uses
+  System.Classes,System.SysUtils, DesignIntf, DesignEditors, GlobalFontSizeManager, FMX.Forms;
+
+type
+  TGlobalFontSizeManagerPropertyEditor = class(TPropertyEditor)
+  public
+    function GetAttributes: TPropertyAttributes; override;
+    procedure Edit; override;
+    function GetValue: string; override;
+    procedure SetValue(const Value: string); override;
+  end;
+
+implementation
+
+uses
+  GlobalFontSizeManagerEditor;
+
+{ TGlobalFontSizeManagerPropertyEditor }
+
+function TGlobalFontSizeManagerPropertyEditor.GetAttributes: TPropertyAttributes;
+begin
+  Result := [paDialog, paRevertable, paMultiSelect];
+end;
+
+procedure TGlobalFontSizeManagerPropertyEditor.Edit;
+var
+  EditorForm: TGlobalFontSizeManagerEditorForm;
+  Comp: TGlobalFontSizeManager;
+begin
+  Comp := TGlobalFontSizeManager(GetComponent(0));
+  EditorForm := TGlobalFontSizeManagerEditorForm.Create(nil);
+  try
+    EditorForm.LoadSettings(Comp);
+    if EditorForm.ShowModal = 1 then
+    begin
+      EditorForm.SaveSettings(Comp);
+      Modified;
+    end;
+  finally
+    EditorForm.Free;
+  end;
+end;
+
+function TGlobalFontSizeManagerPropertyEditor.GetValue: string;
+begin
+  Result := IntToStr(GetOrdValue);
+end;
+
+procedure TGlobalFontSizeManagerPropertyEditor.SetValue(const Value: string);
+begin
+  SetOrdValue(StrToIntDef(Value, 0));
+end;
+
+end.

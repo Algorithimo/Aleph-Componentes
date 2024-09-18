@@ -1,0 +1,26 @@
+unit RegisterGlobalFontSizeManager;
+
+interface
+
+uses
+  System.Classes, DesignIntf, DesignEditors, GlobalFontSizeManager, GlobalFontSizeManagerPropertyEditor;
+
+procedure Register;
+
+implementation
+
+procedure Register;
+begin
+  RegisterComponents('Aleph', [TGlobalFontSizeManager]);
+
+  // Registrar o editor de componente para habilitar o duplo clique
+  RegisterComponentEditor(TGlobalFontSizeManager, TGlobalFontSizeManagerPropertyEditor);
+
+  // Registrar editores de propriedade para propriedades específicas
+  RegisterPropertyEditor(TypeInfo(Integer), TGlobalFontSizeManager, 'FontBase', TGlobalFontSizeManagerPropertyEditor);
+  RegisterPropertyEditor(TypeInfo(Integer), TGlobalFontSizeManager, 'FontPercentage', TGlobalFontSizeManagerPropertyEditor);
+  RegisterPropertyEditor(TypeInfo(Integer), TGlobalFontSizeManager, 'FormWidth', TGlobalFontSizeManagerPropertyEditor);
+  RegisterPropertyEditor(TypeInfo(Integer), TGlobalFontSizeManager, 'MinFontSize', TGlobalFontSizeManagerPropertyEditor);
+end;
+
+end.

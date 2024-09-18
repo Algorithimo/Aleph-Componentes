@@ -170,6 +170,13 @@
         <DCCReference Include="AlephComponent\ResizeManager.pas"/>
         <DCCReference Include="AlephComponent\AlephLabel.pas"/>
         <DCCReference Include="AlephComponent\AlephREmFont.pas"/>
+        <DCCReference Include="AlephComponent\GlobalFontSizeManager.pas"/>
+        <DCCReference Include="AlephComponent\RegisterGlobalFontSizeManager.pas"/>
+        <DCCReference Include="AlephComponent\GlobalFontSizeManagerPropertyEditor.pas"/>
+        <DCCReference Include="AlephComponent\GlobalFontSizeManagerEditor.pas">
+            <Form>GlobalFontSizeManagerEditorForm</Form>
+        </DCCReference>
+        <DCCReference Include="AlephComponent\GlobalFontSizeManagerComponentEditor.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

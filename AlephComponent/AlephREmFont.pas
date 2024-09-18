@@ -13,34 +13,21 @@ type
   end;
 
 type
-  TLabelAutoResizer = class
-  private
-    FLabel: TLabel;
-    FAutoResizeHeight: Boolean;
-    procedure SetAutoResizeHeight(const Value: Boolean);
-  public
-    constructor Create(ALabel: TLabel);
-    destructor Destroy; override;
-    procedure ResizeLabel;
-    property AutoResizeHeight: Boolean read FAutoResizeHeight
-      write SetAutoResizeHeight;
-  end;
-
   TREmFontSize = class(TPersistent)
   private
-    FBaseSize: Single;
+    FBaseSize: Integer;
     FREM: Single;
     FOnChange: TNotifyEvent;
     FControl: TControl;
-    procedure SetBaseSize(const Value: Single);
+    procedure SetBaseSize(const Value: Integer);
     procedure SetREM(const Value: Single);
   public
     procedure TextResizeHandler(Sender: TObject);
-    constructor Create(AControl: TControl);
+    constructor Create(FBaseSize: Integer);
     destructor Destroy; override;
     function ToPixels: Integer;
   published
-    property FontSize: Single read FBaseSize write SetBaseSize;
+    property FontSize: Integer read FBaseSize write SetBaseSize;
     property REM: Single read FREM write SetREM;
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
   end;
@@ -52,10 +39,9 @@ var
 
   { TREmFontSize }
 
-constructor TREmFontSize.Create(AControl: TControl);
+constructor TREmFontSize.Create(FBaseSize: Integer);
 begin
   inherited Create;
-  FControl := AControl;
   FBaseSize := 12; // Valor padrão para o tamanho base da fonte
   FREM := 1; // Valor padrão de 1 rem
 end;
@@ -65,7 +51,7 @@ begin
   inherited;
 end;
 
-procedure TREmFontSize.SetBaseSize(const Value: Single);
+procedure TREmFontSize.SetBaseSize(const Value: Integer);
 begin
   if FBaseSize <> Value then
   begin
@@ -102,45 +88,5 @@ begin
   Result := Round(FREM * FBaseSize);
 end;
 
-{ TLabelAutoResizer }
-
-constructor TLabelAutoResizer.Create(ALabel: TLabel);
-begin
-  FLabel := ALabel;
-  FAutoResizeHeight := False;
-  //FLabel.OnResize := nil;
-  // Por padrão, o redimensionamento automático está ativado
-end;
-
-destructor TLabelAutoResizer.Destroy;
-begin
-  inherited;
-end;
-
-procedure TLabelAutoResizer.ResizeLabel;
-var
-  TextHeight: Single;
-begin
-  if FAutoResizeHeight and Assigned(FLabel) then
-  begin
-    // Calcula a altura do texto
-    TextHeight := FLabel.Canvas.TextHeight(FLabel.Text);
-    // Ajusta a altura do TLabel de acordo com a altura do texto
-    FLabel.Height := TextHeight + FLabel.Margins.Top + FLabel.Margins.Bottom;
-  end;
-end;
-
-procedure TLabelAutoResizer.SetAutoResizeHeight(const Value: Boolean);
-begin
-  if FAutoResizeHeight <> Value then
-  begin
-    FAutoResizeHeight := Value;
-    // Se a propriedade for ativada, redimensiona imediatamente
-    if FAutoResizeHeight then
-      ResizeLabel;
-  end;
-end;
-
 end.
 
-  end.

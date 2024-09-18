@@ -48,6 +48,11 @@ contains
   AlephRem in 'AlephComponent\AlephRem.pas',
   ResizeManager in 'AlephComponent\ResizeManager.pas',
   AlephLabel in 'AlephComponent\AlephLabel.pas',
-  AlephREmFont in 'AlephComponent\AlephREmFont.pas';
+  AlephREmFont in 'AlephComponent\AlephREmFont.pas',
+  GlobalFontSizeManager in 'AlephComponent\GlobalFontSizeManager.pas',
+  RegisterGlobalFontSizeManager in 'AlephComponent\RegisterGlobalFontSizeManager.pas',
+  GlobalFontSizeManagerPropertyEditor in 'AlephComponent\GlobalFontSizeManagerPropertyEditor.pas',
+  GlobalFontSizeManagerEditor in 'AlephComponent\GlobalFontSizeManagerEditor.pas' {GlobalFontSizeManagerEditorForm},
+  GlobalFontSizeManagerComponentEditor in 'AlephComponent\GlobalFontSizeManagerComponentEditor.pas';
 
 end.

@@ -1,0 +1,59 @@
+unit GlobalFontSizeManagerComponentEditor;
+
+interface
+
+uses
+  System.Classes, DesignIntf, DesignEditors, GlobalFontSizeManager, FMX.Forms;
+
+type
+  TGlobalFontSizeManagerComponentEditor = class(TComponentEditor)
+  public
+    procedure Edit; override;
+    procedure ExecuteVerb(Index: Integer); override;
+    function GetVerb(Index: Integer): string; override;
+    function GetVerbCount: Integer; override;
+  end;
+
+implementation
+
+uses
+  GlobalFontSizeManagerEditor;
+
+{ TGlobalFontSizeManagerComponentEditor }
+
+procedure TGlobalFontSizeManagerComponentEditor.Edit;
+var
+  EditorForm: TGlobalFontSizeManagerEditorForm;
+  Comp: TGlobalFontSizeManager;
+begin
+  Comp := TGlobalFontSizeManager(Component);
+  EditorForm := TGlobalFontSizeManagerEditorForm.Create(nil);
+  try
+    EditorForm.LoadSettings(Comp);
+    if EditorForm.ShowModal = 1 then
+      EditorForm.SaveSettings(Comp);
+  finally
+    EditorForm.Free;
+  end;
+end;
+
+procedure TGlobalFontSizeManagerComponentEditor.ExecuteVerb(Index: Integer);
+begin
+  case Index of
+    0: Edit;
+  end;
+end;
+
+function TGlobalFontSizeManagerComponentEditor.GetVerb(Index: Integer): string;
+begin
+  case Index of
+    0: Result := 'Edit Font Size Settings';
+  end;
+end;
+
+function TGlobalFontSizeManagerComponentEditor.GetVerbCount: Integer;
+begin
+  Result := 1;
+end;
+
+end.

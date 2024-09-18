@@ -1,0 +1,50 @@
+unit GlobalFontSizePropertyEditor;
+
+interface
+
+uses
+  System.Classes, DesignIntf, DesignEditors, System.SysUtils, Vcl.Dialogs, FMX.Types, FMX.Controls, GlobalFontSizeManager;
+
+type
+  TGlobalFontSizePropertyEditor = class(TPropertyEditor)
+  private
+    function GetGlobalFontSizeManager: TGlobalFontSizeManager;
+  public
+    function GetAttributes: TPropertyAttributes; override;
+    procedure Edit; override;
+  end;
+
+implementation
+
+function TGlobalFontSizePropertyEditor.GetGlobalFontSizeManager: TGlobalFontSizeManager;
+begin
+  // Implementação para obter o objeto TGlobalFontSizeManager
+  Result := TGlobalFontSizeManager(GetOrdValue); // Supondo que GetOrdValue retorne o objeto correto
+end;
+
+function TGlobalFontSizePropertyEditor.GetAttributes: TPropertyAttributes;
+begin
+  Result := [paDialog];
+end;
+
+procedure TGlobalFontSizePropertyEditor.Edit;
+var
+  FontSizeManager: TGlobalFontSizeManager;
+  NewValue: Integer;
+begin
+  FontSizeManager := GetGlobalFontSizeManager;
+  if Assigned(FontSizeManager) then
+  begin
+    NewValue := StrToIntDef(InputBox('Enter Global Font Size',
+                                    'Enter new font size percentage:',
+                                    IntToStr(FontSizeManager.GetFontBase)),
+                           FontSizeManager.GetFontBase);
+    if NewValue <> FontSizeManager.GetFontBase then
+    begin
+      FontSizeManager.SetFontBase(NewValue);
+    end;
+  end;
+end;
+
+end.
+

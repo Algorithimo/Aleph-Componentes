@@ -1,0 +1,51 @@
+unit GlobalFontSizeManagerPropertyEditor;
+
+interface
+
+uses
+  System.Classes, DesignIntf, DesignEditors, GlobalFontSizeManager, GlobalFontSizeManagerEditor;
+
+type
+  TGlobalFontSizeManagerPropertyEditor = class(TPropertyEditor)
+  public
+    function GetAttributes: TPropertyAttributes; override;
+    procedure Edit; override;
+  end;
+
+implementation
+
+uses
+  System.SysUtils, FMX.Dialogs;
+
+{ TGlobalFontSizeManagerPropertyEditor }
+
+function TGlobalFontSizeManagerPropertyEditor.GetAttributes: TPropertyAttributes;
+begin
+  Result := [paDialog];
+end;
+
+procedure TGlobalFontSizeManagerPropertyEditor.Edit;
+var
+  EditorForm: TGlobalFontSizeManagerEditorForm;
+  Component: TGlobalFontSizeManager;
+begin
+  // Cria uma instância do formulário do editor
+  EditorForm := TGlobalFontSizeManagerEditorForm.Create(nil);
+  try
+    // Obtém o componente associado ao editor de propriedades
+    Component := TGlobalFontSizeManager(GetComponent(0));
+    // Carrega as configurações do componente para o formulário
+    EditorForm.LoadSettings(Component);
+    // Exibe o formulário e verifica se o usuário clicou em OK
+    if EditorForm.ShowModal = mrOk then
+    begin
+      // Se o usuário clicou em OK, as alterações já foram aplicadas no evento BtnOkClick do formulário
+      Designer.Modified; // Notifica o designer sobre a modificação
+    end;
+  finally
+    EditorForm.Free;
+  end;
+end;
+
+end.
+

@@ -1,0 +1,48 @@
+unit GlobalFontSizePropertyEditor;
+
+interface
+
+uses
+  System.Classes, DesignIntf, DesignEditors, GlobalFontSizeManager,
+  System.SysUtils, Vcl.Dialogs; // Inclua o Vcl.Dialogs para usar o InputBox
+
+type
+  TGlobalFontSizePropertyEditor = class(TPropertyEditor)
+  public
+    function GetAttributes: TPropertyAttributes; override;
+    procedure Edit; override;
+  end;
+
+implementation
+
+function TGlobalFontSizePropertyEditor.GetAttributes: TPropertyAttributes;
+begin
+  Result := [paDialog];
+end;
+
+procedure TGlobalFontSizePropertyEditor.Edit;
+var
+  NewPercentage: Integer;
+  NewMinFontSize: Integer;
+  NewValue: string;
+  Component: TGlobalFontSizeManager;
+begin
+  Component := TGlobalFontSizeManager(GetComponent(0));
+
+  // Obtém a porcentagem de fonte
+  NewValue := InputBox('Fonte Global', 'Digite a porcentagem da fonte:', IntToStr(Component.GetFontPercentage));
+  NewPercentage := StrToIntDef(NewValue, Component.GetFontPercentage);
+
+  if NewPercentage <> Component.GetFontPercentage then
+    Component.SetFontPercentage(NewPercentage);
+
+  // Obtém o tamanho mínimo da fonte
+  NewValue := InputBox('Fonte Global', 'Digite o tamanho mínimo da fonte:', IntToStr(Component.GetFontBase));
+  NewMinFontSize := StrToIntDef(NewValue, Component.GetFontBase);
+
+  if NewMinFontSize <> Component.GetFontBase then
+    Component.SetFontBase(NewMinFontSize);
+end;
+
+end.
+

@@ -1,0 +1,42 @@
+unit GlobalFontSizePropertyEditor;
+
+interface
+
+uses
+  System.Classes, DesignIntf, DesignEditors, GlobalFontSizeManager;
+
+type
+  TGlobalFontSizeManagerPropertyEditor = class(TPropertyEditor)
+  public
+    function GetAttributes: TPropertyAttributes; override;
+    procedure Edit; override;
+  end;
+
+implementation
+
+uses
+  System.SysUtils, FMX.Dialogs; // Utilize FMX.Dialogs para FMX
+
+{ TGlobalFontSizeManagerPropertyEditor }
+
+function TGlobalFontSizeManagerPropertyEditor.GetAttributes: TPropertyAttributes;
+begin
+  Result := [paDialog];
+end;
+
+procedure TGlobalFontSizeManagerPropertyEditor.Edit;
+var
+  NewFontBase, NewPercentage, NewWidth, NewMinFont: Integer;
+begin
+  // Exemplo de diálogo para editar propriedades do GlobalFontSizeManager
+  NewFontBase := StrToIntDef(InputBox('Edit FontBase', 'Enter new FontBase:', IntToStr(GetOrdValue)), GetOrdValue);
+  NewPercentage := StrToIntDef(InputBox('Edit FontPercentage', 'Enter new FontPercentage:', IntToStr(GetOrdValue)), GetOrdValue);
+  NewWidth := StrToIntDef(InputBox('Edit FormWidth', 'Enter new FormWidth (px):', IntToStr(GetOrdValue)), GetOrdValue);
+  NewMinFont := StrToIntDef(InputBox('Edit MinFontSize', 'Enter new MinFontSize:', IntToStr(GetOrdValue)), GetOrdValue);
+
+  // Defina os novos valores
+  // (Aqui você pode precisar de um código para aplicar as alterações no TGlobalFontSizeManager)
+end;
+
+end.
+
