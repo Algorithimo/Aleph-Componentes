@@ -108,7 +108,7 @@ procedure TGlobalFontSizeManager.SetFontPercentage(const Value: Single);
 var
    ValidatedValue: Single;
 begin
-  ValidatedValue := Max(1, Value);
+  ValidatedValue := Max(0.1, Value);
 
   if FFontPercentage <> ValidatedValue then
   begin
