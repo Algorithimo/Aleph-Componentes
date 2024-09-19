@@ -14,9 +14,6 @@ type
     FRemFontSize: TREmFontSize;
     FGlobalFontSizeManager: TGlobalFontSizeManager;
 
-//    procedure FormResizeHandler(Sender: TObject);
-//    class procedure GlobalFormResizeHandler(Sender: TObject); static;
-
     function GetTipo: TAlephTipo;
     procedure SetTipo(const Value: TAlephTipo);
 
@@ -26,7 +23,7 @@ type
     procedure SetTextRem(const Value: TREmFontSize);
     procedure SetGlobalFontSizeManager(const Value: TGlobalFontSizeManager);
   protected
-    procedure AdjustSize(Sender: TObject);
+    procedure ResizeComponent(Sender: TObject);
     procedure CalculatePercentage(Sender: TObject);
     procedure ResizeFont(Sender: TObject);
     procedure Resize; override;
@@ -53,10 +50,10 @@ end;
 
 { TAlephLabel }
 
-procedure TAlephLabel.AdjustSize(Sender: TObject);
+procedure TAlephLabel.ResizeComponent(Sender: TObject);
 begin
   if Assigned(FAlephTipo) then
-    FAlephTipo.AdjustSize(sender);
+    FAlephTipo.ResizeComponent(sender);
 end;
 
 procedure TAlephLabel.CalculatePercentage(Sender: TObject);
@@ -93,11 +90,6 @@ begin
   inherited;
 end;
 
-//procedure TAlephLabel.FormResizeHandler(Sender: TObject);
-//begin
-//  GlobalFormResizeHandler(Sender);
-//end;
-
 function TAlephLabel.GetRemMargins: TREmMargins;
 begin
   Result := FRemMargins;
@@ -112,19 +104,6 @@ function TAlephLabel.GetTipo: TAlephTipo;
 begin
   Result := FAlephTipo;
 end;
-
-//class procedure TAlephLabel.GlobalFormResizeHandler(Sender: TObject);
-//var
-//  i: Integer;
-//begin
-//  if Assigned(AlephLabels) then
-//  begin
-//    for i := 0 to AlephLabels.Count - 1 do
-//    begin
-//      AlephLabels[i].AdjustSize(Sender);
-//    end;
-//  end;
-//end;
 
 procedure TAlephLabel.Resize;
 begin
@@ -155,7 +134,7 @@ procedure TAlephLabel.SetTipo(const Value: TAlephTipo);
 begin
   if Assigned(FAlephTipo) then
     FAlephTipo.Assign(Value);
-  AdjustSize(nil);
+  ResizeComponent(nil);
 end;
 
 procedure TAlephLabel.SetGlobalFontSizeManager(const Value: TGlobalFontSizeManager);
@@ -182,6 +161,11 @@ begin
   if Assigned(FRemFontSize) then
   begin
     FRemFontSize.FontSize := NewBaseSize;
+    ResizeFont(Self);
+  end;
+  if Assigned(FRemMargins) then
+  begin
+    FRemMargins.AMarginBase.FontBase := NewBaseSize;
     ResizeFont(Self);
   end;
 end;

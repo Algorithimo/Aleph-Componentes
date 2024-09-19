@@ -24,7 +24,7 @@ type
     FCornerPerHeightPercent: Integer;
     procedure SetCornerPerHeightPercent(const Value: Integer);
     procedure SetCornerPerWidthPercent(const Value: Integer);
-    procedure AdjustSize(Sender: TObject);
+    procedure ResizeComponent(Sender: TObject);
     procedure FormResizeHandler(Sender: TObject);
     class procedure GlobalFormResizeHandler(Sender: TObject); static;
     function GetTipo: TAlephTipo;
@@ -84,7 +84,7 @@ begin
   begin
     for i := 0 to AlephRectangles.Count - 1 do
     begin
-      AlephRectangles[i].AdjustSize(Sender);
+      AlephRectangles[i].ResizeComponent(Sender);
     end;
   end;
 end;
@@ -108,13 +108,13 @@ end;
 procedure TAlephRectangle.SetTipo(const Value: TAlephTipo);
 begin
   FAlephTipo.Assign(Value);
-  AdjustSize(nil);
+  ResizeComponent(nil);
 end;
 
-procedure TAlephRectangle.AdjustSize(Sender: TObject);
+procedure TAlephRectangle.ResizeComponent(Sender: TObject);
 begin
   if Assigned(FAlephTipo) then
-    FAlephTipo.AdjustSize(sender);
+    FAlephTipo.ResizeComponent(sender);
 end;
 
 constructor TAlephRectangle.Create(AOwner: TComponent);

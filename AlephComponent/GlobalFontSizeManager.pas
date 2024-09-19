@@ -16,19 +16,15 @@ type
 
   TGlobalFontSizeManager = class(TComponent, IFontSizeAdjustable)
   private
-    TextWriter: TTextWriter;
-
     FBaseSize: Integer;
     FMinFontSize: Integer;
     FFontPercentage: Single;
     FComponents: TList<IGlobalFontSizeAware>;
 
-
     procedure SetBaseSize(const Value: Integer);
     procedure SetFontPercentage(const Value: Single);
     procedure SetMinFontSize(const Value: Integer);
     procedure UpdateAllComponents;
-    //procedure CalculateAndUpdateFontSize;
     function GetParentForm: TForm;
   protected
     procedure Loaded; override;
@@ -61,7 +57,7 @@ begin
       // Verifica se o novo tamanho base é diferente do atual
       if NewBaseSize <> FBaseSize then
       begin
-        FBaseSize := NewBaseSize;  // Atualiza o valor de BaseSize
+        FBaseSize := NewBaseSize; // Atualiza o valor de BaseSize
         UpdateAllComponents;       // Atualiza os componentes registrados
       end;
     end;

@@ -31,7 +31,7 @@ type
     function GetRemMargins: TREmMargins;
     procedure SetRemMargins(const Value: TREmMargins);
   protected
-    procedure AdjustSize(Sender: TObject);
+    procedure ResizeComponent(Sender: TObject);
     procedure Resize; override;
   public
     constructor Create(AOwner: TComponent); override;
@@ -119,13 +119,13 @@ procedure TAlephLayout.SetTipo(const Value: TAlephTipo);
 begin
   if Assigned(FAlephTipo) then
     FAlephTipo.Assign(Value);
-  AdjustSize(nil);
+  ResizeComponent(nil);
 end;
 
-procedure TAlephLayout.AdjustSize(Sender: TObject);
+procedure TAlephLayout.ResizeComponent(Sender: TObject);
 begin
   if Assigned(FAlephTipo) then
-    FAlephTipo.AdjustSize(sender);
+    FAlephTipo.ResizeComponent(sender);
 end;
 
 constructor TAlephLayout.Create(AOwner: TComponent);

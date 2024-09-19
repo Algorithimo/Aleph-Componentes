@@ -89,49 +89,14 @@ begin
   end;
 end;
 
+
 procedure TAlephRectangle.Resize;
-var
-  ParentWidth, ParentHeight: Single;
-  CurrentWidthPercent, CurrentHeightPercent: Integer;
 begin
   inherited;
-
-  if Assigned(Self.Parent) then
-  begin
-    // Verifica se o Parent é um TForm
-    if Self.Parent is TForm then
-    begin
-      ParentWidth := TForm(Self.Parent).ClientWidth;
-      ParentHeight := TForm(Self.Parent).ClientHeight;
-    end
-    // Verifica se o Parent é um TControl (layout ou retângulo)
-    else if Self.Parent is TControl then
-    begin
-      ParentWidth := TControl(Self.Parent).Width;
-      ParentHeight := TControl(Self.Parent).Height;
-    end
-    else
-    begin
-      Exit; // Se não for um TForm ou TControl, não faz ajuste
-    end;
-
-    // Calcula a porcentagem atual da largura e altura em relação ao pai
-    if ParentWidth > 0 then
-      CurrentWidthPercent := Round((Self.Width / ParentWidth) * 100)
-    else
-      CurrentWidthPercent := 0;
-
-    if ParentHeight > 0 then
-      CurrentHeightPercent := Round((Self.Height / ParentHeight) * 100)
-    else
-      CurrentHeightPercent := 0;
-
-    // Agora você pode usar CurrentWidthPercent e CurrentHeightPercent como desejar
-    FAlephTipo.PWidth := CurrentWidthPercent;
-    FAlephTipo.PHeight := CurrentHeightPercent;
-  end;
+  //if csDesigning in ComponentState then
+  if Assigned(FAlephTipo) then
+      FAlephTipo.Resize;
 end;
-
 
 procedure Register;
 begin
@@ -158,11 +123,11 @@ begin
   FAlephTipo := TAlephTipo.Create(self);
   GlobalResizeManager.RegisterComponent(Self);
   //RegisterAlephRectangle(Self);
-//  if AOwner is TForm then
-//  begin
-//    TForm(AOwner).OnResize := GlobalResizeManager.FormResizeHandler;
-//    TForm(AOwner).OnShow := GlobalResizeManager.FormResizeHandler;
-//  end;
+  if AOwner is TForm then
+  begin
+    TForm(AOwner).OnResize := GlobalResizeManager.FormResizeHandler;
+    TForm(AOwner).OnShow := GlobalResizeManager.FormResizeHandler;
+  end;
 end;
 
 destructor TAlephRectangle.Destroy;

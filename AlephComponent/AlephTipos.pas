@@ -54,7 +54,7 @@ type
     property PWidth: Integer read FPWidth write SetPWidth;
   public
     procedure Resize;
-    procedure AdjustSize(Sender: TObject);
+    procedure ResizeComponent(Sender: TObject);
     constructor Create(AControl: TControl);
     destructor Destroy; override;
   end;
@@ -75,7 +75,7 @@ end;
 
 { TAlephTipo }
 
-procedure TAlephTipo.AdjustSize(Sender: TObject);
+procedure TAlephTipo.ResizeComponent(Sender: TObject);
 var
 
   ParentWidth, ParentHeight: Single;
@@ -182,7 +182,7 @@ begin
   if FPHeight <> Value then
   begin
     FPHeight := Value;
-    AdjustSize(nil);
+    ResizeComponent(nil);
   end;
 end;
 
@@ -191,7 +191,7 @@ begin
   if FPWidth <> Value then
   begin
     FPWidth := Value;
-    AdjustSize(nil);
+    ResizeComponent(nil);
   end;
 end;
 

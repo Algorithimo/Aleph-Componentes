@@ -14,9 +14,6 @@ type
     FRemFontSize: TREmFontSize;
     FGlobalFontSizeManager: TGlobalFontSizeManager;
 
-    procedure FormResizeHandler(Sender: TObject);
-    class procedure GlobalFormResizeHandler(Sender: TObject); static;
-
     function GetTipo: TAlephTipo;
     procedure SetTipo(const Value: TAlephTipo);
 
@@ -29,6 +26,7 @@ type
     procedure AdjustSize(Sender: TObject);
     procedure CalculatePercentage(Sender: TObject);
     procedure ResizeFont(Sender: TObject);
+    procedure Resize; override;
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
   public
     constructor Create(AOwner: TComponent); override;
@@ -44,9 +42,6 @@ type
 procedure Register;
 
 implementation
-
-var
-  AlephLabels: TList<TAlephLabel>;
 
 procedure Register;
 begin
@@ -70,9 +65,11 @@ end;
 constructor TAlephLabel.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+  FAlephTipo := TAlephTipo.Create(Self);
   FRemMargins := TREmMargins.Create(Self);
   FRemFontSize := TREmFontSize.Create(Self);
   GlobalResizeManager.RegisterComponent(Self);
+  GlobalResizeManager.RegisterFontSizeComponent(Self);
   //RegisterAlephLayout(Self);
   if AOwner is TForm then
   begin
@@ -85,15 +82,13 @@ destructor TAlephLabel.Destroy;
 begin
   if Assigned(FGlobalFontSizeManager) then
     FGlobalFontSizeManager.UnregisterComponent(Self);
+  GlobalResizeManager.UnregisterComponent(Self);
+  GlobalResizeManager.UnregisterFontSizeComponent(Self);
   FreeAndNil(FRemMargins);
   FreeAndNil(FRemFontSize);
+  FreeAndNil(FAlephTipo);
   inherited;
 end;
-
-//procedure TAlephLabel.FormResizeHandler(Sender: TObject);
-//begin
-//  GlobalFormResizeHandler(Sender);
-//end;
 
 function TAlephLabel.GetRemMargins: TREmMargins;
 begin
@@ -110,18 +105,12 @@ begin
   Result := FAlephTipo;
 end;
 
-//class procedure TAlephLabel.GlobalFormResizeHandler(Sender: TObject);
-//var
-//  i: Integer;
-//begin
-//  if Assigned(AlephLabels) then
-//  begin
-//    for i := 0 to AlephLabels.Count - 1 do
-//    begin
-//      AlephLabels[i].AdjustSize(Sender);
-//    end;
-//  end;
-//end;
+procedure TAlephLabel.Resize;
+begin
+  inherited;
+  if Assigned(FAlephTipo) then
+      FAlephTipo.Resize;
+end;
 
 procedure TAlephLabel.ResizeFont(Sender: TObject);
 begin

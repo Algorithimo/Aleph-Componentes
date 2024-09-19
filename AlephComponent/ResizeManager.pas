@@ -8,7 +8,7 @@ uses
 type
   IResizable = interface
     ['{888720A6-8410-4D74-B289-433A4295A57B}']
-    procedure AdjustSize(Sender: TObject);
+    procedure ResizeComponent(Sender: TObject);
   end;
 
   IFontSizeAdjustable = interface
@@ -65,7 +65,7 @@ var
   FontComponent: IFontSizeAdjustable;
 begin
   for Component in FResizableComponents do
-    Component.AdjustSize(Sender);
+    Component.ResizeComponent(Sender);
 
   for FontComponent in FFontSizeAdjustableComponents do
     FontComponent.CalculatePercentage(Sender);
