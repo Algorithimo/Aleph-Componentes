@@ -34,7 +34,7 @@ type
     procedure UpdateFontSize(NewBaseSize: Integer);
   published
     property AlephPercentage: TAlephTipo read GetTipo write SetTipo;
-    property MarginsREm: TREmMargins read GetRemMargins write SetRemMargins;
+    property MarginsRem: TREmMargins read GetRemMargins write SetRemMargins;
     property TextRem: TREmFontSize read GetTextRem write SetTextRem;
     property GlobalFontSizeManager: TGlobalFontSizeManager read FGlobalFontSizeManager write SetGlobalFontSizeManager;
   end;

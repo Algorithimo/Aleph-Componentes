@@ -1,0 +1,69 @@
+unit AutoHeightEdit;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, FMX.Types, FMX.Controls, FMX.StdCtrls, FMX.Edit;
+
+type
+  TAutoHeightEdit = class(TEdit)
+  private
+    procedure AdjustHeight;
+  protected
+    procedure Change; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+procedure Register;
+
+implementation
+
+uses
+  FMX.TextLayout, System.UITypes, FMX.Graphics;
+
+procedure Register;
+begin
+  RegisterComponents('Samples', [TAutoHeightEdit]);
+end;
+
+{ TAutoHeightEdit }
+
+constructor TAutoHeightEdit.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  AdjustHeight;
+end;
+
+procedure TAutoHeightEdit.Change;
+begin
+  inherited;
+  AdjustHeight;
+end;
+
+procedure TAutoHeightEdit.AdjustHeight;
+var
+  TextLayout: TTextLayout;
+  NewHeight: Single;
+begin
+  TextLayout := TTextLayoutManager.DefaultTextLayout.Create;
+  try
+    TextLayout.BeginUpdate;
+    TextLayout.Font := Font;
+    TextLayout.Text := Text;
+    TextLayout.MaxSize := PointF(Width, MaxSingle);
+    TextLayout.HorizontalAlign := TTextAlign.Leading;
+    TextLayout.VerticalAlign := TTextAlign.Leading;
+    TextLayout.WordWrap := False;
+    TextLayout.EndUpdate;
+
+    NewHeight := TextLayout.TextHeight + Padding.Top + Padding.Bottom;
+    if Height <> NewHeight then
+      Height := NewHeight;
+  finally
+    TextLayout.Free;
+  end;
+end;
+
+end.
+

@@ -10,7 +10,6 @@ uses
   FMX.Controls,
   FMX.Controls.Presentation,
   FMX.StdCtrls,
-  FMX.Objects,
   FMX.Forms,
   System.Generics.Collections,
   AlephRem,
@@ -22,10 +21,6 @@ type
   private
     FAlephTipo: TAlephTipo;
     FRemMargins : TREmMargins;
-
-//    procedure FormResizeHandler(Sender: TObject);
-//    class procedure GlobalFormResizeHandler(Sender: TObject); static;
-
     function GetTipo: TAlephTipo;
     procedure SetTipo(const Value: TAlephTipo);
     function GetRemMargins: TREmMargins;
@@ -38,45 +33,19 @@ type
     destructor Destroy; override;
   published
     property AlephPercentage: TAlephTipo read GetTipo write SetTipo;
-    property MarginsREm: TREmMargins  read GetRemMargins write SetRemMargins;
+    property MarginsRem: TREmMargins  read GetRemMargins write SetRemMargins;
 
   end;
 
 procedure Register;
 
-
-
 implementation
-
-//var
-//  AlephLayouts: TList<TAlephLayout>;
 
 procedure Register;
 begin
   // Registrar os componentes na paleta de componentes da IDE
   RegisterComponents('Aleph', [TAlephLayout]);
-
-//  RegisterPropertyEditor(TypeInfo(Integer), TAlephLayout, 'PHeight', TAlephWidthHeightPropertyEditor);
-//  RegisterPropertyEditor(TypeInfo(Integer), TAlephLayout, 'PWidth', TAlephWidthHeightPropertyEditor);
 end;
-
-//procedure RegisterAlephLayout(ALayout: TAlephLayout);
-//begin
-//  if not Assigned(AlephLayouts) then
-//    AlephLayouts := TList<TAlephLayout>.Create;
-//  AlephLayouts.Add(ALayout);
-//end;
-//
-//procedure UnregisterAlephLayout(ALayout: TAlephLayout);
-//begin
-//  if Assigned(AlephLayouts) then
-//  begin
-//    AlephLayouts.Remove(ALayout);
-//    if AlephLayouts.Count = 0 then
-//      FreeAndNil(AlephLayouts);
-//  end;
-//end;
-
 
 function TAlephLayout.GetRemMargins: TREmMargins;
 begin
@@ -87,19 +56,6 @@ function TAlephLayout.GetTipo: TAlephTipo;
 begin
   Result := FAlephTipo;
 end;
-
-//class procedure TAlephLayout.GlobalFormResizeHandler(Sender: TObject);
-//var
-//  i: Integer;
-//begin
-//  if Assigned(AlephLayouts) then
-//  begin
-//    for i := 0 to AlephLayouts.Count - 1 do
-//    begin
-//      AlephLayouts[i].AdjustSize(Sender);
-//    end;
-//  end;
-//end;
 
 procedure TAlephLayout.Resize;
 begin
@@ -134,37 +90,19 @@ begin
   FAlephTipo := TAlephTipo.Create(Self);
   FREmMargins := TREmMargins.Create(Self);
   GlobalResizeManager.RegisterComponent(Self);
-  //RegisterAlephLayout(Self);
   if AOwner is TForm then
   begin
     TForm(AOwner).OnResize := GlobalResizeManager.FormResizeHandler;
-    // Registra o evento de redimensionamento global
   end;
-   // Registra o componente na lista
 end;
 
 destructor TAlephLayout.Destroy;
 begin
   GlobalResizeManager.UnregisterComponent(Self);
-  //UnregisterAlephLayout(Self);
   FreeAndNil(FREmMargins);
   FreeAndNil(FAlephTipo);
   inherited Destroy;
-
-//  if Assigned(AlephLayouts) then
-//  begin
-//    UnregisterAlephLayout(Self);
-//    if AlephLayouts.Count = 0 then
-//      FreeAndNil(AlephLayouts); // Liberar a lista se estiver vazia
-//  end;
-//  FreeAndNil(FAlephTipo);
-//  inherited Destroy;
 end;
-
-//procedure TAlephLayout.FormResizeHandler(Sender: TObject);
-//begin
-//  GlobalFormResizeHandler(Sender);
-//end;
 
 end.
 

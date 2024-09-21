@@ -1,0 +1,68 @@
+unit AutoHeightEdit;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, FMX.Types, FMX.Controls, FMX.StdCtrls, FMX.Edit;
+
+type
+  TAutoHeightEdit = class(TEdit)
+ private
+    FAutoHeight: Boolean;
+    FInAutoHeight: Boolean;
+    procedure SetAutoHeight(const Value: Boolean);
+    procedure AdjustHeight;
+  protected
+    procedure Change; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+  published
+    property AutoHeight: Boolean read FAutoHeight write SetAutoHeight;
+  end;
+
+implementation
+
+constructor TAutoHeightEdit.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FAutoHeight := True;  // Inicializa o AutoHeight como habilitado
+  FInAutoHeight := False;
+end;
+
+procedure TAutoHeightEdit.SetAutoHeight(const Value: Boolean);
+begin
+  if FAutoHeight <> Value then
+  begin
+    FAutoHeight := Value;
+    if FAutoHeight then
+      AdjustHeight;
+  end;
+end;
+
+procedure TAutoHeightEdit.AdjustHeight;
+var
+  TextHeight: Single;
+begin
+  if FInAutoHeight or not FAutoHeight then
+    Exit;
+
+  FInAutoHeight := True;
+  try
+    // Calcula a altura do texto com base na fonte e no conteúdo
+    TextHeight := Canvas.TextHeight(Text);
+
+    // Ajusta a altura do TEdit com base no tamanho do texto
+    Height := TextHeight + 10;  // Adiciona um padding para garantir que o texto caiba confortavelmente
+  finally
+    FInAutoHeight := False;
+  end;
+end;
+
+procedure TAutoHeightEdit.Change;
+begin
+  inherited;
+  // Toda vez que o texto mudar, ajusta a altura se AutoHeight estiver habilitado
+  if FAutoHeight then
+    AdjustHeight;
+end;
+

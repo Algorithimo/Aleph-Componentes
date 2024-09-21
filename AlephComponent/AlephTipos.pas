@@ -46,12 +46,18 @@ type
     FPWidth: Integer;
     FPHeight: Integer;
     FControl: TControl;
+    FActiveWidth: Boolean;
+    FActiveHeight: Boolean;
     procedure SetPHeight(const Value: Integer);
     procedure SetPWidth(const Value: Integer);
+    procedure SetActiveWidth(const Value: Boolean);
+    procedure SetActiveHeight(const Value: Boolean);
 
   published
     property PHeight: Integer read FPHeight write SetPHeight;
     property PWidth: Integer read FPWidth write SetPWidth;
+    property ActivePWidth: Boolean read FActiveWidth write SetActiveWidth;
+    property ActivePHeight: Boolean read FActiveHeight write SetActiveHeight;
   public
     procedure Resize;
     procedure ResizeComponent(Sender: TObject);
@@ -80,6 +86,8 @@ var
 
   ParentWidth, ParentHeight: Single;
 begin
+
+
   if Assigned(FControl.Parent) then
   begin
     // Verifica se o Parent é um TForm
@@ -101,10 +109,12 @@ begin
     begin
       FControl.BeginUpdate;
       try
+        if not FActiveWidth then Exit;
         if FPWidth > 0 then
         begin
           FControl.Width := ParentWidth * FPWidth / 100;
         end;
+        if not FActiveHeight then Exit;
         if FPHeight > 0 then
         begin
           FControl.Height := ParentHeight * FPHeight / 100;
@@ -120,6 +130,8 @@ constructor TAlephTipo.Create(AControl: TControl);
 begin
   inherited Create;
   FControl := AControl;
+  FActiveWidth := True;
+  FActiveHeight := True;
 end;
 
 destructor TAlephTipo.Destroy;
@@ -177,12 +189,32 @@ begin
   End;
 end;
 
+procedure TAlephTipo.SetActiveHeight(const Value: Boolean);
+begin
+    if FActiveHeight <> Value then
+  begin
+    FActiveHeight := Value;
+    if FActiveHeight then
+      ResizeComponent(nil);
+  end;
+end;
+
+procedure TAlephTipo.SetActiveWidth(const Value: Boolean);
+begin
+  if FActiveWidth <> Value then
+  begin
+    FActiveWidth := Value;
+    if FActiveWidth then
+      ResizeComponent(nil);
+  end;
+end;
 procedure TAlephTipo.SetPHeight(const Value: Integer);
 begin
   if FPHeight <> Value then
   begin
     FPHeight := Value;
-    ResizeComponent(nil);
+    if FActiveHeight then
+      ResizeComponent(nil);
   end;
 end;
 
@@ -191,7 +223,8 @@ begin
   if FPWidth <> Value then
   begin
     FPWidth := Value;
-    ResizeComponent(nil);
+    if FActiveWidth then
+      ResizeComponent(nil);
   end;
 end;
 
@@ -298,14 +331,3 @@ end;
 
 end.
 
-//procedure TREmFontSize.ResizeFont;
-//begin
-//  if Assigned(FControl) then
-//  begin
-////    if FControl is TLabel then
-////      TLabel(FControl).TextSettings.Font.Size := ToPixels
-////    else if FControl is TButton then
-////      TButton(FControl).TextSettings.Font.Size := ToPixels;
-//    // Adicione outros controles conforme necessário
-//  end;
-//end;
