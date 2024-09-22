@@ -39,13 +39,8 @@ requires
   Skia.Package.RTL;
 
 contains
-  MainAleph in 'AlephMain\MainAleph.pas',
-  AlephControl in 'AlephMain\AlephControl.pas',
-  RemControlInterface in 'AlephMain\RemControlInterface.pas',
   AlephLayout in 'AlephComponent\AlephLayout.pas',
   AlephRectangle in 'AlephComponent\AlephRectangle.pas',
-  AlephLayout_Editor in 'AlephComponent\AlephLayout_Editor.pas',
-  AlephPropertyEditor in 'AlephComponent\AlephPropertyEditor.pas',
   AlephTipos in 'AlephComponent\AlephTipos.pas',
   AlephRem in 'AlephComponent\AlephRem.pas',
   ResizeManager in 'AlephComponent\ResizeManager.pas',
@@ -57,7 +52,6 @@ contains
   GlobalFontSizeManagerEditor in 'AlephComponent\GlobalFontSizeManagerEditor.pas' {GlobalFontSizeManagerEditorForm},
   GlobalFontSizeManagerComponentEditor in 'AlephComponent\GlobalFontSizeManagerComponentEditor.pas',
   AlephButton in 'AlephComponent\AlephButton.pas',
-  AutoHeightEdit in 'AlephComponent\AutoHeightEdit.pas',
   AlephEdit in 'AlephComponent\AlephEdit.pas',
   AlephCornerButton in 'AlephComponent\AlephCornerButton.pas',
   AlephSpinBox in 'AlephComponent\AlephSpinBox.pas',
@@ -66,7 +60,6 @@ contains
   AlephGroupBox in 'AlephComponent\AlephGroupBox.pas',
   AlephCircle in 'AlephComponent\AlephCircle.pas',
   AlephImage in 'AlephComponent\AlephImage.pas',
-  AlephSkSvg in 'AlephComponent\AlephSkSvg.pas',
-  AlephListBox in 'AlephComponent\AlephListBox.pas';
+  AlephSkSvg in 'AlephComponent\AlephSkSvg.pas';
 
 end.

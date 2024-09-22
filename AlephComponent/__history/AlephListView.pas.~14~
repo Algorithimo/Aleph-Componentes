@@ -1,0 +1,54 @@
+unit AlephListView;
+
+interface
+
+uses
+  System.SysUtils,
+  System.Classes,
+  FMX.ListView,
+  FMX.ListView.Appearances,
+  FMX.Types,
+  FMX.Controls,
+  FMX.Controls.Presentation,
+  FMX.StdCtrls,
+  FMX.Forms,
+  System.Generics.Collections,
+  AlephRem,
+  AlephTipos,
+  ResizeManager;
+
+type
+  TAlephAppearanceListView = class(TPresentedListView, IAppearanceItemOwner, IPublishedAppearanceOwner)
+  private
+    FAlephTipo: TAlephTipo;
+    FRemMargins : TREmMargins;
+    function GetTipo: TAlephTipo;
+    procedure SetTipo(const Value: TAlephTipo);
+    function GetRemMargins: TREmMargins;
+    procedure SetRemMargins(const Value: TREmMargins);
+  protected
+    procedure ResizeComponent(Sender: TObject);
+    procedure Resize; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+  published
+    property AlephPercentage: TAlephTipo read GetTipo write SetTipo;
+    property MarginsRem: TREmMargins  read GetRemMargins write SetRemMargins;
+
+  end;
+
+procedure Register;
+
+implementation
+
+procedure Register;
+begin
+  // Registrar os componentes na paleta de componentes da IDE
+  RegisterComponents('Aleph', [TAlephListView]);
+end;
+
+
+
+end.
+

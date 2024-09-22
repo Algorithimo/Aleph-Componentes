@@ -7,7 +7,7 @@ uses
   FMX.StdCtrls, FMX.Objects, AlephRem, AlephTipos, AlephREmFont, GlobalFontSizeManager, ResizeManager;
 
 type
-  TAlephCornerButton = class(TButton, IRemFontSize, IGlobalFontSizeAware, IFontSizeAdjustable, IResizable)
+  TAlephCornerButton = class(TCornerButton, IRemFontSize, IGlobalFontSizeAware, IFontSizeAdjustable, IResizable)
   private
     FAlephTipo: TAlephTipo;
     FRemMargins: TREmMargins;

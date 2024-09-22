@@ -43,19 +43,19 @@ type
 
   TAlephTipo = class(TPersistent)
   private
-    FPWidth: Integer;
-    FPHeight: Integer;
+    FPWidth: Double;
+    FPHeight: Double;
     FControl: TControl;
     FActiveWidth: Boolean;
     FActiveHeight: Boolean;
-    procedure SetPHeight(const Value: Integer);
-    procedure SetPWidth(const Value: Integer);
+    procedure SetPHeight(const Value: Double);
+    procedure SetPWidth(const Value: Double);
     procedure SetActiveWidth(const Value: Boolean);
     procedure SetActiveHeight(const Value: Boolean);
 
   published
-    property PHeight: Integer read FPHeight write SetPHeight;
-    property PWidth: Integer read FPWidth write SetPWidth;
+    property PHeight: Double read FPHeight write SetPHeight;
+    property PWidth: Double read FPWidth write SetPWidth;
     property ActivePWidth: Boolean read FActiveWidth write SetActiveWidth;
     property ActivePHeight: Boolean read FActiveHeight write SetActiveHeight;
   public
@@ -72,6 +72,9 @@ type
 
 implementation
 
+uses
+  Math;
+
 { TControlHelper }
 
 procedure TControlHelper.DoRealign;
@@ -84,7 +87,7 @@ end;
 procedure TAlephTipo.ResizeComponent(Sender: TObject);
 var
 
-  ParentWidth, ParentHeight: Single;
+  ParentWidth, ParentHeight: Double;
 begin
 
 
@@ -109,15 +112,13 @@ begin
     begin
       FControl.BeginUpdate;
       try
-        if not FActiveWidth then Exit;
-        if FPWidth > 0 then
+        if FActiveWidth and (FPWidth > 0) then
         begin
-          FControl.Width := ParentWidth * FPWidth / 100;
+          FControl.Width := RoundTo(ParentWidth * FPWidth / 100, -2);
         end;
-        if not FActiveHeight then Exit;
-        if FPHeight > 0 then
+        if FActiveHeight and (FPHeight > 0) then
         begin
-          FControl.Height := ParentHeight * FPHeight / 100;
+          FControl.Height := RoundTo(ParentHeight * FPHeight / 100, -2);
         end;
       finally
         FControl.EndUpdate
@@ -141,8 +142,7 @@ end;
 
 procedure TAlephTipo.Resize;
 var
-  ParentWidth, ParentHeight: Single;
-  CurrentWidthPercent, CurrentHeightPercent: Integer;
+  ParentWidth, ParentHeight, CurrentWidthPercent, CurrentHeightPercent: Double;
 begin
   if csDesigning in FControl.ComponentState then
   Begin
@@ -169,12 +169,12 @@ begin
 
         // Calcula a porcentagem atual da largura e altura em relação ao pai
         if ParentWidth > 0 then
-          CurrentWidthPercent := Round((FControl.Width / ParentWidth) * 100)
+          CurrentWidthPercent := RoundTo(FControl.Width / ParentWidth * 100, -1)
         else
           CurrentWidthPercent := 0;
 
         if ParentHeight > 0 then
-          CurrentHeightPercent := Round((FControl.Height / ParentHeight) * 100)
+          CurrentHeightPercent := RoundTo(FControl.Height / ParentHeight * 100, -1)
         else
           CurrentHeightPercent := 0;
 
@@ -208,7 +208,7 @@ begin
       ResizeComponent(nil);
   end;
 end;
-procedure TAlephTipo.SetPHeight(const Value: Integer);
+procedure TAlephTipo.SetPHeight(const Value: Double);
 begin
   if FPHeight <> Value then
   begin
@@ -218,7 +218,7 @@ begin
   end;
 end;
 
-procedure TAlephTipo.SetPWidth(const Value: Integer);
+procedure TAlephTipo.SetPWidth(const Value: Double);
 begin
   if FPWidth <> Value then
   begin
