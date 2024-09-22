@@ -7,7 +7,7 @@ uses
   FMX.Edit, FMX.Objects, FMX.Graphics, FMX.TextLayout, AlephRem, AlephTipos, AlephREmFont, GlobalFontSizeManager, ResizeManager;
 
 type
-  TAlephEdit = class(TEdit, IRemFontSize, IGlobalFontSizeAware, IFontSizeAdjustable, IResizable, ITextSettings)
+  TAlephEdit = class(TEdit, IRemFontSize, IGlobalFontSizeAware, IFontSizeAdjustable, IResizable)
   private
     FAlephTipo: TAlephTipo;
     FRemMargins: TREmMargins;
@@ -15,11 +15,9 @@ type
     FGlobalFontSizeManager: TGlobalFontSizeManager;
     FAutoHeight: Boolean;
     FInAutoHeight: Boolean;
-    FOldPadding: TBounds;
 
     function GetTipo: TAlephTipo;
     procedure SetTipo(const Value: TAlephTipo);
-
     function GetRemMargins: TREmMargins;
     procedure SetRemMargins(const Value: TREmMargins);
     function GetTextRem: TREmFontSize;
@@ -27,7 +25,6 @@ type
     procedure SetGlobalFontSizeManager(const Value: TGlobalFontSizeManager);
     procedure AdjustHeight(Sender: TObject);
     procedure SetAutoHeight(const Value: Boolean);
-    procedure PaddingChangedHandler(Sender: TObject);
     procedure SetPadding(const Value: TBounds);
   protected
     procedure ResizeComponent(Sender: TObject);
@@ -35,7 +32,6 @@ type
     procedure ResizeFont(Sender: TObject);
     procedure Resize; override;
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
-    procedure ChangeScale(M, D: Integer; isDpiChange: Boolean); override;
     procedure Loaded; override;
   public
     constructor Create(AOwner: TComponent); override;
@@ -44,7 +40,7 @@ type
   published
     property AlephPercentage: TAlephTipo read GetTipo write SetTipo;
     property AutoHeight: Boolean read FAutoHeight write SetAutoHeight;
-    property MarginsREm: TREmMargins read GetRemMargins write SetRemMargins;
+    property MarginsRem: TREmMargins read GetRemMargins write SetRemMargins;
     property TextRem: TREmFontSize read GetTextRem write SetTextRem;
     property GlobalFontSizeManager: TGlobalFontSizeManager read FGlobalFontSizeManager write SetGlobalFontSizeManager;
   end;
@@ -68,7 +64,7 @@ end;
 
 procedure TAlephEdit.AdjustHeight;
 var
-  NewHeight, NewWidth: Single;
+  NewHeight: Single;
 begin
   if not FAutoHeight then
     Exit;
@@ -78,7 +74,6 @@ begin
     BeginUpdate;
     try
       Height := Round(NewHeight);
-      Width := Round(NewWidth);
     finally
       EndUpdate;
     end;
@@ -92,25 +87,16 @@ begin
     FGlobalFontSizeManager.CalculatePercentage(sender);
 end;
 
-procedure TAlephEdit.ChangeScale(M, D: Integer; isDpiChange: Boolean);
-begin
-  inherited;
-   if FAutoHeight then
-    AdjustHeight(nil);
-end;
-
 constructor TAlephEdit.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FAutoHeight := False;  // Inicializa o AutoHeight como habilitado
   FInAutoHeight := False;
-  Padding.OnChange := PaddingChangedHandler;
   FAlephTipo := TAlephTipo.Create(Self);
   FRemMargins := TREmMargins.Create(Self);
   FRemFontSize := TREmFontSize.Create(Self);
   GlobalResizeManager.RegisterComponent(Self);
   GlobalResizeManager.RegisterFontSizeComponent(Self);
-  //RegisterAlephLayout(Self);
   if AOwner is TForm then
   begin
     TForm(AOwner).OnResize := GlobalResizeManager.FormResizeHandler;
@@ -127,7 +113,6 @@ begin
   FreeAndNil(FRemMargins);
   FreeAndNil(FRemFontSize);
   FreeAndNil(FAlephTipo);
-  FOldPadding.Free;
   inherited;
 end;
 
@@ -238,20 +223,6 @@ begin
   if (Operation = opRemove) and (AComponent = FGlobalFontSizeManager) then
   begin
     FGlobalFontSizeManager := nil;
-  end;
-end;
-
-
-procedure TAlephEdit.PaddingChangedHandler(Sender: TObject);
-begin
-  if (FOldPadding.Left <> Padding.Left) or
-     (FOldPadding.Top <> Padding.Top) or
-     (FOldPadding.Right <> Padding.Right) or
-     (FOldPadding.Bottom <> Padding.Bottom) then
-  begin
-    FOldPadding.Assign(Padding);
-    if FAutoHeight then
-      AdjustHeight(nil);
   end;
 end;
 

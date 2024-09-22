@@ -1,4 +1,4 @@
-unit AlephCornerButton;
+unit AlephLabel;
 
 interface
 
@@ -7,12 +7,13 @@ uses
   FMX.StdCtrls, FMX.Objects, AlephRem, AlephTipos, AlephREmFont, GlobalFontSizeManager, ResizeManager;
 
 type
-  TAlephCornerButton = class(TButton, IRemFontSize, IGlobalFontSizeAware, IFontSizeAdjustable, IResizable)
+  TAlephLabel = class(TLabel, IRemFontSize, IGlobalFontSizeAware, IFontSizeAdjustable, IResizable)
   private
     FAlephTipo: TAlephTipo;
     FRemMargins: TREmMargins;
     FRemFontSize: TREmFontSize;
     FGlobalFontSizeManager: TGlobalFontSizeManager;
+
     function GetTipo: TAlephTipo;
     procedure SetTipo(const Value: TAlephTipo);
 
@@ -33,7 +34,7 @@ type
     procedure UpdateFontSize(NewBaseSize: Integer);
   published
     property AlephPercentage: TAlephTipo read GetTipo write SetTipo;
-    property MarginsREm: TRemMargins read GetRemMargins write SetRemMargins;
+    property MarginsRem: TREmMargins read GetRemMargins write SetRemMargins;
     property TextRem: TREmFontSize read GetTextRem write SetTextRem;
     property GlobalFontSizeManager: TGlobalFontSizeManager read FGlobalFontSizeManager write SetGlobalFontSizeManager;
   end;
@@ -44,24 +45,24 @@ implementation
 
 procedure Register;
 begin
-  RegisterComponents('Aleph', [TAlephCornerButton]);
+  RegisterComponents('Aleph', [TAlephLabel]);
 end;
 
-{ TAlephCornerButton }
+{ TAlephLabel }
 
-procedure TAlephCornerButton.ResizeComponent(Sender: TObject);
+procedure TAlephLabel.ResizeComponent(Sender: TObject);
 begin
   if Assigned(FAlephTipo) then
     FAlephTipo.ResizeComponent(sender);
 end;
 
-procedure TAlephCornerButton.CalculatePercentage(Sender: TObject);
+procedure TAlephLabel.CalculatePercentage(Sender: TObject);
 begin
   if Assigned(FGlobalFontSizeManager) then
     FGlobalFontSizeManager.CalculatePercentage(sender);
 end;
 
-constructor TAlephCornerButton.Create(AOwner: TComponent);
+constructor TAlephLabel.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FAlephTipo := TAlephTipo.Create(Self);
@@ -77,7 +78,7 @@ begin
   end;
 end;
 
-destructor TAlephCornerButton.Destroy;
+destructor TAlephLabel.Destroy;
 begin
   if Assigned(FGlobalFontSizeManager) then
     FGlobalFontSizeManager.UnregisterComponent(Self);
@@ -89,54 +90,54 @@ begin
   inherited;
 end;
 
-function TAlephCornerButton.GetRemMargins: TREmMargins;
+function TAlephLabel.GetRemMargins: TREmMargins;
 begin
   Result := FRemMargins;
 end;
 
-function TAlephCornerButton.GetTextRem: TREmFontSize;
+function TAlephLabel.GetTextRem: TREmFontSize;
 begin
   Result := FRemFontSize;
 end;
 
-function TAlephCornerButton.GetTipo: TAlephTipo;
+function TAlephLabel.GetTipo: TAlephTipo;
 begin
   Result := FAlephTipo;
 end;
 
-procedure TAlephCornerButton.Resize;
+procedure TAlephLabel.Resize;
 begin
   inherited;
   if Assigned(FAlephTipo) then
       FAlephTipo.Resize;
 end;
 
-procedure TAlephCornerButton.ResizeFont(Sender: TObject);
+procedure TAlephLabel.ResizeFont(Sender: TObject);
 begin
   if Assigned(FRemFontSize) then
     TextSettings.Font.Size := FRemFontSize.ToPixels;
 end;
 
-procedure TAlephCornerButton.SetRemMargins(const Value: TREmMargins);
+procedure TAlephLabel.SetRemMargins(const Value: TREmMargins);
 begin
   if Assigned(FRemMargins) then
     FRemMargins.Assign(Value);
 end;
 
-procedure TAlephCornerButton.SetTextRem(const Value: TREmFontSize);
+procedure TAlephLabel.SetTextRem(const Value: TREmFontSize);
 begin
   if Assigned(FRemFontSize) then
     FRemFontSize.Assign(Value);
 end;
 
-procedure TAlephCornerButton.SetTipo(const Value: TAlephTipo);
+procedure TAlephLabel.SetTipo(const Value: TAlephTipo);
 begin
   if Assigned(FAlephTipo) then
     FAlephTipo.Assign(Value);
   ResizeComponent(nil);
 end;
 
-procedure TAlephCornerButton.SetGlobalFontSizeManager(const Value: TGlobalFontSizeManager);
+procedure TAlephLabel.SetGlobalFontSizeManager(const Value: TGlobalFontSizeManager);
 begin
   if FGlobalFontSizeManager <> Value then
   begin
@@ -155,7 +156,7 @@ begin
   end;
 end;
 
-procedure TAlephCornerButton.UpdateFontSize(NewBaseSize: Integer);
+procedure TAlephLabel.UpdateFontSize(NewBaseSize: Integer);
 begin
   if Assigned(FRemFontSize) then
   begin
@@ -169,7 +170,7 @@ begin
   end;
 end;
 
-procedure TAlephCornerButton.Notification(AComponent: TComponent; Operation: TOperation);
+procedure TAlephLabel.Notification(AComponent: TComponent; Operation: TOperation);
 begin
   inherited;
   if (Operation = opRemove) and (AComponent = FGlobalFontSizeManager) then

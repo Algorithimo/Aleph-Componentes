@@ -3,148 +3,174 @@ unit GlobalFontSizeManager;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Generics.Collections, System.Math,
-  FMX.Forms, FMX.Controls, AlephRem, AlephREmFont, ResizeManager, System.IOUtils, FMX.Types;
+  System.SysUtils,
+  System.Classes,
+  System.Generics.Collections,
+  System.Math,
+  FMX.Forms,
+  FMX.Controls,
+  AlephRem,
+  AlephREmFont,
+  ResizeManager,
+  System.IOUtils,
+  FMX.Types;
 
 type
 
-
   IGlobalFontSizeAware = interface
-    ['{E3CF647C-7D56-446A-8089-F641C8F0106B}']
-    procedure UpdateFontSize(NewBaseSize: Integer);
+    [ '{E3CF647C-7D56-446A-8089-F641C8F0106B}' ]
+    procedure UpdateFontSize( NewBaseSize : Integer );
   end;
 
-  TGlobalFontSizeManager = class(TComponent, IFontSizeAdjustable)
-  private
-    FBaseSize: Integer;
-    FMinFontSize: Integer;
-    FFontPercentage: Single;
-    FComponents: TList<IGlobalFontSizeAware>;
+  TGlobalFontSizeManager = class( TComponent, IFontSizeAdjustable )
+    private
+      FBaseSize : Integer;
+      FMinFontSize : Integer;
+      FFontPercentage : Single;
+      FComponents : TList< IGlobalFontSizeAware >;
 
-    procedure SetBaseSize(const Value: Integer);
-    procedure SetFontPercentage(const Value: Single);
-    procedure SetMinFontSize(const Value: Integer);
-    procedure UpdateAllComponents;
-    function GetParentForm: TForm;
-  protected
-    procedure Loaded; override;
-  public
-    constructor Create(AOwner: TComponent); override;
-    destructor Destroy; override;
-    procedure RegisterComponent(AComponent: IGlobalFontSizeAware);
-    procedure CalculatePercentage(Sender: TObject);
-    procedure UnregisterComponent(AComponent: IGlobalFontSizeAware);
-  published
-    property BaseSize: Integer read FBaseSize write SetBaseSize;
-    property FontPercentage: Single read FFontPercentage write SetFontPercentage;
-    property MinFontSize: Integer read FMinFontSize write SetMinFontSize;
+      procedure SetBaseSize( const Value : Integer );
+      procedure SetFontPercentage( const Value : Single );
+      procedure SetMinFontSize( const Value : Integer );
+      procedure UpdateAllComponents;
+      function GetParentForm : TForm;
+    protected
+      procedure Loaded; override;
+    public
+      constructor Create( AOwner : TComponent ); override;
+      destructor Destroy; override;
+      procedure RegisterComponent( AComponent : IGlobalFontSizeAware );
+      procedure CalculatePercentage( Sender : TObject );
+      procedure UnregisterComponent( AComponent : IGlobalFontSizeAware );
+    published
+      property BaseSize : Integer
+        read FBaseSize
+        write SetBaseSize;
+      property FontPercentage : Single
+        read FFontPercentage
+        write SetFontPercentage;
+      property MinFontSize : Integer
+        read FMinFontSize
+        write SetMinFontSize;
   end;
 
 implementation
+
 { TGlobalFontSizeManager }
 
-
-procedure TGlobalFontSizeManager.CalculatePercentage(Sender: TObject);
-var
-   NewBaseSize: Integer;
-   ParentForm: TForm;
-begin
+procedure TGlobalFontSizeManager.CalculatePercentage( Sender : TObject );
+  var
+    NewBaseSize : Integer;
+    ParentForm : TForm;
+  begin
     ParentForm := GetParentForm;
-    if Assigned(ParentForm) then
+    if Assigned( ParentForm )
+    then
     begin
       // Recalcula o BaseSize com base apenas no FontPercentage
-      NewBaseSize := Max(Round(ParentForm.ClientWidth * FFontPercentage / 100), FMinFontSize);
+      NewBaseSize := Max( Round( ParentForm.ClientWidth * FFontPercentage /
+        100 ), FMinFontSize );
       // Verifica se o novo tamanho base é diferente do atual
-      if NewBaseSize <> FBaseSize then
+      if NewBaseSize <> FBaseSize
+      then
       begin
         FBaseSize := NewBaseSize; // Atualiza o valor de BaseSize
-        UpdateAllComponents;       // Atualiza os componentes registrados
+        UpdateAllComponents; // Atualiza os componentes registrados
       end;
     end;
-end;
+  end;
 
-constructor TGlobalFontSizeManager.Create(AOwner: TComponent);
-begin
-  inherited Create(AOwner);
-  FBaseSize := 12;  // Valor padrão inicial
-  FFontPercentage := 1.0;  // Percentual padrão
-  FMinFontSize := 10;  // Tamanho mínimo padrão
-  FComponents := TList<IGlobalFontSizeAware>.Create;
-end;
+constructor TGlobalFontSizeManager.Create( AOwner : TComponent );
+  begin
+    inherited Create( AOwner );
+    FBaseSize := 12; // Valor padrão inicial
+    FFontPercentage := 1.0; // Percentual padrão
+    FMinFontSize := 10; // Tamanho mínimo padrão
+    FComponents := TList< IGlobalFontSizeAware >.Create;
+  end;
 
 destructor TGlobalFontSizeManager.Destroy;
-begin
-  FComponents.Free;
-  inherited;
-end;
+  begin
+    FComponents.Free;
+    inherited;
+  end;
 
 procedure TGlobalFontSizeManager.Loaded;
-begin
-  inherited;
-end;
-
-function TGlobalFontSizeManager.GetParentForm: TForm;
-begin
-  Result := nil;
-  if Assigned(Owner) and (Owner is TComponent) then
   begin
-    if TControl(Owner).Parent is TForm then
-      Result := TForm(TControl(Owner).Parent)
-    else if Owner is TForm then
-      Result := TForm(Owner);
+    inherited;
   end;
-end;
 
-procedure TGlobalFontSizeManager.SetBaseSize(const Value: Integer);
-begin
-  if FBaseSize <> Value then
+function TGlobalFontSizeManager.GetParentForm : TForm;
   begin
-    FBaseSize := Value;
-    UpdateAllComponents;
+    Result := nil;
+    if Assigned( Owner ) and ( Owner is TComponent )
+    then
+    begin
+      if TControl( Owner ).Parent is TForm
+      then
+        Result := TForm( TControl( Owner ).Parent )
+      else if Owner is TForm
+      then
+        Result := TForm( Owner );
+    end;
   end;
-end;
 
-procedure TGlobalFontSizeManager.SetFontPercentage(const Value: Single);
-var
-   ValidatedValue: Single;
-begin
-  ValidatedValue := Max(0.1, Value);
-
-  if FFontPercentage <> ValidatedValue then
+procedure TGlobalFontSizeManager.SetBaseSize( const Value : Integer );
   begin
-    FFontPercentage := ValidatedValue;
-    CalculatePercentage(nil);
+    if FBaseSize <> Value
+    then
+    begin
+      FBaseSize := Value;
+      UpdateAllComponents;
+    end;
   end;
-end;
 
-procedure TGlobalFontSizeManager.SetMinFontSize(const Value: Integer);
-begin
-  if FMinFontSize <> Value then
+procedure TGlobalFontSizeManager.SetFontPercentage( const Value : Single );
+  var
+    ValidatedValue : Single;
   begin
-    FMinFontSize := Value;
-  end;
-end;
+    ValidatedValue := Max( 0.1, Value );
 
-procedure TGlobalFontSizeManager.RegisterComponent(AComponent: IGlobalFontSizeAware);
-begin
-  if not FComponents.Contains(AComponent) then
+    if FFontPercentage <> ValidatedValue
+    then
+    begin
+      FFontPercentage := ValidatedValue;
+      CalculatePercentage( nil );
+    end;
+  end;
+
+procedure TGlobalFontSizeManager.SetMinFontSize( const Value : Integer );
   begin
-    FComponents.Add(AComponent);
-    AComponent.UpdateFontSize(FBaseSize);
+    if FMinFontSize <> Value
+    then
+    begin
+      FMinFontSize := Value;
+    end;
   end;
-end;
 
-procedure TGlobalFontSizeManager.UnregisterComponent(AComponent: IGlobalFontSizeAware);
-begin
-  FComponents.Remove(AComponent);
-end;
+procedure TGlobalFontSizeManager.RegisterComponent
+  ( AComponent : IGlobalFontSizeAware );
+  begin
+    if not FComponents.Contains( AComponent )
+    then
+    begin
+      FComponents.Add( AComponent );
+      AComponent.UpdateFontSize( FBaseSize );
+    end;
+  end;
+
+procedure TGlobalFontSizeManager.UnregisterComponent
+  ( AComponent : IGlobalFontSizeAware );
+  begin
+    FComponents.Remove( AComponent );
+  end;
 
 procedure TGlobalFontSizeManager.UpdateAllComponents;
-var
-  Component: IGlobalFontSizeAware;
-begin
-  for Component in FComponents do
-    Component.UpdateFontSize(FBaseSize);
-end;
+  var
+    Component : IGlobalFontSizeAware;
+  begin
+    for Component in FComponents do
+      Component.UpdateFontSize( FBaseSize );
+  end;
 
 end.

@@ -7,7 +7,7 @@ uses
   FMX.StdCtrls, FMX.Objects, AlephRem, AlephTipos, AlephREmFont, GlobalFontSizeManager, ResizeManager;
 
 type
-  TAlephCornerButton = class(TButton, IRemFontSize, IGlobalFontSizeAware, IFontSizeAdjustable, IResizable)
+  TAlephCornerButton = class(TCornerButton, IRemFontSize, IGlobalFontSizeAware, IFontSizeAdjustable, IResizable)
   private
     FAlephTipo: TAlephTipo;
     FRemMargins: TREmMargins;
@@ -33,7 +33,7 @@ type
     procedure UpdateFontSize(NewBaseSize: Integer);
   published
     property AlephPercentage: TAlephTipo read GetTipo write SetTipo;
-    property MarginsREm: TREmMargins read GetRemMargins write SetRemMargins;
+    property MarginsRem: TRemMargins read GetRemMargins write SetRemMargins;
     property TextRem: TREmFontSize read GetTextRem write SetTextRem;
     property GlobalFontSizeManager: TGlobalFontSizeManager read FGlobalFontSizeManager write SetGlobalFontSizeManager;
   end;

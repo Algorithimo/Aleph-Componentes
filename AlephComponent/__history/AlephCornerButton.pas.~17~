@@ -7,13 +7,13 @@ uses
   FMX.StdCtrls, FMX.Objects, AlephRem, AlephTipos, AlephREmFont, GlobalFontSizeManager, ResizeManager;
 
 type
-  TAlephCornerButton = class(TButton, IRemFontSize, IGlobalFontSizeAware, IFontSizeAdjustable, IResizable)
+  TAlephCornerButton = class(TCornerButton, IRemFontSize, IGlobalFontSizeAware, IFontSizeAdjustable, IResizable, IResizeCorner)
   private
     FAlephTipo: TAlephTipo;
     FRemMargins: TREmMargins;
     FRemFontSize: TREmFontSize;
     FGlobalFontSizeManager: TGlobalFontSizeManager;
-    FSquareMode: Boolean;
+    FPRadius: double;
     function GetTipo: TAlephTipo;
     procedure SetTipo(const Value: TAlephTipo);
 
@@ -22,8 +22,8 @@ type
     function GetTextRem: TREmFontSize;
     procedure SetTextRem(const Value: TREmFontSize);
     procedure SetGlobalFontSizeManager(const Value: TGlobalFontSizeManager);
-    procedure ResizeSquareMode(Sender: TObject);
-    procedure SetSquareMode(const Value: Boolean);
+    procedure ResizeCorner(Sender: TObject);
+    procedure SetPRadius(const Value: double);
   protected
     procedure ResizeComponent(Sender: TObject);
     procedure CalculatePercentage(Sender: TObject);
@@ -36,15 +36,18 @@ type
     procedure UpdateFontSize(NewBaseSize: Integer);
   published
     property AlephPercentage: TAlephTipo read GetTipo write SetTipo;
-    property SquareMode: Boolean read FSquareMode write SetSquareMode;
-    property MarginsREm: TREmMargins read GetRemMargins write SetRemMargins;
+    property MarginsRem: TRemMargins read GetRemMargins write SetRemMargins;
     property TextRem: TREmFontSize read GetTextRem write SetTextRem;
     property GlobalFontSizeManager: TGlobalFontSizeManager read FGlobalFontSizeManager write SetGlobalFontSizeManager;
+    property PRadius: double read FPRadius write SetPRadius;
   end;
 
 procedure Register;
 
 implementation
+
+uses
+  Math;
 
 procedure Register;
 begin
@@ -59,6 +62,24 @@ begin
     FAlephTipo.ResizeComponent(sender);
 end;
 
+procedure TAlephCornerButton.ResizeCorner(Sender: TObject);
+var
+  PercentageHeight: double;
+begin
+
+  PercentageHeight := RoundTo(Width * FPRadius / 100, -1);
+  if (csDesigning in ComponentState) or not (csLoading in ComponentState) then
+  begin
+    BeginUpdate;
+    try
+      Self.XRadius := Round(PercentageHeight);
+      Self.YRadius := Round(PercentageHeight);
+    finally
+      EndUpdate;
+    end;
+  end;
+end;
+
 procedure TAlephCornerButton.CalculatePercentage(Sender: TObject);
 begin
   if Assigned(FGlobalFontSizeManager) then
@@ -68,6 +89,7 @@ end;
 constructor TAlephCornerButton.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+  PRadius := 0;
   FAlephTipo := TAlephTipo.Create(Self);
   FRemMargins := TREmMargins.Create(Self);
   FRemFontSize := TREmFontSize.Create(Self);
@@ -121,31 +143,10 @@ begin
     TextSettings.Font.Size := FRemFontSize.ToPixels;
 end;
 
-procedure TAlephCornerButton.ResizeSquareMode(Sender: TObject);
-begin
-    if not FSquareMode then
-    Exit;
-
-  if (csDesigning in ComponentState) or not (csLoading in ComponentState) then
-  begin
-    BeginUpdate;
-    try
-      Width := Height;
-    finally
-      EndUpdate;
-    end;
-  end;
-end;
-
 procedure TAlephCornerButton.SetRemMargins(const Value: TREmMargins);
 begin
   if Assigned(FRemMargins) then
     FRemMargins.Assign(Value);
-end;
-
-procedure TAlephCornerButton.SetSquareMode(const Value: Boolean);
-begin
-  FSquareMode := Value;
 end;
 
 procedure TAlephCornerButton.SetTextRem(const Value: TREmFontSize);
@@ -158,7 +159,7 @@ procedure TAlephCornerButton.SetTipo(const Value: TAlephTipo);
 begin
   if Assigned(FAlephTipo) then
     FAlephTipo.Assign(Value);
-  ResizeComponent(nil);
+  ResizeCorner(nil);
 end;
 
 procedure TAlephCornerButton.SetGlobalFontSizeManager(const Value: TGlobalFontSizeManager);
@@ -178,6 +179,13 @@ begin
       UpdateFontSize(FGlobalFontSizeManager.BaseSize);
     end;
   end;
+end;
+
+procedure TAlephCornerButton.SetPRadius(const Value: double);
+begin
+    if FPRadius <> Value then
+    FPRadius := Value;
+  ResizeCorner(nil);
 end;
 
 procedure TAlephCornerButton.UpdateFontSize(NewBaseSize: Integer);
