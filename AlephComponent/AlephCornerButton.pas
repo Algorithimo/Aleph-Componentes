@@ -26,6 +26,7 @@ type
       FRemMargins : TREmMargins;
       FRemFontSize : TREmFontSize;
       FGlobalFontSizeManager : TGlobalFontSizeManager;
+      FOldOnResize : TNotifyEvent;
       FPRadius : double;
       FSquareMode : Boolean;
       function GetTipo : TAlephTipo;
@@ -41,6 +42,7 @@ type
       procedure SetPRadius( const Value : double );
       procedure ResizeSquareMode( Sender : TObject );
       procedure SetSquareMode( const Value : Boolean );
+      procedure DoFormResize( Sender : TObject );
     protected
       procedure ResizeComponent( Sender : TObject );
       procedure CalculatePercentage( Sender : TObject );
@@ -157,8 +159,10 @@ constructor TAlephCornerButton.Create( AOwner : TComponent );
     if AOwner is TForm
     then
     begin
-      TForm( AOwner ).OnResize := GlobalResizeManager.FormResizeHandler;
-      // Registra o evento de redimensionamento global
+      // Guarda o handler original do form
+      FOldOnResize := TForm( AOwner ).OnResize;
+      // Define o novo handler
+      TForm( AOwner ).OnResize := DoFormResize;
     end;
   end;
 
@@ -173,6 +177,14 @@ destructor TAlephCornerButton.Destroy;
     FreeAndNil( FRemFontSize );
     FreeAndNil( FAlephTipo );
     inherited;
+  end;
+
+procedure TAlephCornerButton.DoFormResize( Sender : TObject );
+  begin
+    if Assigned( FOldOnResize )
+    then
+      FOldOnResize( Sender );
+    GlobalResizeManager.FormResizeHandler( Sender );
   end;
 
 function TAlephCornerButton.GetRemMargins : TREmMargins;

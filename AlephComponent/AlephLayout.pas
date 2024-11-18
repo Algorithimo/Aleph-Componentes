@@ -21,10 +21,12 @@ type
     private
       FAlephTipo : TAlephTipo;
       FRemMargins : TREmMargins;
+      FOldOnResize : TNotifyEvent;
       function GetTipo : TAlephTipo;
       procedure SetTipo( const Value : TAlephTipo );
       function GetRemMargins : TREmMargins;
       procedure SetRemMargins( const Value : TREmMargins );
+      procedure DoFormResize(Sender: TObject);
     protected
       procedure ResizeComponent( Sender : TObject );
       procedure Resize; override;
@@ -100,7 +102,10 @@ constructor TAlephLayout.Create( AOwner : TComponent );
     if AOwner is TForm
     then
     begin
-      TForm( AOwner ).OnResize := GlobalResizeManager.FormResizeHandler;
+      // Guarda o handler original do form
+      FOldOnResize := TForm(AOwner).OnResize;
+      // Define o novo handler
+      TForm(AOwner).OnResize := DoFormResize;
     end;
   end;
 
@@ -111,5 +116,12 @@ destructor TAlephLayout.Destroy;
     FreeAndNil( FAlephTipo );
     inherited Destroy;
   end;
+
+procedure TAlephLayout.DoFormResize(Sender: TObject);
+begin
+  if Assigned(FOldOnResize) then
+    FOldOnResize(Sender);
+  GlobalResizeManager.FormResizeHandler(Sender);
+end;
 
 end.

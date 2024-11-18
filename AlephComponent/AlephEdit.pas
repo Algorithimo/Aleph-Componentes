@@ -32,7 +32,7 @@ type
       FGlobalFontSizeManager : TGlobalFontSizeManager;
       FAutoHeight : Boolean;
       FInAutoHeight : Boolean;
-
+      FOldOnResize: TNotifyEvent;
       function GetTipo : TAlephTipo;
       procedure SetTipo( const Value : TAlephTipo );
       function GetRemMargins : TREmMargins;
@@ -44,6 +44,7 @@ type
       procedure AdjustHeight( Sender : TObject );
       procedure SetAutoHeight( const Value : Boolean );
       procedure SetPadding( const Value : TBounds );
+      procedure DoFormResize(Sender: TObject);
     protected
       procedure ResizeComponent( Sender : TObject );
       procedure CalculatePercentage( Sender : TObject );
@@ -133,8 +134,10 @@ constructor TAlephEdit.Create( AOwner : TComponent );
     if AOwner is TForm
     then
     begin
-      TForm( AOwner ).OnResize := GlobalResizeManager.FormResizeHandler;
-      // Registra o evento de redimensionamento global
+      // Guarda o handler original do form
+      FOldOnResize := TForm(AOwner).OnResize;
+      // Define o novo handler
+      TForm(AOwner).OnResize := DoFormResize;
     end;
   end;
 
@@ -150,6 +153,13 @@ destructor TAlephEdit.Destroy;
     FreeAndNil( FAlephTipo );
     inherited;
   end;
+
+procedure TAlephEdit.DoFormResize(Sender: TObject);
+begin
+  if Assigned(FOldOnResize) then
+    FOldOnResize(Sender);
+  GlobalResizeManager.FormResizeHandler(Sender);
+end;
 
 procedure TAlephEdit.SetPadding( const Value : TBounds );
   begin

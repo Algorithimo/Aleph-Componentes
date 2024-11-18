@@ -30,6 +30,7 @@ type
       FRemMargins : TREmMargins;
       FRemFontSize : TREmFontSize;
       FGlobalFontSizeManager : TGlobalFontSizeManager;
+      FOldOnResize : TNotifyEvent;
       FAutoHeight : Boolean;
       FInAutoHeight : Boolean;
 
@@ -45,6 +46,7 @@ type
       procedure AdjustHeight( Sender : TObject );
       procedure SetAutoHeight( const Value : Boolean );
       procedure SetPadding( const Value : TBounds );
+      procedure DoFormResize( Sender : TObject );
     protected
       procedure ResizeComponent( Sender : TObject );
       procedure CalculatePercentage( Sender : TObject );
@@ -134,8 +136,10 @@ constructor TAlephCheckBox.Create( AOwner : TComponent );
     if AOwner is TForm
     then
     begin
-      TForm( AOwner ).OnResize := GlobalResizeManager.FormResizeHandler;
-      // Registra o evento de redimensionamento global
+      // Guarda o handler original do form
+      FOldOnResize := TForm( AOwner ).OnResize;
+      // Define o novo handler
+      TForm( AOwner ).OnResize := DoFormResize;
     end;
   end;
 
@@ -150,6 +154,14 @@ destructor TAlephCheckBox.Destroy;
     FreeAndNil( FRemFontSize );
     FreeAndNil( FAlephTipo );
     inherited;
+  end;
+
+procedure TAlephCheckBox.DoFormResize( Sender : TObject );
+  begin
+    if Assigned( FOldOnResize )
+    then
+      FOldOnResize( Sender );
+    GlobalResizeManager.FormResizeHandler( Sender );
   end;
 
 procedure TAlephCheckBox.SetPadding( const Value : TBounds );

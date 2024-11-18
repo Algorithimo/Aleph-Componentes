@@ -26,16 +26,16 @@ type
       FRemMargins : TREmMargins;
       FRemFontSize : TREmFontSize;
       FGlobalFontSizeManager : TGlobalFontSizeManager;
-
+      FOldOnResize : TNotifyEvent;
       function GetTipo : TAlephTipo;
       procedure SetTipo( const Value : TAlephTipo );
-
       function GetRemMargins : TREmMargins;
       procedure SetRemMargins( const Value : TREmMargins );
       function GetTextRem : TREmFontSize;
       procedure SetTextRem( const Value : TREmFontSize );
       procedure SetGlobalFontSizeManager( const Value
         : TGlobalFontSizeManager );
+      procedure DoFormResize( Sender : TObject );
     protected
       procedure ResizeComponent( Sender : TObject );
       procedure CalculatePercentage( Sender : TObject );
@@ -100,8 +100,10 @@ constructor TAlephLabel.Create( AOwner : TComponent );
     if AOwner is TForm
     then
     begin
-      TForm( AOwner ).OnResize := GlobalResizeManager.FormResizeHandler;
-      // Registra o evento de redimensionamento global
+      // Guarda o handler original do form
+      FOldOnResize := TForm( AOwner ).OnResize;
+      // Define o novo handler
+      TForm( AOwner ).OnResize := DoFormResize;
     end;
   end;
 
@@ -116,6 +118,14 @@ destructor TAlephLabel.Destroy;
     FreeAndNil( FRemFontSize );
     FreeAndNil( FAlephTipo );
     inherited;
+  end;
+
+procedure TAlephLabel.DoFormResize( Sender : TObject );
+  begin
+    if Assigned( FOldOnResize )
+    then
+      FOldOnResize( Sender );
+    GlobalResizeManager.FormResizeHandler( Sender );
   end;
 
 function TAlephLabel.GetRemMargins : TREmMargins;
